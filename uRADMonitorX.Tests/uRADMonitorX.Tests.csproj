@@ -45,7 +45,8 @@
   <ItemGroup>
     <Compile Include="Commons\Formatting\TimeSpanFormatterTest.cs" />
     <Compile Include="Configuration\XMLSettingsCommitTests.cs" />
-    <Compile Include="DeviceDataReaderTest.cs" />
+    <Compile Include="DeviceDataHttpReaderTest.cs" />
+    <Compile Include="DeviceDataFileReaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configuration\XMLSettingsTests.cs" />
   </ItemGroup>
