@@ -128,7 +128,7 @@ namespace uRADMonitorX {
                         ((ICanReconfigureAppender)appender).Reconfigure(Path.Combine(Settings.LogDirectoryPath, Program.LoggerFilePath));
                     }
                     else {
-                        ((ICanReconfigureAppender)appender).Reconfigure(Program.LoggerFilePath);
+                        ((ICanReconfigureAppender)appender).Reconfigure(Path.Combine(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()), Program.LoggerFilePath));
                     }
                 }
             }

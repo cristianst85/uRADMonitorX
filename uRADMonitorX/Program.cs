@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using uRADMonitorX.Commons.Logging;
 using uRADMonitorX.Commons.Logging.Appenders;
 using uRADMonitorX.Commons.Logging.Formatters;
+using System.IO;
+using uRADMonitorX.Commons;
 
 namespace uRADMonitorX {
 
@@ -41,7 +43,7 @@ namespace uRADMonitorX {
 
             LoggerManager.GetInstance().Add(Program.LoggerName,
                                                 new ThreadSafeLogger(
-                                                    new FileAppender(Program.LoggerFilePath) { Enabled = true },
+                                                    new FileAppender(Path.Combine((Path.GetDirectoryName(AssemblyUtils.GetApplicationPath())), Program.LoggerFilePath)) { Enabled = true },
                                                     new SimpleFormatter()) { Enabled = false }
                                             );
             ILogger logger = LoggerManager.GetInstance().GetLogger(Program.LoggerName);
