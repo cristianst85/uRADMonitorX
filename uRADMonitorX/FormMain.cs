@@ -91,10 +91,14 @@ namespace uRADMonitorX {
 
                 if (Settings.StartMinimized) {
                     this.WindowState = FormWindowState.Minimized;
+                    this.ShowInTaskbar = false;
                 }
+                else {
+                    this.ShowInTaskbar = Settings.ShowInTaskbar;
+                }
+
                 this.StartPosition = FormStartPosition.Manual;
                 this.restoreWindowPosition(Settings.LastWindowXPos, Settings.LastWindowYPos);
-                this.ShowInTaskbar = Settings.ShowInTaskbar;
 
                 // Handlers
                 this.FormClosing += new FormClosingEventHandler(this.formMain_Closing);
@@ -391,22 +395,10 @@ namespace uRADMonitorX {
             }
         }
 
-        protected override void OnClientSizeChanged(EventArgs e) {
-            if (Settings != null) {
-                this.ShowInTaskbar = Settings.ShowInTaskbar;
-                if (this.WindowState == FormWindowState.Minimized) {
-                    // If form is not shown in the taskbar then set visible to false.
-                    if (!this.ShowInTaskbar) {
-                        this.Visible = false;
-                    }
-                }
-            }
-            base.OnClientSizeChanged(e);
-        }
-
         private void restoreWindowPosition() {
             this.restoreWindowPosition(mLastWindowXPos, mLastWindowYPos);
         }
+
         private void restoreWindowPosition(int x, int y) {
             this.Top = y;
             this.Left = x;
@@ -431,8 +423,8 @@ namespace uRADMonitorX {
         }
 
         private void showWindow() {
-            this.ShowInTaskbar = Settings.ShowInTaskbar;
             if (this.WindowState == FormWindowState.Minimized) {
+                this.ShowInTaskbar = Settings.ShowInTaskbar;
                 this.Show();
                 this.BringToFront();
                 this.WindowState = FormWindowState.Normal;
