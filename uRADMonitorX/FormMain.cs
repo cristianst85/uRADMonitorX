@@ -384,7 +384,6 @@ namespace uRADMonitorX {
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref System.Windows.Forms.Message m) {
             if (m.Msg == (int)NativeMethods.WM.SYSCOMMAND && m.WParam.ToInt32() == (int)NativeMethods.SC.MINIMIZE) {
-                this.saveWindowPosition();
                 this.toogleWindow();
             }
             else {
@@ -464,6 +463,7 @@ namespace uRADMonitorX {
                 this.restoreWindowPosition();
             }
             else {
+                this.saveWindowPosition();
                 this.Visible = false;
                 this.Hide();
                 this.WindowState = FormWindowState.Minimized;
