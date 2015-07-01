@@ -52,7 +52,7 @@ namespace uRADMonitorX {
             try {
                 InitializeComponent();
 
-                this.notifyIcon.Icon = ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor);
+                this.notifyIcon.Icon = ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationGray_v3);
 
                 // Fix status strip right padding.
                 this.statusStrip.Padding = new Padding(3, this.statusStrip.Padding.Top, 3, this.statusStrip.Padding.Bottom);
@@ -84,8 +84,8 @@ namespace uRADMonitorX {
                     this.enablePollingToolStripMenuItem.Enabled = false;
                     this.viewDeviceWebpageToolStripMenuItem.Enabled = false;
                     this.viewDeviceWebpageToolStripMenuItem1.Enabled = false;
-                    this.notifyIcon.Icon = ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationGray_v3);
                 }
+
                 this.enablePollingToolStripMenuItem.Checked = Settings.IsPollingEnabled;
                 this.labelPressure.Enabled = Settings.HasPressureSensor;
 
