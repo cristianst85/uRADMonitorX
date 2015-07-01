@@ -45,7 +45,6 @@ namespace uRADMonitorX {
             }
         }
 
-        private FormWindowState mLastState;
         private int mLastWindowXPos;
         private int mLastWindowYPos;
 
@@ -90,7 +89,6 @@ namespace uRADMonitorX {
                 this.enablePollingToolStripMenuItem.Checked = Settings.IsPollingEnabled;
                 this.labelPressure.Enabled = Settings.HasPressureSensor;
 
-                this.mLastState = this.WindowState;
                 if (Settings.StartMinimized) {
                     this.WindowState = FormWindowState.Minimized;
                 }
@@ -353,6 +351,7 @@ namespace uRADMonitorX {
         }
 
         private void form_SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e) {
+            // this.ShowInTaskbar = Settings.ShowInTaskbar; // TODO: fix this not to flicker.
             this.registerAtWindowsStartup();
             this.logger.Enabled = e.Settings.IsLoggingEnabled;
             this.configLogger(this.logger);
@@ -373,7 +372,7 @@ namespace uRADMonitorX {
             }
 
             if (Settings.CloseToSystemTray && !this.IsClosing) {
-                this.toogleWindow();
+                this.minimizeToTray();
                 e.Cancel = true;
             }
             else {
@@ -386,8 +385,11 @@ namespace uRADMonitorX {
         protected override void WndProc(ref System.Windows.Forms.Message m) {
             if (m.Msg == (int)NativeMethods.WM.SYSCOMMAND && m.WParam.ToInt32() == (int)NativeMethods.SC.MINIMIZE) {
                 this.saveWindowPosition();
+                this.toogleWindow();
             }
-            base.WndProc(ref m);
+            else {
+                base.WndProc(ref m);
+            }
         }
 
         protected override void OnClientSizeChanged(EventArgs e) {
@@ -398,9 +400,6 @@ namespace uRADMonitorX {
                     if (!this.ShowInTaskbar) {
                         this.Visible = false;
                     }
-                }
-                else {
-                    this.mLastState = this.WindowState;
                 }
             }
             base.OnClientSizeChanged(e);
@@ -432,21 +431,41 @@ namespace uRADMonitorX {
             }
         }
 
+        private void showWindow() {
+            this.ShowInTaskbar = Settings.ShowInTaskbar;
+            if (this.WindowState == FormWindowState.Minimized) {
+                this.Show();
+                this.BringToFront();
+                this.WindowState = FormWindowState.Normal;
+                this.Visible = true;
+                this.restoreWindowPosition();
+            }
+            else {
+                this.TopMost = true; // Force to come on top.
+                this.Show();
+                this.BringToFront();
+            }
+            this.TopMost = false; // Don't stay on top forever. Allow it to go to background.
+        }
+
+        private void minimizeToTray() {
+            this.ShowInTaskbar = Settings.ShowInTaskbar;
+            this.Hide();
+            this.WindowState = FormWindowState.Minimized;
+        }
+
         private void toogleWindow() {
             this.ShowInTaskbar = Settings.ShowInTaskbar;
             if (this.WindowState == FormWindowState.Minimized) {
                 this.Show();
                 this.BringToFront();
-                this.WindowState = this.mLastState;
+                this.WindowState = FormWindowState.Normal;
                 this.Visible = true;
-                this.TopMost = true;
                 this.restoreWindowPosition();
             }
             else {
-                this.TopMost = false;
                 this.Visible = false;
                 this.Hide();
-                this.mLastState = this.WindowState;
                 this.WindowState = FormWindowState.Minimized;
             }
         }
@@ -461,7 +480,7 @@ namespace uRADMonitorX {
 
         private void notifyIcon_MouseClick(object sender, MouseEventArgs e) {
             if (e.Button == System.Windows.Forms.MouseButtons.Left) {
-                this.toogleWindow();
+                this.showWindow();
             }
         }
 
@@ -486,6 +505,12 @@ namespace uRADMonitorX {
 
         private void uRADMonitorForumToolStripMenuItem_Click(object sender, EventArgs e) {
             System.Diagnostics.Process.Start("http://www.uradmonitor.com/forums/");
+        }
+
+        private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
+            if (this.WindowState == FormWindowState.Normal) {
+                this.showWindow();
+            }
         }
     }
 }

@@ -514,7 +514,8 @@ namespace uRADMonitorX {
             this.toolStripMenuItem4,
             this.exitToolStripMenuItem1});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(188, 82);
+            this.contextMenuStrip.Size = new System.Drawing.Size(188, 104);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // viewDeviceWebpageToolStripMenuItem1
             // 
