@@ -143,11 +143,11 @@ namespace uRADMonitorX {
                     Registry.RegisterAtWindowsStartup(Application.ProductName, String.Format("\"{0}\"", new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
                 }
                 else {
-                    Registry.UnRegisterAtWindowsStartup(Application.CompanyName);
+                    Registry.UnRegisterAtWindowsStartup(Application.ProductName);
                 }
             }
             catch (Exception e) {
-                logger.Write(String.Format("Error registering application to start at windows startup. Exception: {0}", e.ToString()));
+                logger.Write(String.Format("Error registering application to start at Windows startup. Exception: {0}", e.ToString()));
             }
         }
 
@@ -296,7 +296,7 @@ namespace uRADMonitorX {
                 }
             }
             else {
-                this.labelPressure.Enabled = true;
+                this.labelPressure.Enabled = false;
                 this.viewOnlyTextBoxPressure.Text = String.Empty;
             }
 
