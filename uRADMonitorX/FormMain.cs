@@ -261,11 +261,11 @@ namespace uRADMonitorX {
                 this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour((double)deviceData.RadiationAverage, RadiationDetector.GetByName(deviceData.DeviceInformation.Detector).Factor), 2));
             }
             else {
-                // Other values defaults to Cpm.
+                // Other values defaults to cpm.
                 Settings.RadiationUnitType = Core.RadiationUnitType.Cpm;
                 Settings.Commit();
-                this.viewOnlyTextBoxRadiation.Text = String.Format("{0} CPM", deviceData.Radiation);
-                this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} CPM", deviceData.RadiationAverage);
+                this.viewOnlyTextBoxRadiation.Text = String.Format("{0} cpm", deviceData.Radiation);
+                this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} cpm", deviceData.RadiationAverage);
             }
 
             if (Settings.TemperatureUnitType == Core.TemperatureUnitType.Celsius) {
