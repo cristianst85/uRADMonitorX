@@ -48,9 +48,13 @@ namespace uRADMonitorX {
         private int mLastWindowXPos;
         private int mLastWindowYPos;
 
-        public FormMain() {
+        private volatile bool ignoreRegistering;
+
+        public FormMain(bool ignoreRegistering) {
             try {
                 InitializeComponent();
+
+                this.ignoreRegistering = ignoreRegistering;
 
                 this.notifyIcon.Icon = ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationGray_v3);
 
@@ -104,7 +108,9 @@ namespace uRADMonitorX {
                 this.FormClosing += new FormClosingEventHandler(this.formMain_Closing);
                 this.enablePollingToolStripMenuItem.CheckedChanged += new EventHandler(enablePollingToolStripMenuItem_CheckedChanged);
 
-                this.registerAtWindowsStartup();
+                if (!this.ignoreRegistering) {
+                    this.registerAtWindowsStartup();
+                }
 
                 Thread startupThread = new Thread(new ThreadStart(delegate { this.initDevice(false); }));
                 startupThread.Name = "startupThread";
@@ -356,7 +362,9 @@ namespace uRADMonitorX {
 
         private void form_SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e) {
             // this.ShowInTaskbar = Settings.ShowInTaskbar; // TODO: fix this not to flicker.
-            this.registerAtWindowsStartup();
+            if (!this.ignoreRegistering) {
+                this.registerAtWindowsStartup();
+            }
             this.logger.Enabled = e.Settings.IsLoggingEnabled;
             this.configLogger(this.logger);
         }

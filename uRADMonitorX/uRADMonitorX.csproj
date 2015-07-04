@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgumentDescription.cs" />
     <Compile Include="Commons\EnumHelper.cs" />
     <Compile Include="Commons\Logging\Appenders\NullAppender.cs" />
     <Compile Include="Commons\Logging\Appenders\ICanReconfigureAppender.cs" />
@@ -83,6 +84,7 @@
     </Compile>
     <Compile Include="Core\Fetchers\DeviceDataFetcherErrorEventArgs.cs" />
     <Compile Include="Core\Fetchers\DeviceDataFetcherEventArgs.cs" />
+    <Compile Include="ProgramArguments.cs" />
     <Compile Include="Windows\NativeMethods.cs" />
     <Compile Include="Commons\Formatting\ITimeSpanFormatter.cs" />
     <Compile Include="Commons\Formatting\TimeSpanFormatter.cs" />

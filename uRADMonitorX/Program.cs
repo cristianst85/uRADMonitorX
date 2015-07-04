@@ -1,12 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using uRADMonitorX.Commons;
 using uRADMonitorX.Commons.Logging;
 using uRADMonitorX.Commons.Logging.Appenders;
 using uRADMonitorX.Commons.Logging.Formatters;
-using System.IO;
-using uRADMonitorX.Commons;
 
 namespace uRADMonitorX {
 
@@ -24,13 +24,14 @@ namespace uRADMonitorX {
         [STAThread]
         static void Main(string[] args) {
 
-            bool allowMultipleInstances = false;
+            ProgramArguments arguments = null;
+            bool success = ProgramArguments.TryParse(args, out arguments);
 
-            if (args.Length == 1 && args[0].Equals("--allow-multiple-instances")) {
-                allowMultipleInstances = true;
+            if (!success) {
+                arguments = new ProgramArguments(); // Get a new instance with default values.
             }
 
-            if (!allowMultipleInstances) {
+            if (!arguments.AllowMultipleInstances) {
                 var assembly = typeof(Program).Assembly;
                 GuidAttribute guidAttribute = (GuidAttribute)assembly.GetCustomAttributes(typeof(GuidAttribute), true)[0];
                 bool applicationInstanceIsNotRunning;
@@ -51,7 +52,7 @@ namespace uRADMonitorX {
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+            Application.Run(new FormMain(arguments.IgnoreRegisteringAtWindowsStartup));
         }
     }
 }
