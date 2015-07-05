@@ -200,6 +200,7 @@
     <None Include="Resources\Systray\RadiationGray-v3.ico" />
     <None Include="Resources\Atomic.ico" />
     <None Include="Resources\AtomicGray.ico" />
+    <None Include="Resources\Menus\chart_curve_go.png" />
     <Content Include="Resources\warning_16x16.png" />
     <Content Include="_todo.txt" />
   </ItemGroup>

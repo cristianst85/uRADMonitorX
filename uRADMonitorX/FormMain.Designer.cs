@@ -38,6 +38,7 @@ namespace uRADMonitorX {
             this.enablePollingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.viewDeviceWebpageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewDeviceOnlineDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -138,6 +139,7 @@ namespace uRADMonitorX {
             this.enablePollingToolStripMenuItem,
             this.toolStripMenuItem2,
             this.viewDeviceWebpageToolStripMenuItem,
+            this.viewDeviceOnlineDataToolStripMenuItem,
             this.toolStripMenuItem3,
             this.configurationToolStripMenuItem,
             this.toolStripMenuItem1,
@@ -149,46 +151,54 @@ namespace uRADMonitorX {
             // enablePollingToolStripMenuItem
             // 
             this.enablePollingToolStripMenuItem.Name = "enablePollingToolStripMenuItem";
-            this.enablePollingToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.enablePollingToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.enablePollingToolStripMenuItem.Text = "Enable polling";
             this.enablePollingToolStripMenuItem.Click += new System.EventHandler(this.enablePollingToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(195, 6);
             // 
             // viewDeviceWebpageToolStripMenuItem
             // 
             this.viewDeviceWebpageToolStripMenuItem.Image = global::uRADMonitorX.Properties.Resources.page_white_go;
             this.viewDeviceWebpageToolStripMenuItem.Name = "viewDeviceWebpageToolStripMenuItem";
-            this.viewDeviceWebpageToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.viewDeviceWebpageToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.viewDeviceWebpageToolStripMenuItem.Text = "View device &webpage";
             this.viewDeviceWebpageToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceWebpageToolStripMenuItem_Click);
+            // 
+            // viewDeviceOnlineDataToolStripMenuItem
+            // 
+            this.viewDeviceOnlineDataToolStripMenuItem.Image = global::uRADMonitorX.Properties.Resources.chart_curve_go;
+            this.viewDeviceOnlineDataToolStripMenuItem.Name = "viewDeviceOnlineDataToolStripMenuItem";
+            this.viewDeviceOnlineDataToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.viewDeviceOnlineDataToolStripMenuItem.Text = "View device online data";
+            this.viewDeviceOnlineDataToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceOnlineDataToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(195, 6);
             // 
             // configurationToolStripMenuItem
             // 
             this.configurationToolStripMenuItem.Image = global::uRADMonitorX.Properties.Resources.cog;
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
-            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.configurationToolStripMenuItem.Text = "Device &configuration...";
             this.configurationToolStripMenuItem.Click += new System.EventHandler(this.configurationToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(195, 6);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Image = global::uRADMonitorX.Properties.Resources.wrench;
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.optionsToolStripMenuItem.Text = "&Options...";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -514,7 +524,7 @@ namespace uRADMonitorX {
             this.toolStripMenuItem4,
             this.exitToolStripMenuItem1});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(188, 104);
+            this.contextMenuStrip.Size = new System.Drawing.Size(188, 82);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // viewDeviceWebpageToolStripMenuItem1
@@ -643,6 +653,7 @@ namespace uRADMonitorX {
         private ToolStripMenuItem uRADMonitorWebsiteToolStripMenuItem;
         private ToolStripMenuItem uRADMonitorForumToolStripMenuItem;
         private ToolStripSeparator toolStripMenuItem8;
+        private ToolStripMenuItem viewDeviceOnlineDataToolStripMenuItem;
     }
 }
 

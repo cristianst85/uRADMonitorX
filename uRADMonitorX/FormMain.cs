@@ -104,9 +104,12 @@ namespace uRADMonitorX {
                 this.StartPosition = FormStartPosition.Manual;
                 this.restoreWindowPosition(Settings.LastWindowXPos, Settings.LastWindowYPos);
 
+                this.viewDeviceOnlineDataToolStripMenuItem.Enabled = false;
+
                 // Handlers
                 this.FormClosing += new FormClosingEventHandler(this.formMain_Closing);
                 this.enablePollingToolStripMenuItem.CheckedChanged += new EventHandler(enablePollingToolStripMenuItem_CheckedChanged);
+                this.viewOnlyTextBoxId.TextChanged += new EventHandler(viewOnlyTextBoxId_TextChanged);
 
                 if (!this.ignoreRegistering) {
                     this.registerAtWindowsStartup();
@@ -510,6 +513,16 @@ namespace uRADMonitorX {
         private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
             if (this.WindowState == FormWindowState.Normal) {
                 this.showWindow();
+            }
+        }
+
+        private void viewOnlyTextBoxId_TextChanged(object sender, EventArgs e) {
+            this.viewDeviceOnlineDataToolStripMenuItem.Enabled = this.viewOnlyTextBoxId.Text.Length > 0;
+        }
+
+        private void viewDeviceOnlineDataToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (this.viewOnlyTextBoxId.Text.Length > 0) {
+                System.Diagnostics.Process.Start(String.Format("http://www.uradmonitor.com?open={0}", this.viewOnlyTextBoxId.Text));
             }
         }
     }
