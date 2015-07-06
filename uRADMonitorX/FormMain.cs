@@ -261,20 +261,34 @@ namespace uRADMonitorX {
                 this.viewOnlyTextBoxRadiation.Text = String.Format("{0} cpm", deviceData.Radiation);
                 this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} cpm", deviceData.RadiationAverage);
             }
-            else if (Settings.RadiationUnitType == Core.RadiationUnitType.uSvH && RadiationDetector.IsKnown(deviceData.DeviceInformation.Detector)) {
-                this.viewOnlyTextBoxRadiation.Text = String.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour(deviceData.Radiation, RadiationDetector.GetByName(deviceData.DeviceInformation.Detector).Factor), 4));
-                this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour((double)deviceData.RadiationAverage, RadiationDetector.GetByName(deviceData.DeviceInformation.Detector).Factor), 4));
-            }
-            else if (Settings.RadiationUnitType == Core.RadiationUnitType.uRemH && RadiationDetector.IsKnown(deviceData.DeviceInformation.Detector)) {
-                this.viewOnlyTextBoxRadiation.Text = String.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour(deviceData.Radiation, RadiationDetector.GetByName(deviceData.DeviceInformation.Detector).Factor), 2));
-                this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour((double)deviceData.RadiationAverage, RadiationDetector.GetByName(deviceData.DeviceInformation.Detector).Factor), 2));
-            }
             else {
-                // Other values defaults to cpm.
-                Settings.RadiationUnitType = Core.RadiationUnitType.Cpm;
-                Settings.Commit();
-                this.viewOnlyTextBoxRadiation.Text = String.Format("{0} cpm", deviceData.Radiation);
-                this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} cpm", deviceData.RadiationAverage);
+                // Use normalized name only for conversions.
+                String radiationDetectorName = RadiationDetector.Normalize(deviceData.DeviceInformation.Detector);
+                if (RadiationDetector.IsKnown(radiationDetectorName)) {
+                    RadiationDetector radiationDetector = RadiationDetector.GetByName(radiationDetectorName);
+                    if (Settings.RadiationUnitType == Core.RadiationUnitType.uSvH) {
+                        this.viewOnlyTextBoxRadiation.Text = String.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour(deviceData.Radiation, radiationDetector.Factor), 4));
+                        this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour((double)deviceData.RadiationAverage, radiationDetector.Factor), 4));
+                    }
+                    else if (Settings.RadiationUnitType == Core.RadiationUnitType.uRemH) {
+                        this.viewOnlyTextBoxRadiation.Text = String.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour(deviceData.Radiation, radiationDetector.Factor), 2));
+                        this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour((double)deviceData.RadiationAverage, radiationDetector.Factor), 2));
+                    }
+                    else {
+                        // If conversion to other radiation unit type is not implemented fallback silently to cpm.
+                        Settings.RadiationUnitType = Core.RadiationUnitType.Cpm;
+                        Settings.Commit();
+                        this.viewOnlyTextBoxRadiation.Text = String.Format("{0} cpm", deviceData.Radiation);
+                        this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} cpm", deviceData.RadiationAverage);
+                    }
+                }
+                else {
+                    // If detector is not known fallback silently to cpm.
+                    Settings.RadiationUnitType = Core.RadiationUnitType.Cpm;
+                    Settings.Commit();
+                    this.viewOnlyTextBoxRadiation.Text = String.Format("{0} cpm", deviceData.Radiation);
+                    this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} cpm", deviceData.RadiationAverage);
+                }
             }
 
             if (Settings.TemperatureUnitType == Core.TemperatureUnitType.Celsius) {
@@ -284,7 +298,7 @@ namespace uRADMonitorX {
                 this.viewOnlyTextBoxTemperature.Text = String.Format("{0} F", Temperature.CelsiusToFahrenheit(deviceData.Temperature));
             }
             else {
-                // Other values defaults to Celsius.
+                // If conversion to other temperature unit type is not implemented fallback silently to default (Celsius).
                 Settings.TemperatureUnitType = Core.TemperatureUnitType.Celsius;
                 Settings.Commit();
                 this.viewOnlyTextBoxTemperature.Text = String.Format("{0} C", deviceData.Temperature);
@@ -298,7 +312,7 @@ namespace uRADMonitorX {
                     this.viewOnlyTextBoxPressure.Text = String.Format("{0} kPa", Pressure.PascalToKiloPascal(deviceData.Pressure.Value));
                 }
                 else {
-                    // Other values defaults to Pascal.
+                    // If conversion to other pressure unit type is not implemented fallback silently to default (Pascal).
                     Settings.PressureUnitType = Core.PressureUnitType.Pa;
                     Settings.Commit();
                     this.viewOnlyTextBoxPressure.Text = String.Format("{0} Pa", deviceData.Pressure.Value);
@@ -447,7 +461,7 @@ namespace uRADMonitorX {
                 this.Show();
                 this.BringToFront();
             }
-            this.TopMost = false; // Don't stay on top forever. Allow it to go to background.
+            this.TopMost = false; // Don't stay on top forever. Allow it to go in background.
         }
 
         private void minimizeToTray() {

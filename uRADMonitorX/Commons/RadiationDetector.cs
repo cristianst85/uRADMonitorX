@@ -77,13 +77,24 @@ namespace uRADMonitorX.Commons {
             }
         }
 
+        public static String Normalize(String detectorName) {
+
+            if (detectorName != null) {
+                detectorName = detectorName.Trim()                      // Trim leading and trailing white-spaces.               
+                                           .Replace("-", String.Empty); // Remove dashes. (e.g. fw version 110 / SI29-BG detector)
+            }
+
+            return detectorName;
+        }
+
         public static bool IsKnown(String detectorName) {
 
             if (detectorName == null) {
                 throw new ArgumentNullException("detectorName");
             }
 
-            detectorName = detectorName.Trim();
+            detectorName = detectorName.Trim(); // Trim leading and trailing white-spaces.
+
             foreach (RadiationDetector detector in detectors) {
                 if (detector.Name.Equals(detectorName, StringComparison.OrdinalIgnoreCase)) {
                     return true;
