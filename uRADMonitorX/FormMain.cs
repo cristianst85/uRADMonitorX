@@ -18,12 +18,10 @@ namespace uRADMonitorX {
 
     public partial class FormMain : Form {
 
-        public static String SettingsFilePath { get; private set; }
-        public static ISettings Settings { get; private set; }
-
         private IDeviceDataFetcher deviceDataFetcher = null;
         private ITimeSpanFormatter timeSpanFormatter = new TimeSpanFormatter();
         private ILogger logger = null;
+        private ISettings settings = null;
 
         private volatile bool _isClosing;
         public bool IsClosing {
@@ -50,10 +48,12 @@ namespace uRADMonitorX {
 
         private volatile bool ignoreRegistering;
 
-        public FormMain(bool ignoreRegistering) {
+        public FormMain(ISettings settings, ILogger logger, bool ignoreRegistering) {
             try {
                 InitializeComponent();
 
+                this.settings = settings;
+                this.logger = logger;
                 this.ignoreRegistering = ignoreRegistering;
 
                 this.notifyIcon.Icon = ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationGray_v3);
@@ -64,45 +64,30 @@ namespace uRADMonitorX {
                 this.toolStripStatusLabelDeviceStatus.Text = "Loading...";
                 this.toolStripStatusLabelDeviceUptime.Text = "n/a";
 
-                if (AssemblyUtils.GetVersion().Major == 0) {
-                    this.Text += " - Preview";
-                }
-
-                // Pre-init.
-                SettingsFilePath = String.Format("{0}{1}{2}", Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath), Path.DirectorySeparatorChar, Program.SettingsFileName);
-                if (File.Exists(SettingsFilePath)) {
-                    Settings = XMLSettings.LoadFromFile(SettingsFilePath);
-                }
-                else {
-                    XMLSettings.CreateFile(SettingsFilePath);
-                    Settings = XMLSettings.LoadFromFile(SettingsFilePath);
-                }
-
-                this.logger = LoggerManager.GetInstance().GetLogger(Program.LoggerName);
-                this.logger.Enabled = Settings.IsLoggingEnabled;
-                this.configLogger(this.logger);
+                Version version = AssemblyUtils.GetVersion();
+                this.Text = this.Text.Replace("{version}", String.Format("{0}.{1}.{2} - Preview", version.Major, version.Minor, version.Build));
 
                 // Pre-init.
                 // From settings.
-                if (String.IsNullOrEmpty(Settings.DeviceIPAddress)) {
+                if (String.IsNullOrEmpty(this.settings.DeviceIPAddress)) {
                     this.enablePollingToolStripMenuItem.Enabled = false;
                     this.viewDeviceWebpageToolStripMenuItem.Enabled = false;
                     this.viewDeviceWebpageToolStripMenuItem1.Enabled = false;
                 }
 
-                this.enablePollingToolStripMenuItem.Checked = Settings.IsPollingEnabled;
-                this.labelPressure.Enabled = Settings.HasPressureSensor;
+                this.enablePollingToolStripMenuItem.Checked = this.settings.IsPollingEnabled;
+                this.labelPressure.Enabled = this.settings.HasPressureSensor;
 
-                if (Settings.StartMinimized) {
+                if (this.settings.StartMinimized) {
                     this.WindowState = FormWindowState.Minimized;
                     this.ShowInTaskbar = false;
                 }
                 else {
-                    this.ShowInTaskbar = Settings.ShowInTaskbar;
+                    this.ShowInTaskbar = this.settings.ShowInTaskbar;
                 }
 
                 this.StartPosition = FormStartPosition.Manual;
-                this.restoreWindowPosition(Settings.LastWindowXPos, Settings.LastWindowYPos);
+                this.restoreWindowPosition(this.settings.LastWindowXPos, this.settings.LastWindowYPos);
 
                 this.viewDeviceOnlineDataToolStripMenuItem.Enabled = false;
 
@@ -133,8 +118,8 @@ namespace uRADMonitorX {
                 ILoggerAppender appender = LoggerManager.GetInstance().GetLogger(Program.LoggerName).Appender;
                 if (appender is ICanReconfigureAppender) {
                     // TODO: Verify if logger path is in application root directory.
-                    if (Settings.LogDirectoryPath.Length > 0) {
-                        ((ICanReconfigureAppender)appender).Reconfigure(Path.Combine(Settings.LogDirectoryPath, Program.LoggerFilePath));
+                    if (this.settings.LogDirectoryPath.Length > 0) {
+                        ((ICanReconfigureAppender)appender).Reconfigure(Path.Combine(this.settings.LogDirectoryPath, Program.LoggerFilePath));
                     }
                     else {
                         ((ICanReconfigureAppender)appender).Reconfigure(Path.Combine(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()), Program.LoggerFilePath));
@@ -148,7 +133,7 @@ namespace uRADMonitorX {
 
         private void registerAtWindowsStartup() {
             try {
-                if (Settings.StartWithWindows) {
+                if (this.settings.StartWithWindows) {
                     Registry.RegisterAtWindowsStartup(Application.ProductName, String.Format("\"{0}\"", new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
                 }
                 else {
@@ -172,14 +157,14 @@ namespace uRADMonitorX {
                     this.deviceDataFetcher.DeviceDataFetcherErrorEventHandler -= deviceDataFetcher_DeviceDataFetcherErrorEventHandler;
                 }
 
-                if (!String.IsNullOrEmpty(Settings.DeviceIPAddress)) {
-                    IDeviceDataReader deviceDataReader = new DeviceDataHttpReader(Settings.DeviceIPAddress);
+                if (!String.IsNullOrEmpty(this.settings.DeviceIPAddress)) {
+                    IDeviceDataReader deviceDataReader = new DeviceDataHttpReader(this.settings.DeviceIPAddress);
                     IPollingStrategy pollingStrategy = null;
-                    if (Settings.PollingType == Core.PollingType.WDTSync) {
+                    if (this.settings.PollingType == Core.PollingType.WDTSync) {
                         pollingStrategy = new WDTSyncPollingStrategy(60);
                     }
                     else {
-                        pollingStrategy = new FixedIntervalPollingStrategy(Settings.PollingInterval);
+                        pollingStrategy = new FixedIntervalPollingStrategy(this.settings.PollingInterval);
                     }
                     deviceDataFetcher = new DeviceDataFetcher(deviceDataReader, pollingStrategy);
                     deviceDataFetcher.DeviceDataFetcherEventHandler += new DeviceDataFetcherEventHandler(deviceDataFetcher_DeviceDataFetcherEventHandler);
@@ -187,7 +172,7 @@ namespace uRADMonitorX {
                     if (this.enablePollingToolStripMenuItem.Checked) {
                         deviceDataFetcher.Start();
                         if (!isRestart) {
-                            this.updateDeviceStatus(String.Format("Connecting to {0}...", Settings.DeviceIPAddress));
+                            this.updateDeviceStatus(String.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
                         }
                         this.notifyIcon.Icon = ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor);
                     }
@@ -253,11 +238,11 @@ namespace uRADMonitorX {
 
         private void updateDeviceData(DeviceData deviceData) {
             // Do not update data if user disables polling before first update.
-            if (!Settings.IsPollingEnabled) {
+            if (!this.settings.IsPollingEnabled) {
                 return;
             }
             this.updateDeviceInformation(deviceData.DeviceInformation);
-            if (Settings.RadiationUnitType == Core.RadiationUnitType.Cpm) {
+            if (this.settings.RadiationUnitType == Core.RadiationUnitType.Cpm) {
                 this.viewOnlyTextBoxRadiation.Text = String.Format("{0} cpm", deviceData.Radiation);
                 this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} cpm", deviceData.RadiationAverage);
             }
@@ -266,55 +251,55 @@ namespace uRADMonitorX {
                 String radiationDetectorName = RadiationDetector.Normalize(deviceData.DeviceInformation.Detector);
                 if (RadiationDetector.IsKnown(radiationDetectorName)) {
                     RadiationDetector radiationDetector = RadiationDetector.GetByName(radiationDetectorName);
-                    if (Settings.RadiationUnitType == Core.RadiationUnitType.uSvH) {
+                    if (this.settings.RadiationUnitType == Core.RadiationUnitType.uSvH) {
                         this.viewOnlyTextBoxRadiation.Text = String.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour(deviceData.Radiation, radiationDetector.Factor), 4));
                         this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour((double)deviceData.RadiationAverage, radiationDetector.Factor), 4));
                     }
-                    else if (Settings.RadiationUnitType == Core.RadiationUnitType.uRemH) {
+                    else if (this.settings.RadiationUnitType == Core.RadiationUnitType.uRemH) {
                         this.viewOnlyTextBoxRadiation.Text = String.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour(deviceData.Radiation, radiationDetector.Factor), 2));
                         this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour((double)deviceData.RadiationAverage, radiationDetector.Factor), 2));
                     }
                     else {
                         // If conversion to other radiation unit type is not implemented fallback silently to cpm.
-                        Settings.RadiationUnitType = Core.RadiationUnitType.Cpm;
-                        Settings.Commit();
+                        this.settings.RadiationUnitType = Core.RadiationUnitType.Cpm;
+                        this.settings.Commit();
                         this.viewOnlyTextBoxRadiation.Text = String.Format("{0} cpm", deviceData.Radiation);
                         this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} cpm", deviceData.RadiationAverage);
                     }
                 }
                 else {
                     // If detector is not known fallback silently to cpm.
-                    Settings.RadiationUnitType = Core.RadiationUnitType.Cpm;
-                    Settings.Commit();
+                    this.settings.RadiationUnitType = Core.RadiationUnitType.Cpm;
+                    this.settings.Commit();
                     this.viewOnlyTextBoxRadiation.Text = String.Format("{0} cpm", deviceData.Radiation);
                     this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} cpm", deviceData.RadiationAverage);
                 }
             }
 
-            if (Settings.TemperatureUnitType == Core.TemperatureUnitType.Celsius) {
+            if (this.settings.TemperatureUnitType == Core.TemperatureUnitType.Celsius) {
                 this.viewOnlyTextBoxTemperature.Text = String.Format("{0} C", deviceData.Temperature);
             }
-            else if (Settings.TemperatureUnitType == Core.TemperatureUnitType.Fahrenheit) {
+            else if (this.settings.TemperatureUnitType == Core.TemperatureUnitType.Fahrenheit) {
                 this.viewOnlyTextBoxTemperature.Text = String.Format("{0} F", Temperature.CelsiusToFahrenheit(deviceData.Temperature));
             }
             else {
                 // If conversion to other temperature unit type is not implemented fallback silently to default (Celsius).
-                Settings.TemperatureUnitType = Core.TemperatureUnitType.Celsius;
-                Settings.Commit();
+                this.settings.TemperatureUnitType = Core.TemperatureUnitType.Celsius;
+                this.settings.Commit();
                 this.viewOnlyTextBoxTemperature.Text = String.Format("{0} C", deviceData.Temperature);
             }
             if (deviceData.Pressure.HasValue) {
                 this.labelPressure.Enabled = true;
-                if (Settings.PressureUnitType == Core.PressureUnitType.Pa) {
+                if (this.settings.PressureUnitType == Core.PressureUnitType.Pa) {
                     this.viewOnlyTextBoxPressure.Text = String.Format("{0} Pa", deviceData.Pressure.Value);
                 }
-                else if (Settings.PressureUnitType == Core.PressureUnitType.kPa) {
+                else if (this.settings.PressureUnitType == Core.PressureUnitType.kPa) {
                     this.viewOnlyTextBoxPressure.Text = String.Format("{0} kPa", Pressure.PascalToKiloPascal(deviceData.Pressure.Value));
                 }
                 else {
                     // If conversion to other pressure unit type is not implemented fallback silently to default (Pascal).
-                    Settings.PressureUnitType = Core.PressureUnitType.Pa;
-                    Settings.Commit();
+                    this.settings.PressureUnitType = Core.PressureUnitType.Pa;
+                    this.settings.Commit();
                     this.viewOnlyTextBoxPressure.Text = String.Format("{0} Pa", deviceData.Pressure.Value);
                 }
             }
@@ -323,22 +308,26 @@ namespace uRADMonitorX {
                 this.viewOnlyTextBoxPressure.Text = String.Empty;
             }
 
-            // Update settings.
-            if (Settings.HasPressureSensor != deviceData.Pressure.HasValue) {
-                Settings.HasPressureSensor = deviceData.Pressure.HasValue;
-                Settings.Commit();
+            // Update Settings.
+            if (this.settings.HasPressureSensor != deviceData.Pressure.HasValue) {
+                this.settings.HasPressureSensor = deviceData.Pressure.HasValue;
+                this.settings.Commit();
             }
 
             this.viewOnlyTextBoxVoltage.Text = String.Format("{0} V ({1}%)", deviceData.Voltage, deviceData.VoltagePercent);
             this.viewOnlyTextBoxWDT.Text = String.Format("{0} s", deviceData.WDT);
             this.updateDeviceStatus(String.Format("Device received {0} from server.", (HttpStatus.GetReason(int.Parse(deviceData.ServerResponseCode)) != null) ? String.Format("{0} ({1})", deviceData.ServerResponseCode, HttpStatus.GetReason(int.Parse(deviceData.ServerResponseCode))) : deviceData.ServerResponseCode));
             this.updateDeviceUptime(deviceData.Uptime);
+
+            if (deviceData.ServerResponseCode != HttpStatus.OK.Code.ToString()) {
+                this.logger.Write(String.Format("Device received {0} from server (WDT={1})", deviceData.ServerResponseCode, deviceData.WDT));
+            }
         }
 
         private void enablePollingToolStripMenuItem_CheckedChanged(object sender, EventArgs e) {
             if (this.enablePollingToolStripMenuItem.Checked) {
                 deviceDataFetcher.Start();
-                this.updateDeviceStatus(String.Format("Connecting to {0}...", Settings.DeviceIPAddress));
+                this.updateDeviceStatus(String.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
             }
             else {
                 deviceDataFetcher.Stop();
@@ -349,18 +338,18 @@ namespace uRADMonitorX {
         // Toogle 'Enable polling'.
         private void enablePollingToolStripMenuItem_Click(object sender, EventArgs e) {
             this.enablePollingToolStripMenuItem.Checked = !this.enablePollingToolStripMenuItem.Checked;
-            Settings.IsPollingEnabled = this.enablePollingToolStripMenuItem.Checked;
-            Settings.Commit();
-            this.notifyIcon.Icon = Settings.IsPollingEnabled ?
+            this.settings.IsPollingEnabled = this.enablePollingToolStripMenuItem.Checked;
+            this.settings.Commit();
+            this.notifyIcon.Icon = this.settings.IsPollingEnabled ?
                 ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor) :
                 ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationGray_v3);
         }
 
         private void configurationToolStripMenuItem_Click(object sender, EventArgs e) {
-            using (FormDeviceConfiguration form = new FormDeviceConfiguration(Settings)) {
+            using (FormDeviceConfiguration form = new FormDeviceConfiguration(this.settings)) {
                 DialogResult result = form.ShowDialog(this);
                 if (result == System.Windows.Forms.DialogResult.OK) {
-                    if (!String.IsNullOrEmpty(Settings.DeviceIPAddress)) {
+                    if (!String.IsNullOrEmpty(this.settings.DeviceIPAddress)) {
                         this.enablePollingToolStripMenuItem.Enabled = true;
                         this.viewDeviceWebpageToolStripMenuItem.Enabled = true;
                         this.viewDeviceWebpageToolStripMenuItem1.Enabled = true;
@@ -371,14 +360,14 @@ namespace uRADMonitorX {
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e) {
-            using (FormOptions form = new FormOptions(Settings)) {
+            using (FormOptions form = new FormOptions(this.settings)) {
                 form.SettingsChangedEventHandler += new SettingsChangedEventHandler(form_SettingsChangedEventHandler);
                 DialogResult result = form.ShowDialog(this);
             }
         }
 
         private void form_SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e) {
-            // this.ShowInTaskbar = Settings.ShowInTaskbar; // TODO: fix this not to flicker.
+            // this.ShowInTaskbar = this.settings.ShowInTaskbar; // TODO: fix this not to flicker.
             if (!this.ignoreRegistering) {
                 this.registerAtWindowsStartup();
             }
@@ -400,7 +389,7 @@ namespace uRADMonitorX {
                 return;
             }
 
-            if (Settings.CloseToSystemTray && !this.IsClosing) {
+            if (this.settings.CloseToSystemTray && !this.IsClosing) {
                 this.minimizeToTray();
                 e.Cancel = true;
             }
@@ -441,15 +430,15 @@ namespace uRADMonitorX {
                 this.mLastWindowXPos = this.Left;
             }
             if (commitToSettings) {
-                Settings.LastWindowXPos = mLastWindowXPos;
-                Settings.LastWindowYPos = mLastWindowYPos;
-                Settings.Commit();
+                this.settings.LastWindowXPos = mLastWindowXPos;
+                this.settings.LastWindowYPos = mLastWindowYPos;
+                this.settings.Commit();
             }
         }
 
         private void showWindow() {
             if (this.WindowState == FormWindowState.Minimized) {
-                this.ShowInTaskbar = Settings.ShowInTaskbar;
+                this.ShowInTaskbar = this.settings.ShowInTaskbar;
                 this.Show();
                 this.BringToFront();
                 this.WindowState = FormWindowState.Normal;
@@ -465,13 +454,13 @@ namespace uRADMonitorX {
         }
 
         private void minimizeToTray() {
-            this.ShowInTaskbar = Settings.ShowInTaskbar;
+            this.ShowInTaskbar = this.settings.ShowInTaskbar;
             this.Hide();
             this.WindowState = FormWindowState.Minimized;
         }
 
         private void toogleWindow() {
-            this.ShowInTaskbar = Settings.ShowInTaskbar;
+            this.ShowInTaskbar = this.settings.ShowInTaskbar;
             if (this.WindowState == FormWindowState.Minimized) {
                 this.Show();
                 this.BringToFront();
@@ -502,11 +491,11 @@ namespace uRADMonitorX {
         }
 
         private void viewDeviceWebpageToolStripMenuItem_Click(object sender, EventArgs e) {
-            System.Diagnostics.Process.Start(String.Format("http://{0}/", Settings.DeviceIPAddress));
+            System.Diagnostics.Process.Start(String.Format("http://{0}/", this.settings.DeviceIPAddress));
         }
 
         private void viewDeviceWebpageToolStripMenuItem1_Click(object sender, EventArgs e) {
-            System.Diagnostics.Process.Start(String.Format("http://{0}/", Settings.DeviceIPAddress));
+            System.Diagnostics.Process.Start(String.Format("http://{0}/", this.settings.DeviceIPAddress));
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {

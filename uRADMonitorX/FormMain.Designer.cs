@@ -583,7 +583,7 @@ namespace uRADMonitorX {
             this.MainMenuStrip = this.menuStrip;
             this.MaximizeBox = false;
             this.Name = "FormMain";
-            this.Text = "uRADMonitorX";
+            this.Text = "uRADMonitorX {version}";
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);

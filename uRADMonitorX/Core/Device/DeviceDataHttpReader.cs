@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using uRADMonitorX.Commons.Networking;
 
 namespace uRADMonitorX.Core.Device {
 

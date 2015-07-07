@@ -7,6 +7,7 @@ using uRADMonitorX.Commons;
 using uRADMonitorX.Commons.Logging;
 using uRADMonitorX.Commons.Logging.Appenders;
 using uRADMonitorX.Commons.Logging.Formatters;
+using uRADMonitorX.Configuration;
 
 namespace uRADMonitorX {
 
@@ -42,17 +43,35 @@ namespace uRADMonitorX {
                 }
             }
 
+            // Load settings.
+            ISettings settings = null;
+            String settingsFilePath = String.Format("{0}{1}{2}", Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath), Path.DirectorySeparatorChar, Program.SettingsFileName);
+            if (File.Exists(settingsFilePath)) {
+                settings = XMLSettings.LoadFromFile(settingsFilePath);
+            }
+            else {
+                XMLSettings.CreateFile(settingsFilePath);
+                settings = XMLSettings.LoadFromFile(settingsFilePath);
+            }
+
+            String loggerFilePath = null;
+            if (settings.LogDirectoryPath.Length > 0) {
+                loggerFilePath = Path.Combine(settings.LogDirectoryPath, Program.LoggerFilePath);
+            }
+            else {
+                loggerFilePath = Path.Combine(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()), Program.LoggerFilePath);
+            }
+
             LoggerManager.GetInstance().Add(Program.LoggerName,
-                                                new ThreadSafeLogger(
-                                                    new FileAppender(Path.Combine((Path.GetDirectoryName(AssemblyUtils.GetApplicationPath())), Program.LoggerFilePath)) { Enabled = true },
-                                                    new SimpleFormatter()) { Enabled = false }
-                                            );
+                                            new ThreadSafeLogger(
+                                                new FileAppender(Path.Combine((Path.GetDirectoryName(AssemblyUtils.GetApplicationPath())), Program.LoggerFilePath)) { Enabled = true },
+                                                new SimpleFormatter()) { Enabled = settings.IsLoggingEnabled }
+                                           );
             ILogger logger = LoggerManager.GetInstance().GetLogger(Program.LoggerName);
-            logger.Write("Application is starting...");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain(arguments.IgnoreRegisteringAtWindowsStartup));
+            Application.Run(new FormMain(settings, logger, arguments.IgnoreRegisteringAtWindowsStartup));
         }
     }
 }
