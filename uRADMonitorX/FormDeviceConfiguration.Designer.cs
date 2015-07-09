@@ -96,7 +96,7 @@
             // textBoxIPAddress
             // 
             this.textBoxIPAddress.Location = new System.Drawing.Point(80, 23);
-            this.textBoxIPAddress.MaxLength = 15;
+            this.textBoxIPAddress.MaxLength = 21;
             this.textBoxIPAddress.Name = "textBoxIPAddress";
             this.textBoxIPAddress.Size = new System.Drawing.Size(177, 20);
             this.textBoxIPAddress.TabIndex = 1;

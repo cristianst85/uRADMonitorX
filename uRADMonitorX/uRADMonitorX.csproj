@@ -67,6 +67,7 @@
     <Compile Include="Commons\Logging\NullLogger.cs" />
     <Compile Include="Commons\Logging\NullLoggerFactory.cs" />
     <Compile Include="Commons\MathX.cs" />
+    <Compile Include="Commons\Networking\IPEndPoint.cs" />
     <Compile Include="Commons\Radiation.cs" />
     <Compile Include="Commons\AssemblyUtils.cs" />
     <Compile Include="Configuration\SettingsChangedEventArgs.cs" />

@@ -14,7 +14,8 @@ namespace uRADMonitorX.Core.Device {
                 throw new ArgumentNullException("ipAddress");
             }
 
-            if (!uRADMonitorX.Commons.Networking.IPAddress.IsValidFormat(ipAddress)) {
+            if (!uRADMonitorX.Commons.Networking.IPAddress.IsValidFormat(ipAddress) &&
+                !uRADMonitorX.Commons.Networking.IPEndPoint.IsValidFormat(ipAddress)) {
                 throw new ArgumentException("Invalid IP address.");
             }
 
@@ -28,7 +29,7 @@ namespace uRADMonitorX.Core.Device {
 
         private String retrieveContentFromUrl(String url) {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.UserAgent = "uRADMonitorX/1.0"; // TODO: move this to another class (Application.Constants)
+            request.UserAgent = "uRADMonitorX/1.0"; // TODO: move this string to another class.
             String htmlContent = String.Empty;
             using (WebResponse response = request.GetResponse()) {
                 Stream data = response.GetResponseStream();

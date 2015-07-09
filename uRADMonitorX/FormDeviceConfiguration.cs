@@ -71,7 +71,7 @@ namespace uRADMonitorX {
         }
 
         private bool validateIPAddress(String ipAddress) {
-            return IPAddress.IsValidFormat(ipAddress);
+            return IPAddress.IsValidFormat(ipAddress) || IPEndPoint.IsValidFormat(ipAddress);
         }
 
         private bool validatePollingInterval(String pollingInterval) {
