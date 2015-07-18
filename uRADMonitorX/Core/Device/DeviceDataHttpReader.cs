@@ -7,6 +7,7 @@ namespace uRADMonitorX.Core.Device {
     public class DeviceDataHttpReader : DeviceDataReader, IDeviceDataReader {
 
         public String IPAddress { get; private set; }
+        public int Timeout { get; set; }
 
         public DeviceDataHttpReader(String ipAddress) {
 
@@ -30,6 +31,9 @@ namespace uRADMonitorX.Core.Device {
         private String retrieveContentFromUrl(String url) {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.UserAgent = "uRADMonitorX/1.0"; // TODO: move this string to another class.
+            if (this.Timeout > 0) {
+                request.Timeout = this.Timeout; // TODO: HttpWebRequest seems to have a default timeout of approx. 20 sec.
+            }
             String htmlContent = String.Empty;
             using (WebResponse response = request.GetResponse()) {
                 Stream data = response.GetResponseStream();

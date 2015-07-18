@@ -2,9 +2,11 @@
 using System.Diagnostics;
 using System.IO;
 using System.Security.Permissions;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using uRADMonitorX.Commons;
+using uRADMonitorX.Commons.Controls;
 using uRADMonitorX.Commons.Formatting;
 using uRADMonitorX.Commons.Logging;
 using uRADMonitorX.Commons.Logging.Appenders;
@@ -56,7 +58,7 @@ namespace uRADMonitorX {
                 this.logger = logger;
                 this.ignoreRegistering = ignoreRegistering;
 
-                this.notifyIcon.Icon = ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationGray_v3);
+                this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationDisabled;
 
                 // Fix status strip right padding.
                 this.statusStrip.Padding = new Padding(3, this.statusStrip.Padding.Top, 3, this.statusStrip.Padding.Bottom);
@@ -174,16 +176,18 @@ namespace uRADMonitorX {
                         if (!isRestart) {
                             this.updateDeviceStatus(String.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
                         }
-                        this.notifyIcon.Icon = ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor);
+                        this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor;
                     }
                     else {
                         this.updateDeviceStatus("Polling is disabled.");
-                        this.notifyIcon.Icon = ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationGray_v3);
+                        this.updateNotifyIconText("Polling is disabled.");
+                        this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationDisabled;
                     }
                 }
                 else {
                     this.updateDeviceStatus("Device is not configured.");
-                    this.notifyIcon.Icon = ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationGray_v3);
+                    this.updateNotifyIconText("Device is not configured.");
+                    this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationDisabled;
                 }
             }
         }
@@ -219,6 +223,21 @@ namespace uRADMonitorX {
             this.logger.Write(String.Format("Device data fetch error. Exception: {0}", ex.ToString()));
             this.toolStripStatusLabelDeviceStatus.Text = "Device data fetch error.";
             this.statusStrip.Update();
+            // Update icon and ToolTip text for notification area icon.
+            this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationWithError;
+            this.updateNotifyIconText("Device data fetch error.");
+        }
+
+        private void updateNotifyIconText() {
+            this.updateNotifyIconText(null);
+        }
+
+        private void updateNotifyIconText(String message) {
+            StringBuilder notifyIconText = new StringBuilder(this.Text); // Get form title text.
+            if (message != null) {
+                notifyIconText.Append(String.Format("\n{0}", message));
+            }
+            NotifyIconUtils.SetText(this.notifyIcon, notifyIconText.ToString());
         }
 
         private delegate void updateDeviceStatusCallback(String status);
@@ -277,16 +296,16 @@ namespace uRADMonitorX {
             }
 
             if (this.settings.TemperatureUnitType == Core.TemperatureUnitType.Celsius) {
-                this.viewOnlyTextBoxTemperature.Text = String.Format("{0} C", deviceData.Temperature);
+                this.viewOnlyTextBoxTemperature.Text = String.Format("{0} °C", deviceData.Temperature);
             }
             else if (this.settings.TemperatureUnitType == Core.TemperatureUnitType.Fahrenheit) {
-                this.viewOnlyTextBoxTemperature.Text = String.Format("{0} F", Temperature.CelsiusToFahrenheit(deviceData.Temperature));
+                this.viewOnlyTextBoxTemperature.Text = String.Format("{0} °F", Temperature.CelsiusToFahrenheit(deviceData.Temperature));
             }
             else {
                 // If conversion to other temperature unit type is not implemented fallback silently to default (Celsius).
                 this.settings.TemperatureUnitType = Core.TemperatureUnitType.Celsius;
                 this.settings.Commit();
-                this.viewOnlyTextBoxTemperature.Text = String.Format("{0} C", deviceData.Temperature);
+                this.viewOnlyTextBoxTemperature.Text = String.Format("{0} °C", deviceData.Temperature);
             }
             if (deviceData.Pressure.HasValue) {
                 this.labelPressure.Enabled = true;
@@ -317,10 +336,28 @@ namespace uRADMonitorX {
             this.viewOnlyTextBoxVoltage.Text = String.Format("{0} V ({1}%)", deviceData.Voltage, deviceData.VoltagePercent);
             this.viewOnlyTextBoxWDT.Text = String.Format("{0} s", deviceData.WDT);
             this.updateDeviceStatus(String.Format("Device received {0} from server.", (HttpStatus.GetReason(int.Parse(deviceData.ServerResponseCode)) != null) ? String.Format("{0} ({1})", deviceData.ServerResponseCode, HttpStatus.GetReason(int.Parse(deviceData.ServerResponseCode))) : deviceData.ServerResponseCode));
+
+            // Update ToolTip text for notification area icon.
+            StringBuilder notifyIconText = new StringBuilder(String.Format("Radiation: {0}, Average: {1}\nTemperature: {2}", this.viewOnlyTextBoxRadiation.Text, this.viewOnlyTextBoxRadiationAverage.Text, this.viewOnlyTextBoxTemperature.Text));
+            if (settings.HasPressureSensor) {
+                notifyIconText.Append(String.Format(", Pressure: {0}", this.viewOnlyTextBoxPressure.Text));
+            }
+            this.updateNotifyIconText(notifyIconText.ToString());
+
             this.updateDeviceUptime(deviceData.Uptime);
 
             if (deviceData.ServerResponseCode != HttpStatus.OK.Code.ToString()) {
                 this.logger.Write(String.Format("Device received {0} from server (WDT={1})", deviceData.ServerResponseCode, deviceData.WDT));
+                this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationWithError;
+                if (deviceData.WDT > 59) {
+                    this.updateNotifyIconText("Device cannot send data to server...");
+                }
+                else {
+                    // TODO: Ask Radu about this strange behavior (deviceData.ServerResponseCode == 0 && (WDT == 59 || WDT == 60)).
+                }
+            }
+            else {
+                this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor;
             }
         }
 
@@ -328,10 +365,12 @@ namespace uRADMonitorX {
             if (this.enablePollingToolStripMenuItem.Checked) {
                 deviceDataFetcher.Start();
                 this.updateDeviceStatus(String.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
+                this.updateNotifyIconText(String.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
             }
             else {
                 deviceDataFetcher.Stop();
                 this.updateDeviceStatus("Polling is disabled.");
+                this.updateNotifyIconText("Polling is disabled.");
             }
         }
 
@@ -342,7 +381,7 @@ namespace uRADMonitorX {
             this.settings.Commit();
             this.notifyIcon.Icon = this.settings.IsPollingEnabled ?
                 ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor) :
-                ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationGray_v3);
+                ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationDisabled);
         }
 
         private void configurationToolStripMenuItem_Click(object sender, EventArgs e) {

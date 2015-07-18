@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 namespace uRADMonitorX.Commons {
 
     /// <summary>
-    /// Information about coversion factors where taken from
+    /// The information about coversion factors was taken from: 
     /// https://github.com/radhoo/uradmonitor_kit1/blob/master/code/misc/detectors.cpp
     /// </summary>
     internal class RadiationDetector {
@@ -81,7 +81,7 @@ namespace uRADMonitorX.Commons {
 
             if (detectorName != null) {
                 detectorName = detectorName.Trim()                      // Trim leading and trailing white-spaces.               
-                                           .Replace("-", String.Empty); // Remove dashes. (e.g. fw version 110 / SI29-BG detector)
+                                           .Replace("-", String.Empty); // Remove dashes. (e.g.: fw version 110 / SI29-BG detector)
             }
 
             return detectorName;

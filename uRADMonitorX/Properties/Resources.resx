@@ -124,90 +124,17 @@
   <data name="information" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Menus\information.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="warning_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\warning_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="group_go" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Menus\group_go.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="wrench" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Menus\wrench.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="RadiationColor" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        AAABAAIAEBAAAAEACABoBQAAJgAAABAQAAABACAAaAQAAI4FAAAoAAAAEAAAACAAAAABAAgAAAAAAEAB
-        AAAAAAAAAAAAAAABAAAAAAAAAAAAAA/G+gAeUnoAVmlqADhbXgAsHR0AAAAAAAAAAACMs7MAaV9eABHq
-        +ABua2oAd/b6AA/R+QAAAAAAMC4uAAAAAABvbGwAEbb7ACwpKgBtaWkAIiEiACEVEgAqJSYAAAAAAA/C
-        +gAAAAAApff6AKH3+gAmICIAi/b5AGX//wAAAAAAY/X5AF31+QBU9fkAD///AC4tLQAM3/8ADtX4AC4i
-        IAAPzfkAAAAAAAAAAAA1MzMANSkpAA+++gAQu/oAIB8hACUfIAAAAAAAJiUmAGpjYwAgHh8AMyoqADMw
-        MAAfSk8AHTJJAC0mJwAwJCQALissACQiIwCQ0tUAbIODAG1rawAWb7sAQubqAClVXgA2naAATPX5AGtq
-        agAR3/MAOaSqABxueQBvbm4AFIS7AErl6wAxLzAAFX+ZAAAAAACP9/kAAAAAAA7Y+ABEPTsAAAAAAAAA
-        AABY9fkAYXl5AJXHywCZ9/oAnff6AFvT1gAAAAAALyQjAAAAAAAjSE4AhPf6AAAAAAAPv/cAAAAAAAAA
-        AAAAAAAAp/v9AGH1+QCw+f4AAAAAAAAAAAAAAAAAELL/AAAAAABru74AAAAAADh9gAAAAAAAAAAAAAAA
-        AAAAAAAAO2BiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJD3+QAAAAAAD837AHz5/QCF9vkAAAAAAAAA
-        AABrYmEAbGRkAAAAAAAAAAAAcvX5ABWFzQAfHBwAAAAAAA7v/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AABSZGYAAAAAAKf4+wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEMbpAAAAAAARsvsAF8PNAAAA
-        AAAAAAAAbmhoAI3k6AAAAAAAAAAAAAAAAAB5kpMAAAAAAAAAAAAAAAAAcG9uAAAAAAAN3fsANjIxAEj1
-        +QBO+PwAgfL1AAAAAAAoHx8AAAAAAAAAAAAAAAAAAAAAAA/Y9AAAAAAAAAAAAAAAAAAAAAAAAAAAABtu
-        cwAAAAAAAAAAAAAAAAAAAAAADsz+AAAAAAAAAAAAS6qtAFZQUABZUFEAAAAAAAAAAAAhMTUAAAAAABOT
-        6QAAAAAAAAAAAHv1+QAAAAAAAAAAAAAAAAAAAAAAKigoAAAAAAAjGBcAAAAAAAAAAAAAAAAAAAAAAG6Y
-        mQAAAAAAf/X5ADQtLQBo+PwAf8TGAGv6/gCR9/oAHDhGAAAAAAAAAAAAcXJwAHBvcAAAAAAADtv4AAAA
-        AAAAAAAAAAAAAIf3+gCf+v0AJpOZAAAAAAAAAAAAa2BgAAAAAAB/9/sAAAAAAG1nZwAAAAAAOklKAAAA
-        AAAzMTEAAAAAAAAAAAAAAAAA////AAAAAAAAAuQ5OeQCAAAAAAAAAABJS8MBLi+ebEECAAAAAABJS5wN
-        KQEZLxLNQQIAAABJnxPVuK0nDX5iNTWIAgAARDw8E1+L6lIm5DAwiU4ASfs3DyUTFwoKMT0VFTWJAgQt
-        LDdNJTokJB0zPT0wFkNdNq7fNjtMFxdHBbMxMdcoXfl1cETGTMjHQkjwvjjLKARgfB6A3n9CQh9nViNF
-        r0M/71njUO6xgzRu4iEiI7CSAD5mHFqj80BGNNwMh+BbAAA/PpQbp6JAQBQJ9dA+kgAAAD9YaAurShFA
-        FOE+AwAAAAAAPwjn9xQUhOg+AwAAAAAAAAAAP1dTU1c/AAAAAAD4HwAA4AcAAMADAACAAQAAgAEAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAIABAACAAQAAwAMAAOAHAAD4HwAAKAAAABAAAAAgAAAAAQAgAAAA
-        AABABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjDw1YHy89phxPY+cZXoD0GVuA9BxJ
-        Y+cfKj2mIxQNWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACYVEx0gMzqtFY2r/w+76f8Oz///Dsj//w/B
-        //8Qu///EaDp/xZyq/8hLTutJhoTHQAAAAAAAAAAAAAAACcZGBwfTVXOGYSZ/xmDnf8M4f//D876/w/I
-        +f8Pw/n/D7/8/w/C//8XaJn/GGCX/yE/Vs4nHRgcAAAAACgdHwIkPUCtHY6X/y0nJ/8qGhr/FKnA/wzm
-        //8O0/j/D875/w3X//8Tkr//IRMR/yAcHP8ZY5X/JDZCrSkhHwIsHR1WIo+U/y0/QP8vJib/LSQk/yc7
-        Pv8R2+z/DuL7/w7d/P8Oy+z/Hi82/yAZGf8gGxv/HSoy/xtqlP8sIR5WK1JVpy93ev8yKSn/MC4u/y4t
-        Lf8uHR3/IXN6/w76//8P9f//HWl3/yUVFf8iICL/IR8i/yAZGP8aVG//J0hYpzJ2eec4cHL/NCUl/zMx
-        MP8xLy//LyYm/yw0Nf8Ztrj/F7S2/ycvMP8nHR7/JSMk/yMhI/8iFBL/GlRm/yNld+c7gYX2OVdZ/zMh
-        IP8xKir/Liws/y4pKf8rXF//LDc4/yk1N/8kV1r/JyAi/yQfIP8jGhv/JA4O/xw9Sf8fboD2Q4aI9kml
-        p/9AiYv/SJ6g/1C2uP9Xw8b/WM/T/1xjZP9aZGT/TNHU/0C+xP81r7T/KZSX/x56fv8Tk5r/IHyH9kVw
-        ced8////gf///4f///+J////gv///3r2+f9usrT/aZyf/2Xl5v9f////Wf///1D///9A////L////zJ0
-        dedJVFWnn/L0/5/7/f+V9vr/kPf5/4z///94ubz/amNj/2pgYP9qj5D/bfv//2X1+f9f9Pn/Wfn9/1nx
-        9P9EV1inMSkoVoa5uv+t////oPf6/537/v+R7PD/b3Nz/2tnZ/9raWn/amBg/3PHyv92////bfX5/2r/
-        //9btrn/NigoVjAqKgJKT1Ctqezv/6/+//+o/v//g6io/2tiYv9ubGz/bWtr/2tjY/9ue3v/gfDy/4D9
-        //936u3/RUxOrTQrKwIAAAAALSUlHF1sbM6u8fP/p+nt/21rav9qY2L/bWlp/21nZ/9qZGP/aFpa/4LA
-        wf+I7+//UmpqzjImJhwAAAAAAAAAAAAAAAAvJiYdTFNUrYWtr/+Jpqf/g5eY/3uHiP97h4j/gZWX/4Gh
-        o/93qav/SVJSrTMnJh0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3Ly5YVWVlpmqBgedykJD0cI+P9GZ/
-        gOdRY2OmOjAvWAAAAAAAAAAAAAAAAAAAAADwDwAAwAMAAIABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAgAEAAMADAADwDwAA
-</value>
-  </data>
   <data name="group_link" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Menus\group_link.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="RadiationGray" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        AAABAAEAEBAAAAEAGABoAwAAFgAAACgAAAAQAAAAIAAAAAEAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAACtra16enpgYGBoaGhmZmZdXV14eHiurq4AAAAAAAAAAAAAAAAAAAAAAAAAAAB1
-        dXWJiYm2trbIyMjExMTAwMC9vb2mpqZ5eXlzc3MAAAAAAAAAAAAAAAAAAABubm5/f39/f3/T09PGxsbC
-        wsK/v7++vr7BwcFubm5paWlnZ2cAAAAAAAAAAAB7e3uEhIQoKCgcHBygoKDW1tbIyMjGxsbNzc2SkpIU
-        FBQcHBxqamp4eHgAAACtra2FhYU9PT0nJyclJSU6OjrKysrS0tLQ0NDAwMAvLy8aGhocHBwrKytubm61
-        tbWMjIxwcHAqKiouLi4tLS0fHx9sbGzi4uLf399lZWUXFxchISEgICAZGRlWVlaJiYl9fX1qamonJycx
-        MTEvLy8nJyczMzOlpaWjo6MuLi4eHh4kJCQiIiIVFRVTU1NycnKAgIBUVFQjIyMrKyssLCwqKipYWFg2
-        NjY0NDRSUlIhISEgICAbGxsQEBA9PT1xcXGEhISbm5uCgoKVlZWrq6u4uLjDw8NjY2NjY2PDw8OysrKj
-        o6OJiYlxcXGHh4d7e3t6enrx8fHx8fHy8vLy8vLx8fHp6emrq6uXl5fX19ft7e3t7e3s7Ozq6uro6Oh7
-        e3uPj4/p6enx8fHt7e3s7Ozy8vKzs7NkZGRhYWGLi4vt7e3m5ubl5eXp6enh4eGQkJC3t7e0tLT29vbu
-        7u7y8vLj4+Nzc3NnZ2dpaWlhYWG/v7/w8PDn5+fv7++tra24uLgAAACIiIjm5ub29vb19fWkpKRjY2Ns
-        bGxra2tkZGR6enrk5OTw8PDe3t6GhoYAAAAAAAAAAACIiIjq6urj4+Nra2tjY2NpaWloaGhkZGRcXFy5
-        ubnk5OSFhYUAAAAAAAAAAAAAAAAAAACKioqpqamjo6OVlZWGhoaGhoaTk5Oenp6kpKSJiYkAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAC4uLiampqLi4uSkpKRkZGJiYmZmZm4uLgAAAAAAAAAAAAAAADwDwAA4AcAAMAD
-        AACAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAAwAMAAOAHAADwDwAA
-</value>
-  </data>
   <data name="page_white_link" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Menus\page_white_link.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="RadiationGray_v2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Systray\RadiationGray-v2.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="world_link" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Menus\world_link.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -227,11 +154,16 @@
   <data name="cog" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Menus\cog.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="RadiationGray_v3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Systray\RadiationGray-v3.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="chart_curve_go" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Menus\chart_curve_go.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RadiationColor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RadiationColor.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RadiationDisabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RadiationDisabled.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RadiationWithError" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RadiationWithError.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -173,9 +173,9 @@ namespace uRADMonitorX.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon RadiationGray {
+        internal static System.Drawing.Icon RadiationDisabled {
             get {
-                object obj = ResourceManager.GetObject("RadiationGray", resourceCulture);
+                object obj = ResourceManager.GetObject("RadiationDisabled", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -183,30 +183,10 @@ namespace uRADMonitorX.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon RadiationGray_v2 {
+        internal static System.Drawing.Icon RadiationWithError {
             get {
-                object obj = ResourceManager.GetObject("RadiationGray_v2", resourceCulture);
+                object obj = ResourceManager.GetObject("RadiationWithError", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon RadiationGray_v3 {
-            get {
-                object obj = ResourceManager.GetObject("RadiationGray_v3", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap warning_16x16 {
-            get {
-                object obj = ResourceManager.GetObject("warning_16x16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

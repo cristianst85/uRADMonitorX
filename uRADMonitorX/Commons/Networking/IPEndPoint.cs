@@ -37,9 +37,12 @@ namespace uRADMonitorX.Commons.Networking {
             }
             else {
                 int port = int.Parse(ipEndPoint.Substring(ipEndPoint.IndexOf(':') + 1));
-                return isRegexMatch && port > 0 && port <= 65535;
+                return isRegexMatch && isValidPortNumber(port);
             }
+        }
 
+        private static bool isValidPortNumber(int portNumber) {
+            return (portNumber > 0 && portNumber <= 65535);
         }
 
         private static Regex createRegex(String pattern) {

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentDescription.cs" />
+    <Compile Include="Commons\Controls\NotifyIconUtils.cs" />
     <Compile Include="Commons\EnumHelper.cs" />
     <Compile Include="Commons\Logging\Appenders\NullAppender.cs" />
     <Compile Include="Commons\Logging\Appenders\ICanReconfigureAppender.cs" />
@@ -86,6 +87,11 @@
     <Compile Include="Core\Fetchers\DeviceDataFetcherErrorEventArgs.cs" />
     <Compile Include="Core\Fetchers\DeviceDataFetcherEventArgs.cs" />
     <Compile Include="ProgramArguments.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Windows\NativeMethods.cs" />
     <Compile Include="Commons\Formatting\ITimeSpanFormatter.cs" />
     <Compile Include="Commons\Formatting\TimeSpanFormatter.cs" />
@@ -157,14 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="Commons\Controls\ViewOnlyTextBox.resx">
       <DependentUpon>ViewOnlyTextBox.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -194,15 +195,14 @@
     <None Include="Resources\Menus\group_go.png" />
     <None Include="Resources\Menus\page_white_go.png" />
     <None Include="Resources\Menus\world_go.png" />
-    <None Include="Resources\Systray\Radiation.ico" />
-    <None Include="Resources\Systray\RadiationGray.ico" />
-    <None Include="Resources\Systray\RadiationGray-v2.ico" />
-    <None Include="Resources\Systray\RadiationGray-v3.bmp" />
-    <None Include="Resources\Systray\RadiationGray-v3.ico" />
+    <None Include="Resources\Systray\RadiationDisabled.ico" />
     <None Include="Resources\Atomic.ico" />
-    <None Include="Resources\AtomicGray.ico" />
     <None Include="Resources\Menus\chart_curve_go.png" />
-    <Content Include="Resources\warning_16x16.png" />
+    <None Include="Resources\RadiationDisabled.ico" />
+    <None Include="Resources\Systray\RadiationWithError.ico" />
+    <Content Include="Resources\RadiationColor.ico" />
+    <Content Include="Resources\RadiationWithError.ico" />
+    <Content Include="Resources\Systray\RadiationColor.ico" />
     <Content Include="_todo.txt" />
   </ItemGroup>
   <ItemGroup />

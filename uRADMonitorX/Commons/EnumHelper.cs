@@ -9,7 +9,7 @@ namespace uRADMonitorX.Commons {
         /// <summary>
         /// Takes an enum type and returns a generic list populated with each enum item.
         /// <para>
-        /// Source code taken form: 
+        /// Source code was taken from: 
         /// http://extensionmethod.net/csharp/enum/generic-enum-to-list-t-converter
         /// </para>
         /// </summary>
@@ -29,7 +29,7 @@ namespace uRADMonitorX.Commons {
         /// <summary>
         /// Gets the description attribute assigned to an item in an Enum.
         /// <para>
-        /// Source code taken form: 
+        /// Source code was taken from: 
         /// http://extensionmethod.net/csharp/enum/getenumdescription
         /// </para>
         /// </summary>
