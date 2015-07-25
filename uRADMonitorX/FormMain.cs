@@ -553,6 +553,7 @@ namespace uRADMonitorX {
         }
 
         private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
+            this.contextMenuStrip.Show(Cursor.Position, ToolStripDropDownDirection.AboveRight);
             if (this.WindowState == FormWindowState.Normal) {
                 this.showWindow();
             }
