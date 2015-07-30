@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{955E6A4C-7543-41DF-9303-B351C888835A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>uRADMonitorX</RootNamespace>
+    <AssemblyName>uRADMonitorX</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\uRADMonitorX.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Atomic.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commons\EnumHelper.cs" />
+    <Compile Include="Commons\Logging\Appenders\NullAppender.cs" />
+    <Compile Include="Commons\Logging\Appenders\ICanReconfigureAppender.cs" />
+    <Compile Include="Commons\Logging\Appenders\RollingFileAppender.cs" />
+    <Compile Include="Commons\Logging\Appenders\DailyRollingFileAppender.cs" />
+    <Compile Include="Commons\Logging\Appenders\FileAppender.cs" />
+    <Compile Include="Commons\Logging\Formatters\SimpleFormatter.cs" />
+    <Compile Include="Commons\Logging\ThreadSafeLogger.cs" />
+    <Compile Include="Commons\Logging\FileLoggerFactory.cs" />
+    <Compile Include="Commons\Logging\Formatters\PassthroughFormatter.cs" />
+    <Compile Include="Commons\Logging\GenericLoggerFactory.cs" />
+    <Compile Include="Commons\Logging\Logger.cs" />
+    <Compile Include="Commons\Logging\Appenders\ILoggerAppender.cs" />
+    <Compile Include="Commons\Logging\ILogger.cs" />
+    <Compile Include="Commons\Logging\ILoggerFactory.cs" />
+    <Compile Include="Commons\Logging\Formatters\ILoggerFormatter.cs" />
+    <Compile Include="Commons\Logging\LoggerManager.cs" />
+    <Compile Include="Commons\Logging\NullLogger.cs" />
+    <Compile Include="Commons\Logging\NullLoggerFactory.cs" />
+    <Compile Include="Commons\MathX.cs" />
+    <Compile Include="Commons\Radiation.cs" />
+    <Compile Include="Commons\AssemblyUtils.cs" />
+    <Compile Include="Configuration\SettingsChangedEventArgs.cs" />
+    <Compile Include="Core\Fetchers\DeviceDataFetcher.cs" />
+    <Compile Include="Core\Fetchers\WDTSyncPollingStrategy.cs" />
+    <Compile Include="Core\Fetchers\FixedIntervalPollingStrategy.cs" />
+    <Compile Include="Core\Fetchers\IPollingStrategy.cs" />
+    <Compile Include="Core\RadiationUnitType.cs" />
+    <Compile Include="Commons\RadiationDetector.cs" />
+    <Compile Include="FormAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAbout.Designer.cs">
+      <DependentUpon>FormAbout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Fetchers\DeviceDataFetcherErrorEventArgs.cs" />
+    <Compile Include="Core\Fetchers\DeviceDataFetcherEventArgs.cs" />
+    <Compile Include="Windows\NativeMethods.cs" />
+    <Compile Include="Commons\Formatting\ITimeSpanFormatter.cs" />
+    <Compile Include="Commons\Formatting\TimeSpanFormatter.cs" />
+    <Compile Include="Commons\Networking\HttpStatus.cs" />
+    <Compile Include="Commons\Pressure.cs" />
+    <Compile Include="Configuration\DefaultSettings.cs" />
+    <Compile Include="Core\Device\DeviceInformation.cs" />
+    <Compile Include="Core\Device\DeviceDataReader.cs" />
+    <Compile Include="Core\Device\DeviceDataFileReader.cs" />
+    <Compile Include="Core\Device\DeviceModel.cs" />
+    <Compile Include="Core\Device\IDeviceDataReader.cs" />
+    <Compile Include="Core\Device\DeviceDataJSON.cs" />
+    <Compile Include="Core\Device\DeviceData.cs" />
+    <Compile Include="Core\PollingType.cs" />
+    <Compile Include="Core\PressureUnitType.cs" />
+    <Compile Include="Commons\Temperature.cs" />
+    <Compile Include="FormDeviceConfiguration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDeviceConfiguration.designer.cs">
+      <DependentUpon>FormDeviceConfiguration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormOptions.Designer.cs">
+      <DependentUpon>FormOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Commons\Networking\IPAddress.cs" />
+    <Compile Include="Core\Fetchers\FixedIntervalDeviceDataFetcher.cs" />
+    <Compile Include="Core\Fetchers\IDeviceDataFetcher.cs" />
+    <Compile Include="Configuration\RegistrySettings.cs" />
+    <Compile Include="Core\TemperatureUnitType.cs" />
+    <Compile Include="Configuration\XMLSettings.cs" />
+    <Compile Include="Configuration\ISettings.cs" />
+    <Compile Include="Core\Device\DeviceType.cs" />
+    <Compile Include="Core\Device\DeviceDataHttpReader.cs" />
+    <Compile Include="Commons\Controls\ViewOnlyRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Commons\Controls\ViewOnlyTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Windows\Registry.cs" />
+    <EmbeddedResource Include="Commons\Controls\ViewOnlyRichTextBox.resx">
+      <DependentUpon>ViewOnlyRichTextBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAbout.resx">
+      <DependentUpon>FormAbout.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDeviceConfiguration.resx">
+      <DependentUpon>FormDeviceConfiguration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormOptions.resx">
+      <DependentUpon>FormOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Commons\Controls\ViewOnlyTextBox.resx">
+      <DependentUpon>ViewOnlyTextBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Atomic.ico" />
+    <None Include="Resources\Menus\door_out.png" />
+    <None Include="Resources\Menus\information.png" />
+    <None Include="Resources\Menus\wrench.png" />
+    <None Include="Resources\Menus\cog.png" />
+    <None Include="Resources\Menus\page_white_link.png" />
+    <None Include="Resources\Menus\Radiation.png" />
+    <None Include="Resources\Menus\error.png" />
+    <None Include="Resources\Menus\group_link.png" />
+    <None Include="Resources\Menus\world_link.png" />
+    <None Include="Resources\Menus\group_go.png" />
+    <None Include="Resources\Menus\page_white_go.png" />
+    <None Include="Resources\Menus\world_go.png" />
+    <None Include="Resources\Systray\Radiation.ico" />
+    <None Include="Resources\Systray\RadiationGray.ico" />
+    <None Include="Resources\Systray\RadiationGray-v2.ico" />
+    <None Include="Resources\Systray\RadiationGray-v3.bmp" />
+    <None Include="Resources\Systray\RadiationGray-v3.ico" />
+    <None Include="Resources\Atomic.ico" />
+    <None Include="Resources\AtomicGray.ico" />
+    <Content Include="Resources\warning_16x16.png" />
+    <Content Include="_todo.txt" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
