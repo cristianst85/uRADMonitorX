@@ -26,7 +26,6 @@ namespace uRADMonitorX.Configuration {
         public String LogDirectoryPath { get; set; }
 
         // Device
-        public DeviceInformation Device { get; private set; }
         public bool HasPressureSensor { get; set; }
 
         public String DeviceIPAddress { get; set; }
@@ -48,7 +47,6 @@ namespace uRADMonitorX.Configuration {
 
         private XMLSettings(String filePath) {
             this.FilePath = filePath;
-            this.Device = new DeviceInformation();
         }
 
         /// <summary>

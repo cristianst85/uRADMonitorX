@@ -21,7 +21,6 @@ namespace uRADMonitorX.Configuration {
         String LogDirectoryPath { get; set; }
 
         // Device
-        DeviceInformation Device { get; }
         bool HasPressureSensor { get; set; }
 
         String DeviceIPAddress { get; set; }

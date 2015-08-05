@@ -8,7 +8,7 @@ namespace uRADMonitorX.Commons {
     /// The information about coversion factors was taken from: 
     /// https://github.com/radhoo/uradmonitor_kit1/blob/master/code/misc/detectors.cpp
     /// </summary>
-    internal class RadiationDetector {
+    public class RadiationDetector {
 
         private static readonly ICollection<RadiationDetector> detectors = new Collection<RadiationDetector>() {
             RadiationDetector.SBM19,

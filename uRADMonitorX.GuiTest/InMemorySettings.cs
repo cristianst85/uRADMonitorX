@@ -1,10 +1,10 @@
 ﻿using System;
+using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
-using uRADMonitorX.Core.Device;
 
-namespace uRADMonitorX.Configuration {
+namespace uRADMonitorX.GuiTest {
 
-    public class RegistrySettings : ISettings {
+    public class InMemorySettings : ISettings {
 
         // General
         public Boolean StartWithWindows { get; set; }
@@ -31,11 +31,11 @@ namespace uRADMonitorX.Configuration {
         public int PollingInterval { get; set; }
         public bool IsPollingEnabled { get; set; }
 
-        private RegistrySettings() {
+        public InMemorySettings() {
         }
 
         public void Commit() {
-            throw new NotImplementedException();
+            // Nothing to do here.
         }
     }
 }

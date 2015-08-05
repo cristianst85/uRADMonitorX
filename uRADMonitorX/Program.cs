@@ -8,6 +8,7 @@ using uRADMonitorX.Commons.Logging;
 using uRADMonitorX.Commons.Logging.Appenders;
 using uRADMonitorX.Commons.Logging.Formatters;
 using uRADMonitorX.Configuration;
+using uRADMonitorX.Core;
 
 namespace uRADMonitorX {
 
@@ -68,10 +69,12 @@ namespace uRADMonitorX {
                                                 new SimpleFormatter()) { Enabled = settings.IsLoggingEnabled }
                                            );
             ILogger logger = LoggerManager.GetInstance().GetLogger(Program.LoggerName);
+            
+            IDeviceDataReaderFactory deviceDataReaderFactory = new DeviceDataHttpReaderFactory(settings);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain(settings, logger, arguments.IgnoreRegisteringAtWindowsStartup));
+            Application.Run(new FormMain(deviceDataReaderFactory, settings, logger, arguments.IgnoreRegisteringAtWindowsStartup));
         }
     }
 }

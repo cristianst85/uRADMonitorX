@@ -72,10 +72,13 @@
     <Compile Include="Commons\Radiation.cs" />
     <Compile Include="Commons\AssemblyUtils.cs" />
     <Compile Include="Configuration\SettingsChangedEventArgs.cs" />
+    <Compile Include="Core\DeviceDataHttpReaderFactory.cs" />
+    <Compile Include="Core\Device\DeviceReadings.cs" />
     <Compile Include="Core\Fetchers\DeviceDataFetcher.cs" />
     <Compile Include="Core\Fetchers\WDTSyncPollingStrategy.cs" />
     <Compile Include="Core\Fetchers\FixedIntervalPollingStrategy.cs" />
     <Compile Include="Core\Fetchers\IPollingStrategy.cs" />
+    <Compile Include="Core\IDeviceDataReaderFactory.cs" />
     <Compile Include="Core\RadiationUnitType.cs" />
     <Compile Include="Commons\RadiationDetector.cs" />
     <Compile Include="FormAbout.cs">

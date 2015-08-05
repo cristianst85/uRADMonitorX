@@ -4,3 +4,5 @@ Workspace/*
 uRADMonitorX/_todo.txt
 uRADMonitorX/bin/
 uRADMonitorX/obj/
+uRADMonitorX.GuiTest/bin/
+uRADMonitorX.GuiTest/obj/

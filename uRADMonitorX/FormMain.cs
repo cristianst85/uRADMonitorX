@@ -15,6 +15,7 @@ using uRADMonitorX.Configuration;
 using uRADMonitorX.Core.Device;
 using uRADMonitorX.Core.Fetchers;
 using uRADMonitorX.Windows;
+using uRADMonitorX.Core;
 
 namespace uRADMonitorX {
 
@@ -24,6 +25,7 @@ namespace uRADMonitorX {
         private ITimeSpanFormatter timeSpanFormatter = new TimeSpanFormatter();
         private ILogger logger = null;
         private ISettings settings = null;
+        private IDeviceDataReaderFactory deviceDataReaderFactory = null;
 
         private volatile bool _isClosing;
         public bool IsClosing {
@@ -50,10 +52,11 @@ namespace uRADMonitorX {
 
         private volatile bool ignoreRegistering;
 
-        public FormMain(ISettings settings, ILogger logger, bool ignoreRegistering) {
+        public FormMain(IDeviceDataReaderFactory deviceDataReaderFactory, ISettings settings, ILogger logger, bool ignoreRegistering) {
             try {
                 InitializeComponent();
 
+                this.deviceDataReaderFactory = deviceDataReaderFactory;
                 this.settings = settings;
                 this.logger = logger;
                 this.ignoreRegistering = ignoreRegistering;
@@ -160,7 +163,7 @@ namespace uRADMonitorX {
                 }
 
                 if (!String.IsNullOrEmpty(this.settings.DeviceIPAddress)) {
-                    IDeviceDataReader deviceDataReader = new DeviceDataHttpReader(this.settings.DeviceIPAddress);
+                    IDeviceDataReader deviceDataReader = deviceDataReaderFactory.Create();
                     IPollingStrategy pollingStrategy = null;
                     if (this.settings.PollingType == Core.PollingType.WDTSync) {
                         pollingStrategy = new WDTSyncPollingStrategy(60);

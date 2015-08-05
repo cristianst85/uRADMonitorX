@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace uRADMonitorX.Commons.Networking {
 
-    internal class HttpStatus {
+    public class HttpStatus {
 
         private readonly static IList<HttpStatus> statuses = new List<HttpStatus>() {
             HttpStatus.OK
