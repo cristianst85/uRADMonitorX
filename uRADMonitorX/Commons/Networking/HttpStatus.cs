@@ -23,6 +23,18 @@ namespace uRADMonitorX.Commons.Networking {
             }
         }
 
+        public static HttpStatus InternalServerError {
+            get {
+                return new HttpStatus(500, "Internal Server Error");
+            }
+        }
+
+        public static HttpStatus ServiceUnavailable {
+            get {
+                return new HttpStatus(503, "Service Unavailable");
+            }
+        }
+
         public static HttpStatus FromCode(int code) {
             foreach (HttpStatus status in statuses) {
                 if (status.Code == code) {
