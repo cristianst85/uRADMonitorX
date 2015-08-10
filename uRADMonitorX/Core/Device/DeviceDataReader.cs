@@ -34,11 +34,11 @@ namespace uRADMonitorX.Core.Device {
                     }
                     else if (token.StartsWith("average", StringComparison.OrdinalIgnoreCase)) {
                         String radiationAvg = token.Split(':')[1];
-                        deviceData.RadiationAverage = decimal.Parse(radiationAvg.Substring(0, radiationAvg.IndexOf("CPM", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint, numberFormatInfo);
+                        deviceData.RadiationAverage = double.Parse(radiationAvg.Substring(0, radiationAvg.IndexOf("CPM", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint, numberFormatInfo);
                     }
                     else if (token.StartsWith("temp", StringComparison.OrdinalIgnoreCase)) {
                         String temperature = token.Split(':')[1];
-                        deviceData.Temperature = decimal.Parse(temperature.Substring(0, temperature.IndexOf("C", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, numberFormatInfo);
+                        deviceData.Temperature = double.Parse(temperature.Substring(0, temperature.IndexOf("C", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, numberFormatInfo);
                     }
                     else if (token.StartsWith("P", StringComparison.OrdinalIgnoreCase)) {
                         String pressure = token.Split(':')[1];

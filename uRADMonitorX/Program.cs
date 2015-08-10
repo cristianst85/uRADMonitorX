@@ -9,6 +9,7 @@ using uRADMonitorX.Commons.Logging.Appenders;
 using uRADMonitorX.Commons.Logging.Formatters;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
+using uRADMonitorX.Windows;
 
 namespace uRADMonitorX {
 
@@ -18,6 +19,10 @@ namespace uRADMonitorX {
         public static readonly String LoggerFilePath = "uRADMonitorX.log";
         public static readonly String SettingsFileName = "config.xml";
 
+        private static ProgramArguments arguments = null;
+        private static ISettings settings = null;
+        private static ILogger logger = null;
+
         private static Mutex mutex;
 
         /// <summary>
@@ -26,7 +31,6 @@ namespace uRADMonitorX {
         [STAThread]
         static void Main(string[] args) {
 
-            ProgramArguments arguments = null;
             bool success = ProgramArguments.TryParse(args, out arguments);
 
             if (!success) {
@@ -45,7 +49,6 @@ namespace uRADMonitorX {
             }
 
             // Load settings.
-            ISettings settings = null;
             String settingsFilePath = String.Format("{0}{1}{2}", Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath), Path.DirectorySeparatorChar, Program.SettingsFileName);
             if (File.Exists(settingsFilePath)) {
                 settings = XMLSettings.LoadFromFile(settingsFilePath);
@@ -68,13 +71,66 @@ namespace uRADMonitorX {
                                                 new FileAppender(Path.Combine((Path.GetDirectoryName(AssemblyUtils.GetApplicationPath())), Program.LoggerFilePath)) { Enabled = true },
                                                 new SimpleFormatter()) { Enabled = settings.IsLoggingEnabled }
                                            );
-            ILogger logger = LoggerManager.GetInstance().GetLogger(Program.LoggerName);
-            
+            logger = LoggerManager.GetInstance().GetLogger(Program.LoggerName);
+
             IDeviceDataReaderFactory deviceDataReaderFactory = new DeviceDataHttpReaderFactory(settings);
+
+            if (!arguments.IgnoreRegisteringAtWindowsStartup) {
+                registerAtWindowsStartup();
+            }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain(deviceDataReaderFactory, settings, logger, arguments.IgnoreRegisteringAtWindowsStartup));
+
+            FormMain formMain = new FormMain(deviceDataReaderFactory, settings, logger);
+            formMain.SettingsChangedEventHandler += new SettingsChangedEventHandler(formMain_SettingsChangedEventHandler);
+
+            Application.Run(formMain);
+        }
+
+        private static void formMain_SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e) {
+            if (logger != null) {
+                configLogger();
+            }
+            if (!arguments.IgnoreRegisteringAtWindowsStartup) {
+                registerAtWindowsStartup();
+            }
+        }
+
+        private static void configLogger() {
+            logger.Enabled = settings.IsLoggingEnabled;
+            try {
+                ILoggerAppender appender = LoggerManager.GetInstance().GetLogger(Program.LoggerName).Appender;
+                if (appender is ICanReconfigureAppender) {
+                    // TODO: Verify if logger path is in application root directory.
+                    if (settings.LogDirectoryPath.Length > 0) {
+                        ((ICanReconfigureAppender)appender).Reconfigure(Path.Combine(settings.LogDirectoryPath, Program.LoggerFilePath));
+                    }
+                    else {
+                        ((ICanReconfigureAppender)appender).Reconfigure(Path.Combine(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()), Program.LoggerFilePath));
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException ex) {
+                logger.Write(String.Format("Cannot reconfigure logger appender. Exception: {0}", ex.ToString()));
+            }
+        }
+
+
+        private static void registerAtWindowsStartup() {
+            try {
+                if (settings.StartWithWindows) {
+                    Registry.RegisterAtWindowsStartup(Application.ProductName, String.Format("\"{0}\"", new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
+                }
+                else {
+                    Registry.UnRegisterAtWindowsStartup(Application.ProductName);
+                }
+            }
+            catch (Exception e) {
+                if (logger != null) {
+                    logger.Write(String.Format("Error registering application to start at Windows startup. Exception: {0}", e.ToString()));
+                }
+            }
         }
     }
 }

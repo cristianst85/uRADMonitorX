@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading;
@@ -9,17 +8,18 @@ using uRADMonitorX.Commons;
 using uRADMonitorX.Commons.Controls;
 using uRADMonitorX.Commons.Formatting;
 using uRADMonitorX.Commons.Logging;
-using uRADMonitorX.Commons.Logging.Appenders;
 using uRADMonitorX.Commons.Networking;
 using uRADMonitorX.Configuration;
+using uRADMonitorX.Core;
 using uRADMonitorX.Core.Device;
 using uRADMonitorX.Core.Fetchers;
 using uRADMonitorX.Windows;
-using uRADMonitorX.Core;
 
 namespace uRADMonitorX {
 
     public partial class FormMain : Form {
+
+        public event SettingsChangedEventHandler SettingsChangedEventHandler;
 
         private IDeviceDataFetcher deviceDataFetcher = null;
         private ITimeSpanFormatter timeSpanFormatter = new TimeSpanFormatter();
@@ -50,16 +50,15 @@ namespace uRADMonitorX {
         private int mLastWindowXPos;
         private int mLastWindowYPos;
 
-        private volatile bool ignoreRegistering;
+        private DateTime? notifyIconBalloonLastShownAt = null;
 
-        public FormMain(IDeviceDataReaderFactory deviceDataReaderFactory, ISettings settings, ILogger logger, bool ignoreRegistering) {
+        public FormMain(IDeviceDataReaderFactory deviceDataReaderFactory, ISettings settings, ILogger logger) {
             try {
                 InitializeComponent();
 
                 this.deviceDataReaderFactory = deviceDataReaderFactory;
                 this.settings = settings;
                 this.logger = logger;
-                this.ignoreRegistering = ignoreRegistering;
 
                 this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationDisabled;
 
@@ -101,10 +100,6 @@ namespace uRADMonitorX {
                 this.enablePollingToolStripMenuItem.CheckedChanged += new EventHandler(enablePollingToolStripMenuItem_CheckedChanged);
                 this.viewOnlyTextBoxId.TextChanged += new EventHandler(viewOnlyTextBoxId_TextChanged);
 
-                if (!this.ignoreRegistering) {
-                    this.registerAtWindowsStartup();
-                }
-
                 Thread startupThread = new Thread(new ThreadStart(delegate { this.initDevice(false); }));
                 startupThread.Name = "startupThread";
                 startupThread.Start();
@@ -115,38 +110,6 @@ namespace uRADMonitorX {
             }
             finally {
                 this.IsReady = true;
-            }
-        }
-
-        private void configLogger(ILogger logger) {
-            try {
-                ILoggerAppender appender = LoggerManager.GetInstance().GetLogger(Program.LoggerName).Appender;
-                if (appender is ICanReconfigureAppender) {
-                    // TODO: Verify if logger path is in application root directory.
-                    if (this.settings.LogDirectoryPath.Length > 0) {
-                        ((ICanReconfigureAppender)appender).Reconfigure(Path.Combine(this.settings.LogDirectoryPath, Program.LoggerFilePath));
-                    }
-                    else {
-                        ((ICanReconfigureAppender)appender).Reconfigure(Path.Combine(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()), Program.LoggerFilePath));
-                    }
-                }
-            }
-            catch (UnauthorizedAccessException ex) {
-                logger.Write(String.Format("Cannot reconfigure logger appender. Exception: {0}", ex.ToString()));
-            }
-        }
-
-        private void registerAtWindowsStartup() {
-            try {
-                if (this.settings.StartWithWindows) {
-                    Registry.RegisterAtWindowsStartup(Application.ProductName, String.Format("\"{0}\"", new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
-                }
-                else {
-                    Registry.UnRegisterAtWindowsStartup(Application.ProductName);
-                }
-            }
-            catch (Exception e) {
-                logger.Write(String.Format("Error registering application to start at Windows startup. Exception: {0}", e.ToString()));
             }
         }
 
@@ -264,13 +227,14 @@ namespace uRADMonitorX {
                 return;
             }
             this.updateDeviceInformation(deviceData.DeviceInformation);
+
+            // Use normalized name only for conversions.
+            String radiationDetectorName = RadiationDetector.Normalize(deviceData.DeviceInformation.Detector);
             if (this.settings.RadiationUnitType == Core.RadiationUnitType.Cpm) {
                 this.viewOnlyTextBoxRadiation.Text = String.Format("{0} cpm", deviceData.Radiation);
                 this.viewOnlyTextBoxRadiationAverage.Text = String.Format("{0} cpm", deviceData.RadiationAverage);
             }
             else {
-                // Use normalized name only for conversions.
-                String radiationDetectorName = RadiationDetector.Normalize(deviceData.DeviceInformation.Detector);
                 if (RadiationDetector.IsKnown(radiationDetectorName)) {
                     RadiationDetector radiationDetector = RadiationDetector.GetByName(radiationDetectorName);
                     if (this.settings.RadiationUnitType == Core.RadiationUnitType.uSvH) {
@@ -331,8 +295,24 @@ namespace uRADMonitorX {
             }
 
             // Update Settings.
+            bool commitSettings = false;
             if (this.settings.HasPressureSensor != deviceData.Pressure.HasValue) {
                 this.settings.HasPressureSensor = deviceData.Pressure.HasValue;
+                commitSettings = true;
+            }
+            if (!(radiationDetectorName).Equals(this.settings.DetectorName)) {
+                this.settings.DetectorName = radiationDetectorName;
+                // If the detector is known and the radiation notification value was not set fallback to default values.
+                if (this.settings.DetectorName != null &&
+                        RadiationDetector.IsKnown(this.settings.DetectorName) &&
+                        this.settings.RadiationNotificationUnitType == RadiationUnitType.Cpm &&
+                        this.settings.RadiationNotificationValue == 0) {
+                    this.settings.RadiationNotificationValue = DefaultSettings.RadiationNotificationValue;
+                    this.settings.RadiationNotificationUnitType = DefaultSettings.RadiationNotificationUnitType;
+                }
+                commitSettings = true;
+            }
+            if (commitSettings) {
                 this.settings.Commit();
             }
 
@@ -361,6 +341,66 @@ namespace uRADMonitorX {
             }
             else {
                 this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor;
+            }
+
+            if (this.settings.AreNotificationsEnabled) {
+                double currentTemperature = deviceData.Temperature;
+                String currentTemperatureUnit = "C";
+
+                if (this.settings.TemperatureNotificationUnitType == TemperatureUnitType.Fahrenheit) {
+                    currentTemperature = Temperature.CelsiusToFahrenheit(deviceData.Temperature);
+                    currentTemperatureUnit = "F";
+                }
+
+                double currentRadiation = deviceData.Radiation;
+                String currentRadiationUnit = EnumHelper.GetEnumDescription<RadiationUnitType>(RadiationUnitType.Cpm);
+                if (RadiationDetector.IsKnown(radiationDetectorName)) {
+                    RadiationDetector radiationDetector = RadiationDetector.GetByName(radiationDetectorName);
+                    if (this.settings.RadiationNotificationUnitType == RadiationUnitType.uSvH) {
+                        currentRadiation = Radiation.CpmToMicroSvPerHour(currentRadiation, radiationDetector.Factor);
+                    }
+                    else if (this.settings.RadiationNotificationUnitType == RadiationUnitType.uRemH) {
+                        currentRadiation = Radiation.CpmToMicroRemPerHour(currentRadiation, radiationDetector.Factor);
+                    }
+                    currentRadiationUnit = EnumHelper.GetEnumDescription<RadiationUnitType>(this.settings.RadiationNotificationUnitType);
+                }
+                else {
+                    if (this.settings.RadiationNotificationUnitType != RadiationUnitType.Cpm) {
+                        currentRadiation = 0; // Disable radiation notification if radiation value cannot be converted to uSv/h or uRem/h.
+                    }
+                }
+
+                bool showBalloon = false;
+                String balloonTitle = String.Empty;
+                String balloonMessage = String.Empty;
+                if (currentTemperature >= this.settings.HighTemperatureNotificationValue) {
+                    balloonTitle = "High Temperature";
+                    balloonMessage = String.Format("Temperature: {0} °{1}", currentTemperature, currentTemperatureUnit);
+                    showBalloon = true;
+                }
+                if (this.settings.RadiationNotificationValue != 0 && currentRadiation >= this.settings.RadiationNotificationValue) {
+                    if (balloonTitle.Length > 0) {
+                        balloonTitle += "/";
+                    }
+                    if (balloonMessage.Length > 0) {
+                        balloonMessage += "\n";
+                    }
+                    balloonTitle += "Radiation";
+                    balloonMessage += String.Format("Radiation: {0} {1}", currentRadiation, currentRadiationUnit);
+                    showBalloon = true;
+                }
+                if (showBalloon) {
+                    balloonTitle += " Alert";
+
+                    DateTime now = DateTime.UtcNow;
+                    DateTime dataReadingsTimeStamp = now.AddSeconds(-(deviceData.WDT % 60));
+
+                    // Do not show multiple notifications for the same readings. Usually when polling interval is lower than the device refresh period (60 seconds).
+                    if (!notifyIconBalloonLastShownAt.HasValue || (this.notifyIconBalloonLastShownAt.HasValue && now.Subtract(this.notifyIconBalloonLastShownAt.Value).TotalSeconds >= 60)) {
+                        this.notifyIcon.ShowBalloonTip(10000, balloonTitle, balloonMessage, ToolTipIcon.Info);
+                        this.notifyIconBalloonLastShownAt = dataReadingsTimeStamp;
+                    }
+                }
             }
         }
 
@@ -410,11 +450,10 @@ namespace uRADMonitorX {
 
         private void form_SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e) {
             // this.ShowInTaskbar = this.settings.ShowInTaskbar; // TODO: fix this not to flicker.
-            if (!this.ignoreRegistering) {
-                this.registerAtWindowsStartup();
+            SettingsChangedEventHandler handler = SettingsChangedEventHandler;
+            if (handler != null) {
+                handler(this, new SettingsChangedEventArgs(this.settings));
             }
-            this.logger.Enabled = e.Settings.IsLoggingEnabled;
-            this.configLogger(this.logger);
         }
 
         private void closeApplication(object sender, EventArgs e) {

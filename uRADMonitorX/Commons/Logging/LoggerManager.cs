@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace uRADMonitorX.Commons.Logging {
 
-    internal class LoggerManager {
+    public class LoggerManager {
 
         private static object _locker = new object();
         private static object _syncRoot = new object();

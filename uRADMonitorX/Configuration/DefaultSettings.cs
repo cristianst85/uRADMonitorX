@@ -14,6 +14,7 @@ namespace uRADMonitorX.Configuration {
                 return true;
             }
         }
+
         /// <summary>
         /// Value: <c>true</c>.
         /// </summary>
@@ -22,6 +23,7 @@ namespace uRADMonitorX.Configuration {
                 return true;
             }
         }
+
         /// <summary>
         /// Value: <c>false</c>.
         /// </summary>
@@ -30,6 +32,7 @@ namespace uRADMonitorX.Configuration {
                 return false;
             }
         }
+
         /// <summary>
         /// Value: <c>true</c>.
         /// </summary>
@@ -47,10 +50,20 @@ namespace uRADMonitorX.Configuration {
                 return false;
             }
         }
+
         /// <summary>
         /// Value: <c>String.Empty</c>.
         /// </summary>
         public static String LogDirectoryPath {
+            get {
+                return String.Empty;
+            }
+        }
+        
+        /// <summary>
+        /// Value: <c>String.Empty</c>.
+        /// </summary>
+        public static String DetectorName {
             get {
                 return String.Empty;
             }
@@ -64,6 +77,7 @@ namespace uRADMonitorX.Configuration {
                 return false;
             }
         }
+
         /// <summary>
         /// Value: <c>String.Empty</c>.
         /// </summary>
@@ -72,6 +86,7 @@ namespace uRADMonitorX.Configuration {
                 return String.Empty;
             }
         }
+
         /// <summary>
         /// Value: <c>TemperatureUnitType.Celsius</c>.
         /// </summary>
@@ -80,6 +95,7 @@ namespace uRADMonitorX.Configuration {
                 return TemperatureUnitType.Celsius;
             }
         }
+
         /// <summary>
         /// Value: <c>PressureUnitType.Pa</c>.
         /// </summary>
@@ -88,6 +104,7 @@ namespace uRADMonitorX.Configuration {
                 return PressureUnitType.Pa;
             }
         }
+
         /// <summary>
         /// Value: <c>RadiationUnitType.Cpm</c>.
         /// </summary>
@@ -96,6 +113,7 @@ namespace uRADMonitorX.Configuration {
                 return RadiationUnitType.Cpm;
             }
         }
+
         /// <summary>
         /// Value: <c>PollingType.FixedInterval</c>.
         /// </summary>
@@ -104,6 +122,7 @@ namespace uRADMonitorX.Configuration {
                 return PollingType.FixedInterval;
             }
         }
+
         /// <summary>
         /// Value: <c>5</c> seconds.
         /// </summary>
@@ -112,12 +131,58 @@ namespace uRADMonitorX.Configuration {
                 return 5;
             }
         }
+
         /// <summary>
         /// Value: <c>true</c>.
         /// </summary>
         public static bool IsPollingEnabled {
             get {
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Value: <c>false</c>.
+        /// </summary>
+        public static bool AreNotificationsEnabled {
+            get {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Value: <c>50</c> degrees Celsius.
+        /// </summary>
+        public static int HighTemperatureNotificationValue {
+            get {
+                return 50;
+            }
+        }
+
+        /// <summary>
+        /// Value: <c>0.5</c> uSvH.
+        /// </summary>
+        public static double RadiationNotificationValue {
+            get {
+                return 0.5;
+            }
+        }
+
+        /// <summary>
+        /// Value: <c>TemperatureUnitType.Celsius</c>.
+        /// </summary>
+        public static TemperatureUnitType TemperatureNotificationUnitType {
+            get {
+                return TemperatureUnitType.Celsius;
+            }
+        }
+
+        /// <summary>
+        /// Value: <c>RadiationUnitType.uSvH</c>.
+        /// </summary>
+        public static RadiationUnitType RadiationNotificationUnitType {
+            get {
+                return RadiationUnitType.uSvH;
             }
         }
     }

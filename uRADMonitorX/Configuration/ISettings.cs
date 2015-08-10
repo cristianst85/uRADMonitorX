@@ -21,6 +21,8 @@ namespace uRADMonitorX.Configuration {
         String LogDirectoryPath { get; set; }
 
         // Device
+        String DetectorName { get; set; }
+
         bool HasPressureSensor { get; set; }
 
         String DeviceIPAddress { get; set; }
@@ -30,6 +32,13 @@ namespace uRADMonitorX.Configuration {
         PollingType PollingType { get; set; }
         int PollingInterval { get; set; }
         bool IsPollingEnabled { get; set; }
+
+        // Notifications
+        bool AreNotificationsEnabled { get; set; }
+        int HighTemperatureNotificationValue { get; set; }
+        double RadiationNotificationValue { get; set; }
+        TemperatureUnitType TemperatureNotificationUnitType { get; set; }
+        RadiationUnitType RadiationNotificationUnitType { get; set; }
 
         void Commit();
 

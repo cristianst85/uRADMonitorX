@@ -21,6 +21,8 @@ namespace uRADMonitorX.GuiTest {
         public String LogDirectoryPath { get; set; }
 
         // Device
+        public String DetectorName { get; set; }
+
         public bool HasPressureSensor { get; set; }
 
         public String DeviceIPAddress { get; set; }
@@ -30,6 +32,13 @@ namespace uRADMonitorX.GuiTest {
         public PollingType PollingType { get; set; }
         public int PollingInterval { get; set; }
         public bool IsPollingEnabled { get; set; }
+
+        // Notifications
+        public bool AreNotificationsEnabled { get; set; }
+        public int HighTemperatureNotificationValue { get; set; }
+        public double RadiationNotificationValue { get; set; }
+        public TemperatureUnitType TemperatureNotificationUnitType { get; set; }
+        public RadiationUnitType RadiationNotificationUnitType { get; set; }
 
         public InMemorySettings() {
         }

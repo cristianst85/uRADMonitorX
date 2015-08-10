@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml;
 using uRADMonitorX.Core;
-using uRADMonitorX.Core.Device;
+using uRADMonitorX.Commons;
 
 namespace uRADMonitorX.Configuration {
 
     public delegate void SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e);
 
     public class XMLSettings : ISettings {
+
+        private static NumberFormatInfo numberFormatInfo = CultureInfo.CurrentCulture.NumberFormat;
 
         public String FilePath { get; private set; }
 
@@ -26,6 +29,8 @@ namespace uRADMonitorX.Configuration {
         public String LogDirectoryPath { get; set; }
 
         // Device
+        public String DetectorName { get; set; }
+
         public bool HasPressureSensor { get; set; }
 
         public String DeviceIPAddress { get; set; }
@@ -35,6 +40,13 @@ namespace uRADMonitorX.Configuration {
         public PollingType PollingType { get; set; }
         public int PollingInterval { get; set; }
         public bool IsPollingEnabled { get; set; }
+
+        // Notifications
+        public bool AreNotificationsEnabled { get; set; }
+        public int HighTemperatureNotificationValue { get; set; }
+        public double RadiationNotificationValue { get; set; }
+        public TemperatureUnitType TemperatureNotificationUnitType { get; set; }
+        public RadiationUnitType RadiationNotificationUnitType { get; set; }
 
         public static XmlWriterSettings XmlWriterSettings {
             get {
@@ -72,6 +84,15 @@ namespace uRADMonitorX.Configuration {
             xmlSettings.LastWindowYPos = int.Parse(xmlNode["display"].SelectSingleNode("last_window_y_pos").InnerText);
             xmlSettings.IsLoggingEnabled = bool.Parse(xmlNode["logging"].SelectSingleNode("enabled").InnerText);
             xmlSettings.LogDirectoryPath = xmlNode["logging"].SelectSingleNode("path").InnerText;
+
+            // Introduced with version 0.39.0.
+            if (xmlNode["device"].SelectSingleNode("detector_name") != null) {
+                xmlSettings.DetectorName = xmlNode["device"].SelectSingleNode("detector_name").InnerText;
+            }
+            else {
+                xmlSettings.DetectorName = DefaultSettings.DetectorName;
+            }
+
             xmlSettings.HasPressureSensor = bool.Parse(xmlNode["device"].SelectSingleNode("has_pressure_sensor").InnerText);
             xmlSettings.DeviceIPAddress = xmlNode["device"].SelectSingleNode("ip_address").InnerText;
             xmlSettings.TemperatureUnitType = (TemperatureUnitType)Enum.Parse(typeof(TemperatureUnitType), xmlNode["device"].SelectSingleNode("temperature_unit_type").InnerText, true);
@@ -80,6 +101,33 @@ namespace uRADMonitorX.Configuration {
             xmlSettings.PollingType = (PollingType)Enum.Parse(typeof(PollingType), xmlNode["device"].SelectSingleNode("polling_type").InnerText, true);
             xmlSettings.PollingInterval = int.Parse(xmlNode["device"].SelectSingleNode("polling_interval").InnerText);
             xmlSettings.IsPollingEnabled = bool.Parse(xmlNode["device"].SelectSingleNode("is_polling_enabled").InnerText);
+
+            // Notifications were introduced with version 0.39.0.
+            // If the 'notifications' element is missing then load the default settings.
+            if (xmlNode["notifications"] != null) {
+                xmlSettings.AreNotificationsEnabled = bool.Parse(xmlNode["notifications"].SelectSingleNode("enabled").InnerText);
+                xmlSettings.HighTemperatureNotificationValue = int.Parse(xmlNode["notifications"].SelectSingleNode("high_temperature_value").InnerText);
+                xmlSettings.TemperatureNotificationUnitType = (TemperatureUnitType)Enum.Parse(typeof(TemperatureUnitType), xmlNode["notifications"].SelectSingleNode("temperature_unit_type").InnerText, true);
+                xmlSettings.RadiationNotificationValue = double.Parse(xmlNode["notifications"].SelectSingleNode("radiation_value").InnerText, NumberStyles.AllowDecimalPoint, numberFormatInfo);
+                xmlSettings.RadiationNotificationUnitType = (RadiationUnitType)Enum.Parse(typeof(RadiationUnitType), xmlNode["notifications"].SelectSingleNode("radiation_unit_type").InnerText, true);
+            }
+            else {
+                xmlSettings.AreNotificationsEnabled = DefaultSettings.AreNotificationsEnabled;
+                xmlSettings.HighTemperatureNotificationValue = DefaultSettings.HighTemperatureNotificationValue;
+                xmlSettings.TemperatureNotificationUnitType = DefaultSettings.TemperatureNotificationUnitType;
+                xmlSettings.RadiationNotificationValue = DefaultSettings.RadiationNotificationValue;
+                xmlSettings.RadiationNotificationUnitType = DefaultSettings.RadiationNotificationUnitType;
+            }
+
+            // Override default settings if radiation notification unit type is not counts pe minute (cpm) and the detector is unknown.
+            if (xmlSettings.RadiationNotificationUnitType != RadiationUnitType.Cpm &&
+                    (String.IsNullOrEmpty(xmlSettings.DetectorName) ||
+                    !RadiationDetector.IsKnown(RadiationDetector.Normalize(xmlSettings.DetectorName)))
+                ) {
+                xmlSettings.RadiationNotificationValue = 0;
+                xmlSettings.RadiationNotificationUnitType = RadiationUnitType.Cpm;
+            }
+
             return xmlSettings;
         }
 
@@ -101,6 +149,7 @@ namespace uRADMonitorX.Configuration {
                 writeFullElement(xmlWriter, "path", DefaultSettings.LogDirectoryPath);
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("device");
+                writeFullElement(xmlWriter, "detector_name", DefaultSettings.DetectorName);
                 writeFullElement(xmlWriter, "has_pressure_sensor", DefaultSettings.HasPressureSensor);
                 writeFullElement(xmlWriter, "ip_address", DefaultSettings.DeviceIPAddress);
                 writeFullElement(xmlWriter, "temperature_unit_type", DefaultSettings.TemperatureUnitType.ToString());
@@ -109,6 +158,13 @@ namespace uRADMonitorX.Configuration {
                 writeFullElement(xmlWriter, "polling_type", DefaultSettings.PollingType.ToString());
                 writeFullElement(xmlWriter, "polling_interval", DefaultSettings.PollingInterval);
                 writeFullElement(xmlWriter, "is_polling_enabled", DefaultSettings.IsPollingEnabled);
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteStartElement("notifications");
+                writeFullElement(xmlWriter, "enabled", DefaultSettings.AreNotificationsEnabled);
+                writeFullElement(xmlWriter, "high_temperature_value", DefaultSettings.HighTemperatureNotificationValue);
+                writeFullElement(xmlWriter, "radiation_value", DefaultSettings.RadiationNotificationValue);
+                writeFullElement(xmlWriter, "temperature_unit_type", DefaultSettings.TemperatureNotificationUnitType.ToString());
+                writeFullElement(xmlWriter, "radiation_unit_type", DefaultSettings.RadiationNotificationUnitType.ToString());
                 xmlWriter.WriteEndElement();
                 xmlWriter.Flush();
             }
@@ -144,6 +200,12 @@ namespace uRADMonitorX.Configuration {
             xmlNode["logging"].SelectSingleNode("enabled").InnerText = this.IsLoggingEnabled.ToString().ToLower();
             xmlNode["logging"].SelectSingleNode("path").InnerText = this.LogDirectoryPath ?? String.Empty;
 
+            // Introduced with version 0.39.0. 
+            if (xmlNode["device"].SelectSingleNode("detector_name") == null) {
+                xmlNode["device"].InsertBefore(xmlDocument.CreateNode(XmlNodeType.Element, "detector_name", null), xmlNode["device"].SelectSingleNode("has_pressure_sensor"));
+            }
+
+            xmlNode["device"].SelectSingleNode("detector_name").InnerText = this.DetectorName ?? String.Empty;
             xmlNode["device"].SelectSingleNode("has_pressure_sensor").InnerText = this.HasPressureSensor.ToString().ToLower();
             xmlNode["device"].SelectSingleNode("ip_address").InnerText = this.DeviceIPAddress ?? String.Empty;
             xmlNode["device"].SelectSingleNode("temperature_unit_type").InnerText = this.TemperatureUnitType.ToString();
@@ -152,6 +214,24 @@ namespace uRADMonitorX.Configuration {
             xmlNode["device"].SelectSingleNode("polling_type").InnerText = this.PollingType.ToString();
             xmlNode["device"].SelectSingleNode("polling_interval").InnerText = this.PollingInterval.ToString();
             xmlNode["device"].SelectSingleNode("is_polling_enabled").InnerText = this.IsPollingEnabled.ToString().ToLower();
+
+            // Notifications were introduced with version 0.39.0. 
+            // If the 'notifications' element is missing then it must be created.
+            if (xmlNode["notifications"] == null) {
+                XmlNode notificationsXmlNode = xmlDocument.CreateNode(XmlNodeType.Element, "notifications", null);
+                notificationsXmlNode.AppendChild(xmlDocument.CreateNode(XmlNodeType.Element, "enabled", null));
+                notificationsXmlNode.AppendChild(xmlDocument.CreateNode(XmlNodeType.Element, "high_temperature_value", null));
+                notificationsXmlNode.AppendChild(xmlDocument.CreateNode(XmlNodeType.Element, "temperature_unit_type", null));
+                notificationsXmlNode.AppendChild(xmlDocument.CreateNode(XmlNodeType.Element, "radiation_value", null));
+                notificationsXmlNode.AppendChild(xmlDocument.CreateNode(XmlNodeType.Element, "radiation_unit_type", null));
+                xmlNode.InsertAfter(notificationsXmlNode, xmlNode["device"]);
+            }
+            xmlNode["notifications"].SelectSingleNode("enabled").InnerText = this.AreNotificationsEnabled.ToString().ToLower();
+            xmlNode["notifications"].SelectSingleNode("high_temperature_value").InnerText = this.HighTemperatureNotificationValue.ToString();
+            xmlNode["notifications"].SelectSingleNode("temperature_unit_type").InnerText = this.TemperatureNotificationUnitType.ToString();
+            xmlNode["notifications"].SelectSingleNode("radiation_value").InnerText = this.RadiationNotificationValue.ToString();
+            xmlNode["notifications"].SelectSingleNode("radiation_unit_type").InnerText = this.RadiationNotificationUnitType.ToString();
+
             using (XmlWriter xmlWriter = XmlWriter.Create(filePath, XmlWriterSettings)) {
                 xmlDocument.Save(xmlWriter);
             }
