@@ -77,6 +77,15 @@ namespace uRADMonitorX.Commons {
             }
         }
 
+        /// <summary>
+        /// The conversion factor for LND712 tube was determined using the conversion chart from Gamma-Scout radiation detector.
+        /// </summary>
+        public static RadiationDetector LND712 {
+            get {
+                return new RadiationDetector("LND712", 0.00833);
+            }
+        }
+
         public static String Normalize(String detectorName) {
 
             if (detectorName != null) {

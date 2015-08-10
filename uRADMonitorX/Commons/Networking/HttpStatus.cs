@@ -17,6 +17,12 @@ namespace uRADMonitorX.Commons.Networking {
             this.Reason = reason;
         }
 
+        public static HttpStatus Unreachable {
+            get {
+                return new HttpStatus(0, "Unreachable");
+            }
+        }
+
         public static HttpStatus OK {
             get {
                 return new HttpStatus(200, "OK");

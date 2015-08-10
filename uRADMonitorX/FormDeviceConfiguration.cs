@@ -38,8 +38,12 @@ namespace uRADMonitorX {
         }
 
         private void textBoxIPAddress_TextChanged(object sender, EventArgs e) {
-            if (!this.validateIPAddress(this.textBoxIPAddress.Text)) {
-                // TODO: add tooltip
+            if (!this.ipAddressIsValid(this.textBoxIPAddress.Text)) {
+                ToolTip toolTip = new ToolTip();
+                toolTip.IsBalloon = true;
+                toolTip.ToolTipIcon = ToolTipIcon.Error;
+                toolTip.ToolTipTitle = "Incorrect value";
+                toolTip.Show("Value for IP Address must be a valid IPv4 address.", this.textBoxIPAddress, 0, -74, 3000);
             }
             this.updateSaveButtonState();
         }
@@ -51,39 +55,45 @@ namespace uRADMonitorX {
         }
 
         private void textBoxPollingInterval_TextChanged(object sender, EventArgs e) {
-            if (!this.validatePollingInterval(this.textBoxPollingInterval.Text)) {
-                // TODO: add tooltip
+            if (!this.pollingIntervalIsValid(this.textBoxPollingInterval.Text)) {
+                ToolTip toolTip = new ToolTip();
+                toolTip.IsBalloon = true;
+                toolTip.ToolTipIcon = ToolTipIcon.Error;
+                toolTip.ToolTipTitle = "Incorrect value";
+                toolTip.Show("Value for Polling Interval must be a number between 1 and 999.", this.textBoxPollingInterval, 0, -74, 5000);
             }
             this.updateSaveButtonState();
         }
 
         private void updateSaveButtonState() {
-            this.buttonSave.Enabled = inputControlsValidate();
+            this.buttonSave.Enabled = inputControlsValuesAreValid();
         }
 
-        private bool inputControlsValidate() {
+        private bool inputControlsValuesAreValid() {
             return
-            this.validateIPAddress(this.textBoxIPAddress.Text) &&
-            (this.radioButtonPollingTypeWDTSync.Checked ||
-            (this.radioButtonPollingTypeInterval.Checked &&
-            this.validatePollingInterval(this.textBoxPollingInterval.Text))
-            );
+                this.ipAddressIsValid(this.textBoxIPAddress.Text) && (
+                    this.radioButtonPollingTypeWDTSync.Checked ||
+                    (this.radioButtonPollingTypeInterval.Checked &&
+                    this.pollingIntervalIsValid(this.textBoxPollingInterval.Text))
+                );
         }
 
-        private bool validateIPAddress(String ipAddress) {
+        private bool ipAddressIsValid(String ipAddress) {
             return IPAddress.IsValidFormat(ipAddress) || IPEndPoint.IsValidFormat(ipAddress);
         }
 
-        private bool validatePollingInterval(String pollingInterval) {
+        private bool pollingIntervalIsValid(String pollingInterval) {
             int value = 0;
-            bool isInteger = int.TryParse(this.textBoxPollingInterval.Text, out value);
+            bool isInteger = int.TryParse(pollingInterval, out value);
             return (isInteger && (value > 0 && value < 1000));
         }
 
         private void buttonSave_Click(object sender, EventArgs e) {
             this.settings.DeviceIPAddress = this.textBoxIPAddress.Text;
             this.settings.PollingType = (this.radioButtonPollingTypeWDTSync.Checked) ? PollingType.WDTSync : PollingType.FixedInterval;
-            this.settings.PollingInterval = int.Parse(this.textBoxPollingInterval.Text);
+            if (this.radioButtonPollingTypeInterval.Checked) {
+                this.settings.PollingInterval = int.Parse(this.textBoxPollingInterval.Text);
+            }
             this.settings.Commit();
             this.Close();
         }
