@@ -52,5 +52,9 @@ namespace uRADMonitorX {
                 this.Close();
             }
         }
+
+        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            System.Diagnostics.Process.Start("https://github.com/cristianst85/uRADMonitorX");
+        }
     }
 }

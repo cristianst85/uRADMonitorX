@@ -32,6 +32,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.linkLabelContact = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
+            this.linkLabel3 = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // label2
@@ -135,18 +136,34 @@
             // label3
             // 
             this.label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label3.Location = new System.Drawing.Point(36, 45);
+            this.label3.Location = new System.Drawing.Point(36, 53);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(205, 48);
+            this.label3.Size = new System.Drawing.Size(205, 18);
             this.label3.TabIndex = 0;
-            this.label3.Text = "Copyright (C) 2015, Cristian Stoica.\r\nAll rights reserved.";
+            this.label3.Text = "Copyright (C) 2015, Cristian Stoica.\r\n";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // linkLabel3
+            // 
+            this.linkLabel3.ActiveLinkColor = System.Drawing.Color.Black;
+            this.linkLabel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.linkLabel3.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline;
+            this.linkLabel3.Location = new System.Drawing.Point(36, 71);
+            this.linkLabel3.Name = "linkLabel3";
+            this.linkLabel3.Size = new System.Drawing.Size(205, 15);
+            this.linkLabel3.TabIndex = 4;
+            this.linkLabel3.TabStop = true;
+            this.linkLabel3.Text = "Released under GNU GPLv2.";
+            this.linkLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.linkLabel3.VisitedLinkColor = System.Drawing.Color.Black;
+            this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
             // 
             // FormAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(274, 216);
+            this.Controls.Add(this.linkLabel3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.label6);
@@ -178,6 +195,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.LinkLabel linkLabelContact;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.LinkLabel linkLabel3;
 
     }
 }

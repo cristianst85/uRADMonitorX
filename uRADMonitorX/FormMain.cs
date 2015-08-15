@@ -69,7 +69,7 @@ namespace uRADMonitorX {
                 this.toolStripStatusLabelDeviceUptime.Text = "n/a";
 
                 Version version = AssemblyUtils.GetVersion();
-                this.Text = this.Text.Replace("{version}", String.Format("{0}.{1}.{2} - Preview", version.Major, version.Minor, version.Build));
+                this.Text = this.Text.Replace("{version}", String.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build));
 
                 // Pre-init.
                 // From settings.
