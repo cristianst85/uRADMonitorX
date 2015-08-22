@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("uRADMonitorX")]
-[assembly: AssemblyDescription("uRADMonitorX")]
+[assembly: AssemblyTitle("uRADMonitorX.IntegrationTests")]
+[assembly: AssemblyDescription("uRADMonitorX.IntegrationTests")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Cristian Stoica")]
-[assembly: AssemblyProduct("uRADMonitorX")]
+[assembly: AssemblyProduct("uRADMonitorX.IntegrationTests")]
 [assembly: AssemblyCopyright("Copyright © 2015 Cristian Stoica")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3e036c7a-028c-49db-a3d6-74cea0d90916")]
+[assembly: Guid("3b2484e4-3a94-4fae-8a60-ef423693ded2")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.39.1.*")]
-[assembly: AssemblyFileVersion("0.39.1.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

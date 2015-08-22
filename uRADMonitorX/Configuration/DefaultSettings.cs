@@ -43,6 +43,24 @@ namespace uRADMonitorX.Configuration {
         }
 
         /// <summary>
+        /// Value: <c>50</c>.
+        /// </summary>
+        public static int LastWindowXPos {
+            get {
+                return 50;
+            }
+        }
+
+        /// <summary>
+        /// Value: <c>50</c>.
+        /// </summary>
+        public static int LastWindowYPos {
+            get {
+                return 50;
+            }
+        }
+
+        /// <summary>
         /// Value: <c>false</c>.
         /// </summary>
         public static Boolean IsLoggingEnabled {

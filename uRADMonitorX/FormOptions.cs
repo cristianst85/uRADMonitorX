@@ -104,7 +104,6 @@ namespace uRADMonitorX {
             this.comboBoxRadiationNotificationUnit.Items.Add(EnumHelper.GetEnumDescription<RadiationUnitType>(RadiationUnitType.uRemH));
 
             this.textBoxHighTemperatureNotificationValue.Text = settings.HighTemperatureNotificationValue.ToString();
-            this.textBoxRadiationNotificationValue.Text = settings.RadiationNotificationValue.ToString();
 
             this.checkBoxNotificationsEnable.Checked = settings.AreNotificationsEnabled;
 
@@ -121,13 +120,26 @@ namespace uRADMonitorX {
 
             this.temperatureNotificationUnitSelectedIndex = this.comboBoxTemperatureNotificationUnit.SelectedIndex;
 
-            if (settings.RadiationNotificationUnitType == RadiationUnitType.Cpm) {
+            RadiationUnitType radiationNotificationUnitType = settings.RadiationNotificationUnitType;
+            double radiationNotificationValue = settings.RadiationNotificationValue;
+
+            // Override settings if radiation notification unit type is not in counts pe minute (cpm) and the detector is unknown.
+            if (radiationNotificationUnitType != RadiationUnitType.Cpm &&
+                    (String.IsNullOrEmpty(settings.DetectorName) ||
+                    !RadiationDetector.IsKnown(RadiationDetector.Normalize(settings.DetectorName)))
+                ) {
+                radiationNotificationValue = 0;
+                radiationNotificationUnitType = RadiationUnitType.Cpm;
+            }
+            this.textBoxRadiationNotificationValue.Text = radiationNotificationValue.ToString();
+
+            if (radiationNotificationUnitType == RadiationUnitType.Cpm) {
                 this.comboBoxRadiationNotificationUnit.SelectedIndex = 0;
             }
-            else if (settings.RadiationNotificationUnitType == RadiationUnitType.uSvH) {
+            else if (radiationNotificationUnitType == RadiationUnitType.uSvH) {
                 this.comboBoxRadiationNotificationUnit.SelectedIndex = 1;
             }
-            else if (settings.RadiationNotificationUnitType == RadiationUnitType.uRemH) {
+            else if (radiationNotificationUnitType == RadiationUnitType.uRemH) {
                 this.comboBoxRadiationNotificationUnit.SelectedIndex = 2;
             }
             else {

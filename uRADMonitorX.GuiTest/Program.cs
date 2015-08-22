@@ -23,6 +23,8 @@ namespace uRADMonitorX.GuiTest {
                 TemperatureUnitType = TemperatureUnitType.Celsius,
                 RadiationUnitType = RadiationUnitType.Cpm,
                 PollingType = PollingType.FixedInterval,
+                LastWindowXPos = DefaultSettings.LastWindowXPos,
+                LastWindowYPos = DefaultSettings.LastWindowYPos,
                 PollingInterval = 1,
                 DeviceIPAddress = "127.0.0.1",
                 IsPollingEnabled = true,

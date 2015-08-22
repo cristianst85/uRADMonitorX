@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Xml;
 using uRADMonitorX.Core;
-using uRADMonitorX.Commons;
 
 namespace uRADMonitorX.Configuration {
 
@@ -119,15 +118,6 @@ namespace uRADMonitorX.Configuration {
                 xmlSettings.RadiationNotificationUnitType = DefaultSettings.RadiationNotificationUnitType;
             }
 
-            // Override default settings if radiation notification unit type is not counts pe minute (cpm) and the detector is unknown.
-            if (xmlSettings.RadiationNotificationUnitType != RadiationUnitType.Cpm &&
-                    (String.IsNullOrEmpty(xmlSettings.DetectorName) ||
-                    !RadiationDetector.IsKnown(RadiationDetector.Normalize(xmlSettings.DetectorName)))
-                ) {
-                xmlSettings.RadiationNotificationValue = 0;
-                xmlSettings.RadiationNotificationUnitType = RadiationUnitType.Cpm;
-            }
-
             return xmlSettings;
         }
 
@@ -141,8 +131,8 @@ namespace uRADMonitorX.Configuration {
                 writeFullElement(xmlWriter, "start_minimized", DefaultSettings.StartMinimized);
                 writeFullElement(xmlWriter, "show_in_taskbar", DefaultSettings.ShowInTaskbar);
                 writeFullElement(xmlWriter, "close_to_system_tray", DefaultSettings.CloseToSystemTray);
-                writeFullElement(xmlWriter, "last_window_x_pos", 50);
-                writeFullElement(xmlWriter, "last_window_y_pos", 50);
+                writeFullElement(xmlWriter, "last_window_x_pos", DefaultSettings.LastWindowXPos);
+                writeFullElement(xmlWriter, "last_window_y_pos", DefaultSettings.LastWindowYPos);
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("logging");
                 writeFullElement(xmlWriter, "enabled", DefaultSettings.IsLoggingEnabled);
@@ -162,7 +152,7 @@ namespace uRADMonitorX.Configuration {
                 xmlWriter.WriteStartElement("notifications");
                 writeFullElement(xmlWriter, "enabled", DefaultSettings.AreNotificationsEnabled);
                 writeFullElement(xmlWriter, "high_temperature_value", DefaultSettings.HighTemperatureNotificationValue);
-                writeFullElement(xmlWriter, "radiation_value", DefaultSettings.RadiationNotificationValue);
+                writeFullElement(xmlWriter, "radiation_value", DefaultSettings.RadiationNotificationValue.ToString(numberFormatInfo));
                 writeFullElement(xmlWriter, "temperature_unit_type", DefaultSettings.TemperatureNotificationUnitType.ToString());
                 writeFullElement(xmlWriter, "radiation_unit_type", DefaultSettings.RadiationNotificationUnitType.ToString());
                 xmlWriter.WriteEndElement();

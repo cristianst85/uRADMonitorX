@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using uRADMonitorX.Core.Device;
 
-namespace uRADMonitorX.Tests {
+namespace uRADMonitorX.IntegrationTests.Core.Device {
 
     [TestFixture]
     public class DeviceDataHttpReaderTest {
@@ -10,8 +10,7 @@ namespace uRADMonitorX.Tests {
         [TestCase("10.10.0.144")]
         public void Read(String ipAddress) {
             IDeviceDataReader deviceDataReader = new DeviceDataHttpReader(ipAddress);
-            DeviceData deviceData = deviceDataReader.Read();
-            // TODO: asserts
+            Assert.DoesNotThrow(() => deviceDataReader.Read());
         }
     }
 }

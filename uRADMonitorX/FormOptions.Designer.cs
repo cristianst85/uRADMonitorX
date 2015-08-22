@@ -43,6 +43,8 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageNotifications = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.pictureBoxNotificationsInfo = new System.Windows.Forms.PictureBox();
+            this.labelNotificationsInfo = new System.Windows.Forms.Label();
             this.comboBoxRadiationNotificationUnit = new System.Windows.Forms.ComboBox();
             this.textBoxRadiationNotificationValue = new System.Windows.Forms.TextBox();
             this.labelRadiationNotification = new System.Windows.Forms.Label();
@@ -58,8 +60,6 @@
             this.comboBoxTemperatureUnit = new System.Windows.Forms.ComboBox();
             this.labelPressureUnit = new System.Windows.Forms.Label();
             this.labelTemperatureUnit = new System.Windows.Forms.Label();
-            this.pictureBoxNotificationsInfo = new System.Windows.Forms.PictureBox();
-            this.labelNotificationsInfo = new System.Windows.Forms.Label();
             this.tabPageDisplay.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
@@ -69,9 +69,9 @@
             this.tabControl.SuspendLayout();
             this.tabPageNotifications.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotificationsInfo)).BeginInit();
             this.tabPageMisc.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotificationsInfo)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonApply
@@ -291,6 +291,28 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Settings";
             // 
+            // pictureBoxNotificationsInfo
+            // 
+            this.pictureBoxNotificationsInfo.ErrorImage = null;
+            this.pictureBoxNotificationsInfo.Image = global::uRADMonitorX.Properties.Resources.information;
+            this.pictureBoxNotificationsInfo.Location = new System.Drawing.Point(19, 117);
+            this.pictureBoxNotificationsInfo.Name = "pictureBoxNotificationsInfo";
+            this.pictureBoxNotificationsInfo.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxNotificationsInfo.TabIndex = 8;
+            this.pictureBoxNotificationsInfo.TabStop = false;
+            // 
+            // labelNotificationsInfo
+            // 
+            this.labelNotificationsInfo.AutoSize = true;
+            this.labelNotificationsInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.labelNotificationsInfo.Location = new System.Drawing.Point(41, 117);
+            this.labelNotificationsInfo.Name = "labelNotificationsInfo";
+            this.labelNotificationsInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.labelNotificationsInfo.Size = new System.Drawing.Size(215, 39);
+            this.labelNotificationsInfo.TabIndex = 7;
+            this.labelNotificationsInfo.Text = "Radiation measure unit selection is disabled \r\nbecause device detector is unknown" +
+    " or is \r\nnot configured.";
+            // 
             // comboBoxRadiationNotificationUnit
             // 
             this.comboBoxRadiationNotificationUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -435,26 +457,6 @@
             this.labelTemperatureUnit.TabIndex = 0;
             this.labelTemperatureUnit.Text = "Show temperature in";
             // 
-            // pictureBoxNotificationsInfo
-            // 
-            this.pictureBoxNotificationsInfo.ErrorImage = null;
-            this.pictureBoxNotificationsInfo.Image = global::uRADMonitorX.Properties.Resources.information;
-            this.pictureBoxNotificationsInfo.Location = new System.Drawing.Point(19, 117);
-            this.pictureBoxNotificationsInfo.Name = "pictureBoxNotificationsInfo";
-            this.pictureBoxNotificationsInfo.Size = new System.Drawing.Size(16, 16);
-            this.pictureBoxNotificationsInfo.TabIndex = 8;
-            this.pictureBoxNotificationsInfo.TabStop = false;
-            // 
-            // labelNotificationsInfo
-            // 
-            this.labelNotificationsInfo.AutoSize = true;
-            this.labelNotificationsInfo.Location = new System.Drawing.Point(41, 117);
-            this.labelNotificationsInfo.Name = "labelNotificationsInfo";
-            this.labelNotificationsInfo.Size = new System.Drawing.Size(215, 39);
-            this.labelNotificationsInfo.TabIndex = 7;
-            this.labelNotificationsInfo.Text = "Radiation measure unit selection is disabled \r\nbecause device detector is unknown" +
-    " or is \r\nnot configured.";
-            // 
             // FormOptions
             // 
             this.AcceptButton = this.buttonOK;
@@ -484,10 +486,10 @@
             this.tabPageNotifications.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotificationsInfo)).EndInit();
             this.tabPageMisc.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotificationsInfo)).EndInit();
             this.ResumeLayout(false);
 
         }

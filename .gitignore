@@ -7,3 +7,5 @@ uRADMonitorX/obj/
 uRADMonitorX.GuiTest/bin/
 uRADMonitorX.GuiTest/obj/
 uRADMonitorX.suo
+uRADMonitorX.IntegrationTests/bin/
+uRADMonitorX.IntegrationTests/obj/
