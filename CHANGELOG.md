@@ -1,3 +1,7 @@
+0.39.1
+
+ Fixed a bug in CreateFile() method in XMLSettings.cs.
+
 0.39.0
 
  Changed license to GNU GPLv2 (added README.md, LICENSE, COPYING, CHANGELOG.md files to solution directory).
