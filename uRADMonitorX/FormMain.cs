@@ -81,6 +81,7 @@ namespace uRADMonitorX {
 
                 this.enablePollingToolStripMenuItem.Checked = this.settings.IsPollingEnabled;
                 this.labelPressure.Enabled = this.settings.HasPressureSensor;
+                this.pressureToolStripMenuItem.Enabled = this.settings.HasPressureSensor;
 
                 if (this.settings.StartMinimized) {
                     this.WindowState = FormWindowState.Minimized;
@@ -276,6 +277,7 @@ namespace uRADMonitorX {
             }
             if (deviceData.Pressure.HasValue) {
                 this.labelPressure.Enabled = true;
+                this.pressureToolStripMenuItem.Enabled = true;
                 if (this.settings.PressureUnitType == Core.PressureUnitType.Pa) {
                     this.viewOnlyTextBoxPressure.Text = String.Format("{0} Pa", deviceData.Pressure.Value);
                 }
@@ -291,6 +293,7 @@ namespace uRADMonitorX {
             }
             else {
                 this.labelPressure.Enabled = false;
+                this.pressureToolStripMenuItem.Enabled = false;
                 this.viewOnlyTextBoxPressure.Text = String.Empty;
             }
 
@@ -605,10 +608,20 @@ namespace uRADMonitorX {
             this.viewDeviceOnlineDataToolStripMenuItem.Enabled = this.viewOnlyTextBoxId.Text.Length > 0;
         }
 
-        private void viewDeviceOnlineDataToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void graphToolStripMenuItem_Click(object sender, EventArgs e) {
             if (this.viewOnlyTextBoxId.Text.Length > 0) {
                 System.Diagnostics.Process.Start(String.Format("http://www.uradmonitor.com?open={0}", this.viewOnlyTextBoxId.Text));
             }
+        }
+
+        private void viewDeviceOnlineDataToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (this.viewOnlyTextBoxId.Text.Length > 0) {
+                openDataAPILink(this.viewOnlyTextBoxId.Text, ((ToolStripMenuItem)sender).Text.ToLower());
+            }
+        }
+
+        private void openDataAPILink(String deviceId, String sensorData) {
+            System.Diagnostics.Process.Start(String.Format("http://data.uradmonitor.com/api/v1/devices/{0}/{1}", deviceId, sensorData));
         }
     }
 }

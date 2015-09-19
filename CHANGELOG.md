@@ -1,3 +1,7 @@
+0.39.2
+
+ Expanded 'View device online data' menu item to work with the new www.uradmonitor.com API.
+
 0.39.1
 
  Fixed a bug in CreateFile() method in XMLSettings.cs.
