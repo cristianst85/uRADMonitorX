@@ -116,7 +116,6 @@ namespace uRADMonitorX {
             }
         }
 
-
         private static void registerAtWindowsStartup() {
             try {
                 if (settings.StartWithWindows) {

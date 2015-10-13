@@ -11,6 +11,5 @@ namespace uRADMonitorX.Core {
         /// Synchronize with watchdog timer.
         /// </summary>
         WDTSync
-
     }
 }

@@ -19,6 +19,5 @@ namespace uRADMonitorX.Core {
         /// </summary>
         [Description("µrem/h")]
         uRemH
-
     }
 }
