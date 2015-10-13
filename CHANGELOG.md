@@ -1,3 +1,7 @@
+0.39.3
+
+ Added date and time to notification message.
+
 0.39.2
 
  Expanded 'View device online data' menu item to work with the new www.uradmonitor.com API.
