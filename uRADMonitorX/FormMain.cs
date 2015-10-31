@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading;
@@ -14,7 +15,6 @@ using uRADMonitorX.Core;
 using uRADMonitorX.Core.Device;
 using uRADMonitorX.Core.Fetchers;
 using uRADMonitorX.Windows;
-using System.Globalization;
 
 namespace uRADMonitorX {
 
@@ -50,6 +50,7 @@ namespace uRADMonitorX {
 
         private int mLastWindowXPos;
         private int mLastWindowYPos;
+        private volatile bool allowVisible;
 
         private DateTime? notifyIconBalloonLastShownAt = null;
 
@@ -84,16 +85,22 @@ namespace uRADMonitorX {
                 this.labelPressure.Enabled = this.settings.HasPressureSensor;
                 this.pressureToolStripMenuItem.Enabled = this.settings.HasPressureSensor;
 
+                this.StartPosition = FormStartPosition.Manual;
+                this.restoreWindowPosition(this.settings.LastWindowXPos, this.settings.LastWindowYPos);
+
+                Debug.WriteLine(String.Format("FormMain > Settings.StartMinimized: {0}", this.settings.StartMinimized.ToString().ToLower()));
+                Debug.WriteLine(String.Format("FormMain > Settings.ShowInTaskbar: {0}", this.settings.ShowInTaskbar.ToString().ToLower()));
+
+                this.allowVisible = !this.settings.StartMinimized;
+
                 if (this.settings.StartMinimized) {
                     this.WindowState = FormWindowState.Minimized;
                     this.ShowInTaskbar = false;
                 }
                 else {
+                    this.WindowState = FormWindowState.Normal;
                     this.ShowInTaskbar = this.settings.ShowInTaskbar;
                 }
-
-                this.StartPosition = FormStartPosition.Manual;
-                this.restoreWindowPosition(this.settings.LastWindowXPos, this.settings.LastWindowYPos);
 
                 this.viewDeviceOnlineDataToolStripMenuItem.Enabled = false;
 
@@ -107,12 +114,25 @@ namespace uRADMonitorX {
                 startupThread.Start();
             }
             catch (Exception ex) {
-                Debug.WriteLine(String.Format("Exception: {0}", ex.ToString()));
+                Debug.WriteLine(String.Format("FormMain > Exception: {0}", ex.ToString()));
                 this.logger.Write(String.Format("Exception: {0}", ex.ToString()));
             }
             finally {
                 this.IsReady = true;
             }
+        }
+
+        protected override void SetVisibleCore(bool value) {
+            Debug.WriteLine(String.Format("FormMain > SetVisibleCore({0})", value.ToString().ToLower()));
+            Debug.WriteLine(String.Format("FormMain > allowVisible: {0}", this.allowVisible.ToString().ToLower()));
+            if (value && !this.IsHandleCreated) {
+                CreateHandle();
+            }
+            if (!this.allowVisible) {
+                value = false;
+            }
+            base.SetVisibleCore(value);
+            this.allowVisible = true;
         }
 
         private void initDevice(bool isRestart) {
@@ -472,15 +492,16 @@ namespace uRADMonitorX {
         }
 
         private void formMain_Closing(object sender, FormClosingEventArgs e) {
+            Debug.WriteLine("FormMain > formMain_Closing()");
             this.saveWindowPosition();
             if (e.CloseReason != CloseReason.UserClosing) {
                 this.IsClosing = true;
                 this.saveWindowPosition(true);
                 return;
             }
-
             if (this.settings.CloseToSystemTray && !this.IsClosing) {
                 this.minimizeToTray();
+                this.Hide();
                 e.Cancel = true;
             }
             else {
@@ -544,12 +565,15 @@ namespace uRADMonitorX {
         }
 
         private void minimizeToTray() {
+            Debug.WriteLine("FormMain > minimizeToTray()");
             this.ShowInTaskbar = this.settings.ShowInTaskbar;
-            this.Hide();
             this.WindowState = FormWindowState.Minimized;
+            this.Visible = false;
+            this.Hide();
         }
 
         private void toogleWindow() {
+            Debug.WriteLine("FormMain > toogleWindow()");
             this.ShowInTaskbar = this.settings.ShowInTaskbar;
             if (this.WindowState == FormWindowState.Minimized) {
                 this.Show();
@@ -559,6 +583,7 @@ namespace uRADMonitorX {
                 this.restoreWindowPosition();
             }
             else {
+                this.Hide();
                 this.saveWindowPosition();
                 this.Visible = false;
                 this.Hide();

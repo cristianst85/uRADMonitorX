@@ -1,3 +1,7 @@
+0.39.4
+
+ Fixed a bug that caused application to still be visible in ALT+TAB dialog when 'Start uRADMonitorX minimized' was enabled.
+
 0.39.3
 
  Added date and time to notification message.

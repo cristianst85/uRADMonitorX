@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+using System.Windows.Forms;
 using uRADMonitorX.Commons.Controls;
 
 namespace uRADMonitorX {
@@ -39,6 +39,8 @@ namespace uRADMonitorX {
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.viewDeviceWebpageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewDeviceOnlineDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.graphToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
             this.temperatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pressureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cpmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,29 +60,18 @@ namespace uRADMonitorX {
             this.toolStripStatusLabelUptime = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelDeviceUptime = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.viewOnlyTextBoxId = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.labelId = new System.Windows.Forms.Label();
-            this.viewOnlyTextBoxDetector = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.labelDetector = new System.Windows.Forms.Label();
-            this.viewOnlyTextBoxFirmware = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
-            this.viewOnlyTextBoxHardware = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.labelModel = new System.Windows.Forms.Label();
             this.labelFirmware = new System.Windows.Forms.Label();
             this.labelHardware = new System.Windows.Forms.Label();
-            this.viewOnlyTextBoxModel = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.viewOnlyTextBoxWDT = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.labelWDT = new System.Windows.Forms.Label();
-            this.viewOnlyTextBoxVoltage = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.labelVoltage = new System.Windows.Forms.Label();
-            this.viewOnlyTextBoxPressure = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.labelPressure = new System.Windows.Forms.Label();
             this.labelTemperature = new System.Windows.Forms.Label();
-            this.viewOnlyTextBoxTemperature = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
-            this.viewOnlyTextBoxRadiationAverage = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.labelRadiationAverage = new System.Windows.Forms.Label();
             this.labelRadiation = new System.Windows.Forms.Label();
-            this.viewOnlyTextBoxRadiation = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.viewDeviceWebpageToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
@@ -88,8 +79,17 @@ namespace uRADMonitorX {
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.graphToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
+            this.viewOnlyTextBoxWDT = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
+            this.viewOnlyTextBoxVoltage = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
+            this.viewOnlyTextBoxPressure = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
+            this.viewOnlyTextBoxTemperature = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
+            this.viewOnlyTextBoxRadiationAverage = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
+            this.viewOnlyTextBoxRadiation = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
+            this.viewOnlyTextBoxId = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
+            this.viewOnlyTextBoxDetector = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
+            this.viewOnlyTextBoxFirmware = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
+            this.viewOnlyTextBoxHardware = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
+            this.viewOnlyTextBoxModel = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -192,38 +192,50 @@ namespace uRADMonitorX {
             this.viewDeviceOnlineDataToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.viewDeviceOnlineDataToolStripMenuItem.Text = "View device online data";
             // 
+            // graphToolStripMenuItem
+            // 
+            this.graphToolStripMenuItem.Name = "graphToolStripMenuItem";
+            this.graphToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.graphToolStripMenuItem.Text = "Graph";
+            this.graphToolStripMenuItem.Click += new System.EventHandler(this.graphToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem7
+            // 
+            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(139, 6);
+            // 
             // temperatureToolStripMenuItem
             // 
             this.temperatureToolStripMenuItem.Name = "temperatureToolStripMenuItem";
-            this.temperatureToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.temperatureToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.temperatureToolStripMenuItem.Text = "Temperature";
             this.temperatureToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceOnlineDataToolStripMenuItem_Click);
             // 
             // pressureToolStripMenuItem
             // 
             this.pressureToolStripMenuItem.Name = "pressureToolStripMenuItem";
-            this.pressureToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pressureToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.pressureToolStripMenuItem.Text = "Pressure";
             this.pressureToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceOnlineDataToolStripMenuItem_Click);
             // 
             // cpmToolStripMenuItem
             // 
             this.cpmToolStripMenuItem.Name = "cpmToolStripMenuItem";
-            this.cpmToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cpmToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.cpmToolStripMenuItem.Text = "Cpm";
             this.cpmToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceOnlineDataToolStripMenuItem_Click);
             // 
             // voltageToolStripMenuItem
             // 
             this.voltageToolStripMenuItem.Name = "voltageToolStripMenuItem";
-            this.voltageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.voltageToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.voltageToolStripMenuItem.Text = "Voltage";
             this.voltageToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceOnlineDataToolStripMenuItem_Click);
             // 
             // dutyToolStripMenuItem
             // 
             this.dutyToolStripMenuItem.Name = "dutyToolStripMenuItem";
-            this.dutyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dutyToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.dutyToolStripMenuItem.Text = "Duty";
             this.dutyToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceOnlineDataToolStripMenuItem_Click);
             // 
@@ -347,15 +359,6 @@ namespace uRADMonitorX {
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Device Information";
             // 
-            // viewOnlyTextBoxId
-            // 
-            this.viewOnlyTextBoxId.Location = new System.Drawing.Point(91, 17);
-            this.viewOnlyTextBoxId.Name = "viewOnlyTextBoxId";
-            this.viewOnlyTextBoxId.ReadOnly = true;
-            this.viewOnlyTextBoxId.ShortcutsEnabled = false;
-            this.viewOnlyTextBoxId.Size = new System.Drawing.Size(84, 20);
-            this.viewOnlyTextBoxId.TabIndex = 2;
-            // 
             // labelId
             // 
             this.labelId.AutoSize = true;
@@ -365,15 +368,6 @@ namespace uRADMonitorX {
             this.labelId.TabIndex = 1;
             this.labelId.Text = "ID:";
             // 
-            // viewOnlyTextBoxDetector
-            // 
-            this.viewOnlyTextBoxDetector.Location = new System.Drawing.Point(237, 43);
-            this.viewOnlyTextBoxDetector.Name = "viewOnlyTextBoxDetector";
-            this.viewOnlyTextBoxDetector.ReadOnly = true;
-            this.viewOnlyTextBoxDetector.ShortcutsEnabled = false;
-            this.viewOnlyTextBoxDetector.Size = new System.Drawing.Size(84, 20);
-            this.viewOnlyTextBoxDetector.TabIndex = 6;
-            // 
             // labelDetector
             // 
             this.labelDetector.AutoSize = true;
@@ -382,24 +376,6 @@ namespace uRADMonitorX {
             this.labelDetector.Size = new System.Drawing.Size(51, 13);
             this.labelDetector.TabIndex = 5;
             this.labelDetector.Text = "Detector:";
-            // 
-            // viewOnlyTextBoxFirmware
-            // 
-            this.viewOnlyTextBoxFirmware.Location = new System.Drawing.Point(237, 69);
-            this.viewOnlyTextBoxFirmware.Name = "viewOnlyTextBoxFirmware";
-            this.viewOnlyTextBoxFirmware.ReadOnly = true;
-            this.viewOnlyTextBoxFirmware.ShortcutsEnabled = false;
-            this.viewOnlyTextBoxFirmware.Size = new System.Drawing.Size(84, 20);
-            this.viewOnlyTextBoxFirmware.TabIndex = 10;
-            // 
-            // viewOnlyTextBoxHardware
-            // 
-            this.viewOnlyTextBoxHardware.Location = new System.Drawing.Point(91, 69);
-            this.viewOnlyTextBoxHardware.Name = "viewOnlyTextBoxHardware";
-            this.viewOnlyTextBoxHardware.ReadOnly = true;
-            this.viewOnlyTextBoxHardware.ShortcutsEnabled = false;
-            this.viewOnlyTextBoxHardware.Size = new System.Drawing.Size(84, 20);
-            this.viewOnlyTextBoxHardware.TabIndex = 8;
             // 
             // labelModel
             // 
@@ -428,15 +404,6 @@ namespace uRADMonitorX {
             this.labelHardware.TabIndex = 7;
             this.labelHardware.Text = "Hardware:";
             // 
-            // viewOnlyTextBoxModel
-            // 
-            this.viewOnlyTextBoxModel.Location = new System.Drawing.Point(91, 43);
-            this.viewOnlyTextBoxModel.Name = "viewOnlyTextBoxModel";
-            this.viewOnlyTextBoxModel.ReadOnly = true;
-            this.viewOnlyTextBoxModel.ShortcutsEnabled = false;
-            this.viewOnlyTextBoxModel.Size = new System.Drawing.Size(84, 20);
-            this.viewOnlyTextBoxModel.TabIndex = 4;
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.viewOnlyTextBoxWDT);
@@ -458,15 +425,6 @@ namespace uRADMonitorX {
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Device Readings";
             // 
-            // viewOnlyTextBoxWDT
-            // 
-            this.viewOnlyTextBoxWDT.Location = new System.Drawing.Point(237, 70);
-            this.viewOnlyTextBoxWDT.Name = "viewOnlyTextBoxWDT";
-            this.viewOnlyTextBoxWDT.ReadOnly = true;
-            this.viewOnlyTextBoxWDT.ShortcutsEnabled = false;
-            this.viewOnlyTextBoxWDT.Size = new System.Drawing.Size(84, 20);
-            this.viewOnlyTextBoxWDT.TabIndex = 22;
-            // 
             // labelWDT
             // 
             this.labelWDT.AutoSize = true;
@@ -476,15 +434,6 @@ namespace uRADMonitorX {
             this.labelWDT.TabIndex = 21;
             this.labelWDT.Text = "WDT:";
             // 
-            // viewOnlyTextBoxVoltage
-            // 
-            this.viewOnlyTextBoxVoltage.Location = new System.Drawing.Point(91, 70);
-            this.viewOnlyTextBoxVoltage.Name = "viewOnlyTextBoxVoltage";
-            this.viewOnlyTextBoxVoltage.ReadOnly = true;
-            this.viewOnlyTextBoxVoltage.ShortcutsEnabled = false;
-            this.viewOnlyTextBoxVoltage.Size = new System.Drawing.Size(84, 20);
-            this.viewOnlyTextBoxVoltage.TabIndex = 20;
-            // 
             // labelVoltage
             // 
             this.labelVoltage.AutoSize = true;
@@ -493,15 +442,6 @@ namespace uRADMonitorX {
             this.labelVoltage.Size = new System.Drawing.Size(46, 13);
             this.labelVoltage.TabIndex = 19;
             this.labelVoltage.Text = "Voltage:";
-            // 
-            // viewOnlyTextBoxPressure
-            // 
-            this.viewOnlyTextBoxPressure.Location = new System.Drawing.Point(237, 44);
-            this.viewOnlyTextBoxPressure.Name = "viewOnlyTextBoxPressure";
-            this.viewOnlyTextBoxPressure.ReadOnly = true;
-            this.viewOnlyTextBoxPressure.ShortcutsEnabled = false;
-            this.viewOnlyTextBoxPressure.Size = new System.Drawing.Size(84, 20);
-            this.viewOnlyTextBoxPressure.TabIndex = 18;
             // 
             // labelPressure
             // 
@@ -521,24 +461,6 @@ namespace uRADMonitorX {
             this.labelTemperature.TabIndex = 15;
             this.labelTemperature.Text = "Temperature:";
             // 
-            // viewOnlyTextBoxTemperature
-            // 
-            this.viewOnlyTextBoxTemperature.Location = new System.Drawing.Point(91, 44);
-            this.viewOnlyTextBoxTemperature.Name = "viewOnlyTextBoxTemperature";
-            this.viewOnlyTextBoxTemperature.ReadOnly = true;
-            this.viewOnlyTextBoxTemperature.ShortcutsEnabled = false;
-            this.viewOnlyTextBoxTemperature.Size = new System.Drawing.Size(84, 20);
-            this.viewOnlyTextBoxTemperature.TabIndex = 16;
-            // 
-            // viewOnlyTextBoxRadiationAverage
-            // 
-            this.viewOnlyTextBoxRadiationAverage.Location = new System.Drawing.Point(237, 18);
-            this.viewOnlyTextBoxRadiationAverage.Name = "viewOnlyTextBoxRadiationAverage";
-            this.viewOnlyTextBoxRadiationAverage.ReadOnly = true;
-            this.viewOnlyTextBoxRadiationAverage.ShortcutsEnabled = false;
-            this.viewOnlyTextBoxRadiationAverage.Size = new System.Drawing.Size(85, 20);
-            this.viewOnlyTextBoxRadiationAverage.TabIndex = 14;
-            // 
             // labelRadiationAverage
             // 
             this.labelRadiationAverage.AutoSize = true;
@@ -556,15 +478,6 @@ namespace uRADMonitorX {
             this.labelRadiation.Size = new System.Drawing.Size(55, 13);
             this.labelRadiation.TabIndex = 11;
             this.labelRadiation.Text = "Radiation:";
-            // 
-            // viewOnlyTextBoxRadiation
-            // 
-            this.viewOnlyTextBoxRadiation.Location = new System.Drawing.Point(91, 18);
-            this.viewOnlyTextBoxRadiation.Name = "viewOnlyTextBoxRadiation";
-            this.viewOnlyTextBoxRadiation.ReadOnly = true;
-            this.viewOnlyTextBoxRadiation.ShortcutsEnabled = false;
-            this.viewOnlyTextBoxRadiation.Size = new System.Drawing.Size(84, 20);
-            this.viewOnlyTextBoxRadiation.TabIndex = 12;
             // 
             // contextMenuStrip
             // 
@@ -621,17 +534,104 @@ namespace uRADMonitorX {
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
             // 
-            // graphToolStripMenuItem
+            // viewOnlyTextBoxWDT
             // 
-            this.graphToolStripMenuItem.Name = "graphToolStripMenuItem";
-            this.graphToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.graphToolStripMenuItem.Text = "Graph";
-            this.graphToolStripMenuItem.Click += new System.EventHandler(this.graphToolStripMenuItem_Click);
+            this.viewOnlyTextBoxWDT.Location = new System.Drawing.Point(237, 70);
+            this.viewOnlyTextBoxWDT.Name = "viewOnlyTextBoxWDT";
+            this.viewOnlyTextBoxWDT.ReadOnly = true;
+            this.viewOnlyTextBoxWDT.ShortcutsEnabled = false;
+            this.viewOnlyTextBoxWDT.Size = new System.Drawing.Size(84, 20);
+            this.viewOnlyTextBoxWDT.TabIndex = 22;
             // 
-            // toolStripMenuItem7
+            // viewOnlyTextBoxVoltage
             // 
-            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-            this.toolStripMenuItem7.Size = new System.Drawing.Size(149, 6);
+            this.viewOnlyTextBoxVoltage.Location = new System.Drawing.Point(91, 70);
+            this.viewOnlyTextBoxVoltage.Name = "viewOnlyTextBoxVoltage";
+            this.viewOnlyTextBoxVoltage.ReadOnly = true;
+            this.viewOnlyTextBoxVoltage.ShortcutsEnabled = false;
+            this.viewOnlyTextBoxVoltage.Size = new System.Drawing.Size(84, 20);
+            this.viewOnlyTextBoxVoltage.TabIndex = 20;
+            // 
+            // viewOnlyTextBoxPressure
+            // 
+            this.viewOnlyTextBoxPressure.Location = new System.Drawing.Point(237, 44);
+            this.viewOnlyTextBoxPressure.Name = "viewOnlyTextBoxPressure";
+            this.viewOnlyTextBoxPressure.ReadOnly = true;
+            this.viewOnlyTextBoxPressure.ShortcutsEnabled = false;
+            this.viewOnlyTextBoxPressure.Size = new System.Drawing.Size(84, 20);
+            this.viewOnlyTextBoxPressure.TabIndex = 18;
+            // 
+            // viewOnlyTextBoxTemperature
+            // 
+            this.viewOnlyTextBoxTemperature.Location = new System.Drawing.Point(91, 44);
+            this.viewOnlyTextBoxTemperature.Name = "viewOnlyTextBoxTemperature";
+            this.viewOnlyTextBoxTemperature.ReadOnly = true;
+            this.viewOnlyTextBoxTemperature.ShortcutsEnabled = false;
+            this.viewOnlyTextBoxTemperature.Size = new System.Drawing.Size(84, 20);
+            this.viewOnlyTextBoxTemperature.TabIndex = 16;
+            // 
+            // viewOnlyTextBoxRadiationAverage
+            // 
+            this.viewOnlyTextBoxRadiationAverage.Location = new System.Drawing.Point(237, 18);
+            this.viewOnlyTextBoxRadiationAverage.Name = "viewOnlyTextBoxRadiationAverage";
+            this.viewOnlyTextBoxRadiationAverage.ReadOnly = true;
+            this.viewOnlyTextBoxRadiationAverage.ShortcutsEnabled = false;
+            this.viewOnlyTextBoxRadiationAverage.Size = new System.Drawing.Size(85, 20);
+            this.viewOnlyTextBoxRadiationAverage.TabIndex = 14;
+            // 
+            // viewOnlyTextBoxRadiation
+            // 
+            this.viewOnlyTextBoxRadiation.Location = new System.Drawing.Point(91, 18);
+            this.viewOnlyTextBoxRadiation.Name = "viewOnlyTextBoxRadiation";
+            this.viewOnlyTextBoxRadiation.ReadOnly = true;
+            this.viewOnlyTextBoxRadiation.ShortcutsEnabled = false;
+            this.viewOnlyTextBoxRadiation.Size = new System.Drawing.Size(84, 20);
+            this.viewOnlyTextBoxRadiation.TabIndex = 12;
+            // 
+            // viewOnlyTextBoxId
+            // 
+            this.viewOnlyTextBoxId.Location = new System.Drawing.Point(91, 17);
+            this.viewOnlyTextBoxId.Name = "viewOnlyTextBoxId";
+            this.viewOnlyTextBoxId.ReadOnly = true;
+            this.viewOnlyTextBoxId.ShortcutsEnabled = false;
+            this.viewOnlyTextBoxId.Size = new System.Drawing.Size(84, 20);
+            this.viewOnlyTextBoxId.TabIndex = 2;
+            // 
+            // viewOnlyTextBoxDetector
+            // 
+            this.viewOnlyTextBoxDetector.Location = new System.Drawing.Point(237, 43);
+            this.viewOnlyTextBoxDetector.Name = "viewOnlyTextBoxDetector";
+            this.viewOnlyTextBoxDetector.ReadOnly = true;
+            this.viewOnlyTextBoxDetector.ShortcutsEnabled = false;
+            this.viewOnlyTextBoxDetector.Size = new System.Drawing.Size(84, 20);
+            this.viewOnlyTextBoxDetector.TabIndex = 6;
+            // 
+            // viewOnlyTextBoxFirmware
+            // 
+            this.viewOnlyTextBoxFirmware.Location = new System.Drawing.Point(237, 69);
+            this.viewOnlyTextBoxFirmware.Name = "viewOnlyTextBoxFirmware";
+            this.viewOnlyTextBoxFirmware.ReadOnly = true;
+            this.viewOnlyTextBoxFirmware.ShortcutsEnabled = false;
+            this.viewOnlyTextBoxFirmware.Size = new System.Drawing.Size(84, 20);
+            this.viewOnlyTextBoxFirmware.TabIndex = 10;
+            // 
+            // viewOnlyTextBoxHardware
+            // 
+            this.viewOnlyTextBoxHardware.Location = new System.Drawing.Point(91, 69);
+            this.viewOnlyTextBoxHardware.Name = "viewOnlyTextBoxHardware";
+            this.viewOnlyTextBoxHardware.ReadOnly = true;
+            this.viewOnlyTextBoxHardware.ShortcutsEnabled = false;
+            this.viewOnlyTextBoxHardware.Size = new System.Drawing.Size(84, 20);
+            this.viewOnlyTextBoxHardware.TabIndex = 8;
+            // 
+            // viewOnlyTextBoxModel
+            // 
+            this.viewOnlyTextBoxModel.Location = new System.Drawing.Point(91, 43);
+            this.viewOnlyTextBoxModel.Name = "viewOnlyTextBoxModel";
+            this.viewOnlyTextBoxModel.ReadOnly = true;
+            this.viewOnlyTextBoxModel.ShortcutsEnabled = false;
+            this.viewOnlyTextBoxModel.Size = new System.Drawing.Size(84, 20);
+            this.viewOnlyTextBoxModel.TabIndex = 4;
             // 
             // FormMain
             // 
