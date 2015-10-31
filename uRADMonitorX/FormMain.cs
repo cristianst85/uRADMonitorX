@@ -586,7 +586,6 @@ namespace uRADMonitorX {
                 this.Hide();
                 this.saveWindowPosition();
                 this.Visible = false;
-                this.Hide();
                 this.WindowState = FormWindowState.Minimized;
             }
         }
