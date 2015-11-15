@@ -27,6 +27,8 @@ namespace uRADMonitorX {
 
             this.checkBoxStartWithWindows.Checked = settings.StartWithWindows;
 
+            this.checkBoxStartWithWindows.Enabled = !EnvironmentUtils.IsMonoRuntime();
+
             this.checkBoxLoggingEnable.Checked = settings.IsLoggingEnabled;
             this.textBoxLogDirectoryPath.Text = settings.LogDirectoryPath;
 
