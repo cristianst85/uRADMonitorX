@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Security.Permissions;
@@ -193,9 +194,17 @@ namespace uRADMonitorX {
             this.statusStrip.Update();
         }
 
+        private delegate void updateDeviceStatusCallback(String status);
+
         private void updateDeviceStatus(String status) {
             if (!this.IsClosing) {
-                this.Invoke(new updateDeviceStatusCallback(updateDeviceStatusTS), new object[] { status });
+                if (((ISynchronizeInvoke)this.statusStrip).InvokeRequired) {
+                    this.Invoke(new updateDeviceStatusCallback(updateDeviceStatus), new object[] { status });
+                }
+                else {
+                    this.toolStripStatusLabelDeviceStatus.Text = status;
+                    this.statusStrip.Update();
+                }
             }
         }
 
@@ -225,14 +234,10 @@ namespace uRADMonitorX {
             if (message != null) {
                 notifyIconText.Append(String.Format("\n{0}", message));
             }
-            NotifyIconUtils.SetText(this.notifyIcon, notifyIconText.ToString());
-        }
-
-        private delegate void updateDeviceStatusCallback(String status);
-
-        public void updateDeviceStatusTS(String status) {
-            this.toolStripStatusLabelDeviceStatus.Text = status;
-            this.statusStrip.Update();
+            // FIXME: Don't crash when running on Mono.
+            if (!EnvironmentUtils.IsMonoRuntime()) {
+                NotifyIconUtils.SetText(this.notifyIcon, notifyIconText.ToString());
+            }
         }
 
         private void deviceDataFetcher_DeviceDataFetcherEventHandler(object sender, DeviceDataFetcherEventArgs e) {

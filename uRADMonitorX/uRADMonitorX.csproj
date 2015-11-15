@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentDescription.cs" />
+    <Compile Include="Commons\EnvironmentUtils.cs" />
     <Compile Include="Commons\Controls\NotifyIconUtils.cs" />
     <Compile Include="Commons\EnumHelper.cs" />
     <Compile Include="Commons\Logging\Appenders\NullAppender.cs" />
