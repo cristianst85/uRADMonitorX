@@ -24,5 +24,10 @@ namespace uRADMonitorX.Commons {
                 return null;
             }
         }
+
+        public static bool IsUnix() {
+            int pId = (int)Environment.OSVersion.Platform;
+            return ((pId == 4) || (pId == 6) || (pId == 128));
+        }
     }
 }

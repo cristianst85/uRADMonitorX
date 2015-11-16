@@ -75,7 +75,7 @@ namespace uRADMonitorX {
 
             IDeviceDataReaderFactory deviceDataReaderFactory = new DeviceDataHttpReaderFactory(settings);
 
-            if (!arguments.IgnoreRegisteringAtWindowsStartup && !EnvironmentUtils.IsMonoRuntime()) {
+            if (!arguments.IgnoreRegisteringAtWindowsStartup && !EnvironmentUtils.IsUnix()) {
                 registerAtWindowsStartup();
             }
 
@@ -92,7 +92,7 @@ namespace uRADMonitorX {
             if (logger != null) {
                 configLogger();
             }
-            if (!arguments.IgnoreRegisteringAtWindowsStartup && !EnvironmentUtils.IsMonoRuntime()) {
+            if (!arguments.IgnoreRegisteringAtWindowsStartup && !EnvironmentUtils.IsUnix()) {
                 registerAtWindowsStartup();
             }
         }
