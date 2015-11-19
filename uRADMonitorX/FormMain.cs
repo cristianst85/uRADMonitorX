@@ -73,6 +73,11 @@ namespace uRADMonitorX {
 
                 Version version = AssemblyUtils.GetVersion();
                 this.Text = this.Text.Replace("{version}", String.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build));
+#if DEBUG
+                if (EnvironmentUtils.IsMonoRuntime()) {
+                    this.Text += " (Mono)";
+                }
+#endif
 
                 // Pre-init.
                 // From settings.
