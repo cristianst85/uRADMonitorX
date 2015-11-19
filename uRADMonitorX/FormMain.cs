@@ -633,7 +633,10 @@ namespace uRADMonitorX {
         }
 
         private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
-            this.contextMenuStrip.Show(Cursor.Position, ToolStripDropDownDirection.AboveRight);
+            // FIXME: Don't crash (right-click on the notification icon) when running on Mono.
+            if (!EnvironmentUtils.IsMonoRuntime()) {
+                this.contextMenuStrip.Show(Cursor.Position, ToolStripDropDownDirection.AboveRight);
+            }
             if (this.WindowState == FormWindowState.Normal) {
                 this.showWindow();
             }
