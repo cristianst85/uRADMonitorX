@@ -6,7 +6,7 @@ uRADMonitorX is a small application that polls your network connected uRADMonito
 
 ## Requirements
 
-- Microsoft Windows XP/7 with .NET Framework 2.0;
+- Microsoft Windows XP/7 with .NET Framework 2.0 or Linux/Mac OS X with Wine/Mono;
 - An [uRADMonitor](http://www.uradmonitor.com/) device model A or A2 with firmware version 110 or newer.
 
 ## Repository
