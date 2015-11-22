@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using uRADMonitorX.Commons;
-using System.Diagnostics;
 
 namespace uRADMonitorX {
 
@@ -22,15 +21,6 @@ namespace uRADMonitorX {
 #endif
             this.label2.Text = this.label2.Text
                             .Replace("{revision}", String.Empty).TrimEnd('.');
-
-            foreach (object control in this.Controls) {
-                if (control is Label) {
-                    ((Label)control).BorderStyle = BorderStyle.None;
-                }
-                if (control is LinkLabel) {
-                    ((LinkLabel)control).BorderStyle = BorderStyle.None;
-                }
-            }
 
             this.KeyDown += new KeyEventHandler(formAbout_KeyPress);
         }

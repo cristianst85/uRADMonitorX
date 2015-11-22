@@ -16,6 +16,14 @@ namespace uRADMonitorX.Commons.Controls {
         /// <param name="text"></param>
         public static void SetText(NotifyIcon notifyIcon, String text) {
 
+            if (notifyIcon == null) {
+                throw new ArgumentNullException("notifyIcon");
+            }
+
+            if (text == null) {
+                throw new ArgumentNullException("text");
+            }
+
             if (text.Length >= 128) {
                 throw new ArgumentOutOfRangeException("Text length must be less than 128 characters long.");
             }
@@ -25,8 +33,13 @@ namespace uRADMonitorX.Commons.Controls {
 
             t.GetField("text", flags).SetValue(notifyIcon, text);
 
-            if ((bool)t.GetField("added", flags).GetValue(notifyIcon)) {
-                t.GetMethod("UpdateIcon", flags).Invoke(notifyIcon, new object[] { true });
+            if (!EnvironmentUtils.IsMonoRuntime()) {
+                if ((bool)t.GetField("added", flags).GetValue(notifyIcon)) {
+                    t.GetMethod("UpdateIcon", flags).Invoke(notifyIcon, new object[] { true });
+                }
+            }
+            else {
+                t.GetMethod("Recalculate", flags).Invoke(notifyIcon, null);
             }
         }
     }

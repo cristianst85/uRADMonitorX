@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Security.Permissions;
@@ -72,6 +73,11 @@ namespace uRADMonitorX {
 
                 Version version = AssemblyUtils.GetVersion();
                 this.Text = this.Text.Replace("{version}", String.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build));
+#if DEBUG
+                if (EnvironmentUtils.IsMonoRuntime()) {
+                    this.Text += " (Mono)";
+                }
+#endif
 
                 // Pre-init.
                 // From settings.
@@ -193,9 +199,17 @@ namespace uRADMonitorX {
             this.statusStrip.Update();
         }
 
+        private delegate void updateDeviceStatusCallback(String status);
+
         private void updateDeviceStatus(String status) {
             if (!this.IsClosing) {
-                this.Invoke(new updateDeviceStatusCallback(updateDeviceStatusTS), new object[] { status });
+                if (((ISynchronizeInvoke)this.statusStrip).InvokeRequired) {
+                    this.Invoke(new updateDeviceStatusCallback(updateDeviceStatus), new object[] { status });
+                }
+                else {
+                    this.toolStripStatusLabelDeviceStatus.Text = status;
+                    this.statusStrip.Update();
+                }
             }
         }
 
@@ -226,13 +240,6 @@ namespace uRADMonitorX {
                 notifyIconText.Append(String.Format("\n{0}", message));
             }
             NotifyIconUtils.SetText(this.notifyIcon, notifyIconText.ToString());
-        }
-
-        private delegate void updateDeviceStatusCallback(String status);
-
-        public void updateDeviceStatusTS(String status) {
-            this.toolStripStatusLabelDeviceStatus.Text = status;
-            this.statusStrip.Update();
         }
 
         private void deviceDataFetcher_DeviceDataFetcherEventHandler(object sender, DeviceDataFetcherEventArgs e) {
@@ -628,7 +635,10 @@ namespace uRADMonitorX {
         }
 
         private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e) {
-            this.contextMenuStrip.Show(Cursor.Position, ToolStripDropDownDirection.AboveRight);
+            // FIXME: Don't crash (right-click on the notification icon) when running on Mono.
+            if (!EnvironmentUtils.IsMonoRuntime()) {
+                this.contextMenuStrip.Show(Cursor.Position, ToolStripDropDownDirection.AboveRight);
+            }
             if (this.WindowState == FormWindowState.Normal) {
                 this.showWindow();
             }
