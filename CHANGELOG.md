@@ -1,3 +1,7 @@
+0.40.0
+
+ Improved compatibility with Mono for running under Linux.
+
 0.39.4
 
  Fixed a bug that caused application to still be visible in ALT+TAB dialog when 'Start uRADMonitorX minimized' was enabled.
