@@ -239,10 +239,7 @@ namespace uRADMonitorX {
             if (message != null) {
                 notifyIconText.Append(String.Format("\n{0}", message));
             }
-            // FIXME: Don't crash when running on Mono.
-            if (!EnvironmentUtils.IsMonoRuntime()) {
-                NotifyIconUtils.SetText(this.notifyIcon, notifyIconText.ToString());
-            }
+            NotifyIconUtils.SetText(this.notifyIcon, notifyIconText.ToString());
         }
 
         private void deviceDataFetcher_DeviceDataFetcherEventHandler(object sender, DeviceDataFetcherEventArgs e) {
