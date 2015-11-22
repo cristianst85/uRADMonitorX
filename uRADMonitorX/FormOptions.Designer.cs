@@ -318,7 +318,7 @@
             // 
             this.comboBoxRadiationNotificationUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRadiationNotificationUnit.FormattingEnabled = true;
-            this.comboBoxRadiationNotificationUnit.Location = new System.Drawing.Point(186, 68);
+            this.comboBoxRadiationNotificationUnit.Location = new System.Drawing.Point(186, 69);
             this.comboBoxRadiationNotificationUnit.Name = "comboBoxRadiationNotificationUnit";
             this.comboBoxRadiationNotificationUnit.Size = new System.Drawing.Size(78, 21);
             this.comboBoxRadiationNotificationUnit.TabIndex = 5;
