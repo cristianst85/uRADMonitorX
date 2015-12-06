@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -18,6 +19,9 @@ namespace uRADMonitorX {
         public static readonly String LoggerName = "fileLogger";
         public static readonly String LoggerFilePath = "uRADMonitorX.log";
         public static readonly String SettingsFileName = "config.xml";
+        public static readonly String UserAgent = "uRADMonitorX/1.0";
+        // Download update.xml only using HTTPS.
+        public static readonly String UpdaterUrl = "https://github.com/cristianst85/uRADMonitorX/update.xml";
 
         private static ProgramArguments arguments = null;
         private static ISettings settings = null;
@@ -35,6 +39,13 @@ namespace uRADMonitorX {
 
             if (!success) {
                 arguments = new ProgramArguments(); // Get a new instance with default values.
+            }
+
+            if (arguments.CleanupUpdate) {
+                // Wait one second to allow the other instance to exit.
+                Thread.Sleep(1000);
+                // Remove the old executable file.
+                File.Delete(String.Format("{0}.tmp", AssemblyUtils.GetApplicationPath()));
             }
 
             if (!arguments.AllowMultipleInstances) {

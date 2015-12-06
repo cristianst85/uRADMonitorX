@@ -116,7 +116,7 @@ namespace uRADMonitorX {
                 this.viewOnlyTextBoxId.TextChanged += new EventHandler(viewOnlyTextBoxId_TextChanged);
 
                 Thread startupThread = new Thread(new ThreadStart(delegate { this.initDevice(false); }));
-                startupThread.Name = "startupThread";
+                startupThread.Name = "initDeviceThread";
                 startupThread.Start();
             }
             catch (Exception ex) {
@@ -662,6 +662,13 @@ namespace uRADMonitorX {
 
         private void openDataAPILink(String deviceId, String sensorData) {
             System.Diagnostics.Process.Start(String.Format("http://data.uradmonitor.com/api/v1/devices/{0}/{1}", deviceId, sensorData));
+        }
+
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e) {
+            using (FormUpdate form = new FormUpdate(this.logger)) {
+                form.Update();
+                DialogResult result = form.ShowDialog(this);
+            }
         }
     }
 }

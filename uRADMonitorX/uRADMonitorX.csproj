@@ -43,6 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commons\ChecksumUtils.cs" />
+    <Compile Include="Commons\Formatting\TextStyleFormatter.cs" />
+    <Compile Include="FormUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUpdate.Designer.cs">
+      <DependentUpon>FormUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Updater\ApplicationUpdateInfo.cs" />
+    <Compile Include="Updater\UnsecureHttpApplicationUpdater.cs" />
+    <Compile Include="Updater\HttpApplicationUpdater.cs" />
     <Compile Include="ArgumentDescription.cs" />
     <Compile Include="Commons\EnvironmentUtils.cs" />
     <Compile Include="Commons\Controls\NotifyIconUtils.cs" />
@@ -87,6 +98,7 @@
     </Compile>
     <Compile Include="Core\Fetchers\DeviceDataFetcherErrorEventArgs.cs" />
     <Compile Include="Core\Fetchers\DeviceDataFetcherEventArgs.cs" />
+    <Compile Include="Updater\IHttpApplicationUpdater.cs" />
     <Compile Include="ProgramArguments.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -171,6 +183,9 @@
       <DependentUpon>ViewOnlyTextBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormUpdate.resx">
+      <DependentUpon>FormUpdate.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -201,6 +216,7 @@
     <None Include="Resources\Menus\chart_curve_go.png" />
     <None Include="Resources\RadiationDisabled.ico" />
     <None Include="Resources\Systray\RadiationWithError.ico" />
+    <Content Include="Resources\Menus\exclamation.png" />
     <Content Include="Resources\RadiationColor.ico" />
     <Content Include="Resources\RadiationWithError.ico" />
     <Content Include="Resources\Systray\RadiationColor.ico" />

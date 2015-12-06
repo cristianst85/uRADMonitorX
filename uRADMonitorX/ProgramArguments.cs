@@ -11,6 +11,9 @@ namespace uRADMonitorX {
         [ArgumentDescription("--ignore-registering-at-windows-startup", "Ignores the value of start_with_windows parameter from configuration file.")]
         public bool IgnoreRegisteringAtWindowsStartup { get; set; }
 
+        [ArgumentDescription("--cleanup-update", "Removes old executable file after application update.")]
+        public bool CleanupUpdate { get; set; }
+
         public ProgramArguments() {
         }
 
@@ -35,7 +38,7 @@ namespace uRADMonitorX {
             arguments = null;
             exception = null;
 
-            if (args.Length > 2) {
+            if (args.Length > 3) {
                 return false;
             }
             else {
@@ -52,6 +55,9 @@ namespace uRADMonitorX {
                         }
                         else if (arg.Equals("--ignore-registering-at-windows-startup")) {
                             programArguments.IgnoreRegisteringAtWindowsStartup = true;
+                        }
+                        else if (arg.Equals("--cleanup-update")) {
+                            programArguments.CleanupUpdate = true;
                         }
                         else {
                             exception = new Exception(String.Format("Unknown argument '{0}' found.", arg));

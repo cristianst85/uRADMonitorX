@@ -213,9 +213,9 @@
             // 
             // buttonConfigureLogDirectoryPath
             // 
-            this.buttonConfigureLogDirectoryPath.Location = new System.Drawing.Point(201, 67);
+            this.buttonConfigureLogDirectoryPath.Location = new System.Drawing.Point(199, 67);
             this.buttonConfigureLogDirectoryPath.Name = "buttonConfigureLogDirectoryPath";
-            this.buttonConfigureLogDirectoryPath.Size = new System.Drawing.Size(73, 23);
+            this.buttonConfigureLogDirectoryPath.Size = new System.Drawing.Size(75, 23);
             this.buttonConfigureLogDirectoryPath.TabIndex = 3;
             this.buttonConfigureLogDirectoryPath.Text = "Configure...";
             this.buttonConfigureLogDirectoryPath.UseVisualStyleBackColor = true;
