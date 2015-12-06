@@ -44,9 +44,7 @@ namespace uRADMonitorX {
                     if (!String.IsNullOrEmpty(this.applicationUpdateInfo.DownloadPage)) {
                         this.toggleButtonState(this.buttonGoToDownloadPage, true);
                     }
-                    if (!EnvironmentUtils.IsUnix()) {
-                        this.toggleButtonState(this.buttonUpdate, true);
-                    }
+                    this.toggleButtonState(this.buttonUpdate, true);
                 }
                 else {
                     this.updateStatus("You are using the latest version of uRADMonitorX.");
@@ -125,8 +123,17 @@ namespace uRADMonitorX {
                             throw new Exception("Checksum of the downloaded file doesn't match the one found in update.xml.");
                         }
                         this.updateStatus(String.Format("Application needs to be restarted to complete the update process."));
-                        this.buttonUpdate.Text = "Restart";
-                        this.buttonUpdate.Enabled = true;
+                        if (!EnvironmentUtils.IsMonoRuntime()) {
+                            this.buttonUpdate.Text = "Restart";
+                            this.buttonUpdate.Enabled = true;
+                        }
+                        else {
+                            String executingAssemblyPath = AssemblyUtils.GetApplicationPath();
+                            // Rename executing assembly.
+                            File.Move(executingAssemblyPath, executingAssemblyPath + ".tmp");
+                            // Move temp file to current assembly path.
+                            File.Move(tempPath, executingAssemblyPath);
+                        }
                     }
                 }
                 else if (this.buttonUpdate.Text.Equals("Restart")) {
@@ -150,12 +157,9 @@ namespace uRADMonitorX {
             }
             catch (Exception ex) {
                 this.pictureBoxStatus.Image = global::uRADMonitorX.Properties.Resources.exclamation;
-                this.updateStatus(String.Format("An error occurred while downloading application update: {0}.", TextStyleFormatter.LowercaseFirst(ex.Message).TrimEnd('.')));
+                this.updateStatus(String.Format("An error occurred while downloading application update: {0}.", TextStyleFormatter.LowercaseFirst(ex.Message).Trim().TrimEnd('.')));
                 this.logger.Write(String.Format("An error occurred while downloading application update. Exception: {0}", ex.ToString()));
                 Debug.WriteLine(String.Format("FormUpdate > Exception: {0}", ex.ToString()));
-            }
-            finally {
-                this.buttonUpdate.Enabled = true;
             }
         }
     }

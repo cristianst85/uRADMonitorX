@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -41,11 +40,15 @@ namespace uRADMonitorX {
                 arguments = new ProgramArguments(); // Get a new instance with default values.
             }
 
-            if (arguments.CleanupUpdate) {
-                // Wait one second to allow the other instance to exit.
-                Thread.Sleep(1000);
+            if (arguments.CleanupUpdate || EnvironmentUtils.IsMonoRuntime()) {
+                if (!EnvironmentUtils.IsMonoRuntime()) {
+                    // Wait one second to allow the other instance to exit.
+                    Thread.Sleep(1000);
+                }
                 // Remove the old executable file.
-                File.Delete(String.Format("{0}.tmp", AssemblyUtils.GetApplicationPath()));
+                if (File.Exists(String.Format("{0}.tmp", AssemblyUtils.GetApplicationPath()))) {
+                    File.Delete(String.Format("{0}.tmp", AssemblyUtils.GetApplicationPath()));
+                }
             }
 
             if (!arguments.AllowMultipleInstances) {
