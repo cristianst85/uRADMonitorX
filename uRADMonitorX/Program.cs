@@ -21,7 +21,7 @@ namespace uRADMonitorX {
         public static readonly String SettingsFileName = "config.xml";
         public static readonly String UserAgent = "uRADMonitorX/1.0";
         // Download update.xml only using HTTPS.
-        public static readonly String UpdaterUrl = "https://github.com/cristianst85/uRADMonitorX/update.xml";
+        public static readonly String UpdaterUrl = "https://raw.githubusercontent.com/cristianst85/uRADMonitorX/master/update.xml";
 
         private static ProgramArguments arguments = null;
         private static ISettings settings = null;
