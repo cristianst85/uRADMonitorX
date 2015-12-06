@@ -35,7 +35,7 @@ namespace uRADMonitorX {
         private void checkForUpdates() {
             this.toggleButtonState(this.buttonUpdate, false);
             this.updateButtonText(this.buttonUpdate, "Update");
-            this.updateStatus(String.Format("Fetching {0}, please wait a few seconds...", Program.UpdaterUrl));
+            this.updateStatus(String.Format("Fetching{0}{1}, please wait a few seconds...", CharUtils.NonBreakingSpace, Program.UpdaterUrl));
             try {
                 this.httpApplicationUpdater = new GitHubApplicationUpdater(Program.UpdaterUrl);
                 this.applicationUpdateInfo = this.httpApplicationUpdater.Check();

@@ -96,7 +96,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Check for update";
+            this.Text = "Check for updates";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStatus)).EndInit();
             this.ResumeLayout(false);
 

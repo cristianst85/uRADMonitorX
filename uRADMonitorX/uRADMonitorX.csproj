@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commons\CharUtils.cs" />
     <Compile Include="Commons\ChecksumUtils.cs" />
     <Compile Include="Commons\Formatting\TextStyleFormatter.cs" />
     <Compile Include="HashCheck\ChecksumEntry.cs" />
