@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Core\Device\DeviceDataHttpReaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Updater\GitHubApplicationUpdaterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\uRADMonitorX\uRADMonitorX.csproj">

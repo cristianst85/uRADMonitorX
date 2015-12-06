@@ -35,9 +35,9 @@ namespace uRADMonitorX {
         private void checkForUpdates() {
             this.toggleButtonState(this.buttonUpdate, false);
             this.updateButtonText(this.buttonUpdate, "Update");
-            this.updateStatus(String.Format("Fetching {0}...", Program.UpdaterUrl));
+            this.updateStatus(String.Format("Fetching {0}, please wait a few seconds...", Program.UpdaterUrl));
             try {
-                this.httpApplicationUpdater = new HttpApplicationUpdater(Program.UpdaterUrl);
+                this.httpApplicationUpdater = new GitHubApplicationUpdater(Program.UpdaterUrl);
                 this.applicationUpdateInfo = this.httpApplicationUpdater.Check();
                 if (applicationUpdateInfo.IsNewVersionAvailable(AssemblyUtils.GetVersion())) {
                     this.updateStatus(String.Format("A new version of uRADMonitorX ({0}) is available.", applicationUpdateInfo.Version));
