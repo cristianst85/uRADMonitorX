@@ -17,6 +17,8 @@ namespace uRADMonitorX.GuiTest {
         [STAThread]
         static void Main(string[] args) {
 
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyUtils.AssemblyResolver);
+
             ISettings settings = new InMemorySettings() {
                 CloseToSystemTray = true,
                 HasPressureSensor = true,
