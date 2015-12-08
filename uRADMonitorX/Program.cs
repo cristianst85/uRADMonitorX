@@ -133,10 +133,10 @@ namespace uRADMonitorX {
         private static void registerAtWindowsStartup() {
             try {
                 if (settings.StartWithWindows) {
-                    Registry.RegisterAtWindowsStartup(Application.ProductName, String.Format("\"{0}\"", new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
+                    RegistryUtils.RegisterAtWindowsStartup(Application.ProductName, String.Format("\"{0}\"", new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
                 }
                 else {
-                    Registry.UnRegisterAtWindowsStartup(Application.ProductName);
+                    RegistryUtils.UnRegisterAtWindowsStartup(Application.ProductName);
                 }
             }
             catch (Exception e) {

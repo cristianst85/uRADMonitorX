@@ -3,7 +3,7 @@ using Microsoft.Win32;
 
 namespace uRADMonitorX.Windows {
 
-    public static class Registry {
+    public static class RegistryUtils {
 
         public static void RegisterAtWindowsStartup(String applicationName, String applicationPath) {
             using (RegistryKey regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true)) {
