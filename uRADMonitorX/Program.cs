@@ -19,8 +19,16 @@ namespace uRADMonitorX {
         public static readonly String LoggerFilePath = "uRADMonitorX.log";
         public static readonly String SettingsFileName = "config.xml";
         public static readonly String UserAgent = "uRADMonitorX/1.0";
-        // Download only using HTTPS.
+        /// <summary>
+        /// Specifies the URL application uses to check 
+        /// for updates. Only use secure URLs (HTTPS).
+        /// </summary>
         public static readonly String UpdaterUrl = "https://api.github.com/repos/cristianst85/uRADMonitorX/releases/latest";
+        /// <summary>
+        /// Specifies the interval in minutes at that 
+        /// application automatically checks for updates.
+        /// </summary>
+        public static readonly int UpdaterInterval = 720; // 12 hours.
 
         private static ProgramArguments arguments = null;
         private static ISettings settings = null;

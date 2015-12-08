@@ -6,6 +6,7 @@ using System.Security.Permissions;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using FluentScheduler;
 using uRADMonitorX.Commons;
 using uRADMonitorX.Commons.Controls;
 using uRADMonitorX.Commons.Formatting;
@@ -15,6 +16,7 @@ using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
 using uRADMonitorX.Core.Device;
 using uRADMonitorX.Core.Fetchers;
+using uRADMonitorX.Updater;
 using uRADMonitorX.Windows;
 
 namespace uRADMonitorX {
@@ -118,6 +120,24 @@ namespace uRADMonitorX {
                 Thread startupThread = new Thread(new ThreadStart(delegate { this.initDevice(false); }));
                 startupThread.Name = "initDeviceThread";
                 startupThread.Start();
+
+                TaskManager.Initialize(new Registry());
+                TaskManager.AddTask(
+                    () => {
+                        try {
+                            GitHubApplicationUpdater applicationUpdater = new GitHubApplicationUpdater(Program.UpdaterUrl);
+                            ApplicationUpdateInfo applicationUpdateInfo = applicationUpdater.Check();
+                            if (applicationUpdateInfo.IsNewVersionAvailable(AssemblyUtils.GetVersion())) {
+                                this.notifyIcon.ShowBalloonTip(10000, "uRADMonitorX Update Available", String.Format("A new version of uRADMonitorX ({0}) is available.", applicationUpdateInfo.Version), ToolTipIcon.Info);
+                            }
+                        }
+                        catch {
+                            // Silently ignore all errors when automatically checking for updates.
+                            // There's no need to annoy users with these.
+                        }
+                    },
+                    (task) => task.ToRunOnceAt(DateTime.Now.AddMinutes(2)).AndEvery(Program.UpdaterInterval).Minutes()
+                );
             }
             catch (Exception ex) {
                 Debug.WriteLine(String.Format("FormMain > Exception: {0}", ex.ToString()));
