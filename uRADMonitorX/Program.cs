@@ -10,7 +10,6 @@ using uRADMonitorX.Commons.Logging.Formatters;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
 using uRADMonitorX.Windows;
-using System.Reflection;
 
 namespace uRADMonitorX {
 
@@ -42,8 +41,11 @@ namespace uRADMonitorX {
         /// </summary>
         [STAThread]
         static void Main(string[] args) {
-
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyUtils.AssemblyResolver);
+            internalMain(args);
+        }
+
+        static void internalMain(string[] args) {
 
             bool success = ProgramArguments.TryParse(args, out arguments);
 

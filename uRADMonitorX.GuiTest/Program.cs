@@ -16,8 +16,11 @@ namespace uRADMonitorX.GuiTest {
 
         [STAThread]
         static void Main(string[] args) {
-
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyUtils.AssemblyResolver);
+            internalMain(args);
+        }
+
+        static void internalMain(string[] args) {
 
             ISettings settings = new InMemorySettings() {
                 CloseToSystemTray = true,
