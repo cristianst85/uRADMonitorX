@@ -16,6 +16,15 @@ namespace uRADMonitorX.Configuration {
         }
 
         /// <summary>
+        /// Value: <c>false</c>.
+        /// </summary>
+        public static Boolean AutomaticallyCheckForUpdates {
+            get {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Value: <c>true</c>.
         /// </summary>
         public static Boolean StartMinimized {

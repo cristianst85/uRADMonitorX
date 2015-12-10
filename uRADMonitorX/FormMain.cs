@@ -18,6 +18,7 @@ using uRADMonitorX.Core.Device;
 using uRADMonitorX.Core.Fetchers;
 using uRADMonitorX.Updater;
 using uRADMonitorX.Windows;
+using FluentScheduler.Model;
 
 namespace uRADMonitorX {
 
@@ -122,22 +123,7 @@ namespace uRADMonitorX {
                 startupThread.Start();
 
                 TaskManager.Initialize(new Registry());
-                TaskManager.AddTask(
-                    () => {
-                        try {
-                            GitHubApplicationUpdater applicationUpdater = new GitHubApplicationUpdater(Program.UpdaterUrl);
-                            ApplicationUpdateInfo applicationUpdateInfo = applicationUpdater.Check();
-                            if (applicationUpdateInfo.IsNewVersionAvailable(AssemblyUtils.GetVersion())) {
-                                this.notifyIcon.ShowBalloonTip(10000, "uRADMonitorX Update Available", String.Format("A new version of uRADMonitorX ({0}) is available.", applicationUpdateInfo.Version), ToolTipIcon.Info);
-                            }
-                        }
-                        catch {
-                            // Silently ignore all errors when automatically checking for updates.
-                            // There's no need to annoy users with these.
-                        }
-                    },
-                    (task) => task.ToRunOnceAt(DateTime.Now.AddMinutes(2)).AndEvery(Program.UpdaterInterval).Minutes()
-                );
+                configureCheckForUpdatesTask();
             }
             catch (Exception ex) {
                 Debug.WriteLine(String.Format("FormMain > Exception: {0}", ex.ToString()));
@@ -145,6 +131,32 @@ namespace uRADMonitorX {
             }
             finally {
                 this.IsReady = true;
+            }
+        }
+
+        private void configureCheckForUpdatesTask() {
+            if (settings.AutomaticallyCheckForUpdates) {
+                if (TaskManager.GetSchedule("checkForUpdates") == null) {
+                    TaskManager.AddTask(
+                        () => {
+                            try {
+                                GitHubApplicationUpdater applicationUpdater = new GitHubApplicationUpdater(Program.UpdaterUrl);
+                                ApplicationUpdateInfo applicationUpdateInfo = applicationUpdater.Check();
+                                if (applicationUpdateInfo.IsNewVersionAvailable(AssemblyUtils.GetVersion())) {
+                                    this.notifyIcon.ShowBalloonTip(10000, "uRADMonitorX Update Available", String.Format("A new version of uRADMonitorX ({0}) is available.", applicationUpdateInfo.Version), ToolTipIcon.Info);
+                                }
+                            }
+                            catch {
+                                // Silently ignore all errors when automatically checking for updates.
+                                // There's no need to annoy users with these.
+                            }
+                        },
+                        (task) => task.WithName("checkForUpdates").ToRunOnceAt(DateTime.Now.AddMinutes(2)).AndEvery(Program.UpdaterInterval).Minutes()
+                    );
+                }
+            }
+            else {
+                TaskManager.RemoveTask("checkForUpdates");
             }
         }
 
@@ -510,6 +522,7 @@ namespace uRADMonitorX {
             if (handler != null) {
                 handler(this, new SettingsChangedEventArgs(this.settings));
             }
+            configureCheckForUpdatesTask();
         }
 
         private void closeApplication(object sender, EventArgs e) {

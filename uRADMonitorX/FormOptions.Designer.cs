@@ -32,17 +32,11 @@
             this.checkBoxCloseToSystemTray = new System.Windows.Forms.CheckBox();
             this.checkBoxStartMinimized = new System.Windows.Forms.CheckBox();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.pictureBoxLoggingInfo = new System.Windows.Forms.PictureBox();
-            this.labelLoggingInfo = new System.Windows.Forms.Label();
-            this.textBoxLogDirectoryPath = new System.Windows.Forms.TextBox();
-            this.buttonConfigureLogDirectoryPath = new System.Windows.Forms.Button();
-            this.checkBoxLoggingEnable = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBoxStartWithWindows = new System.Windows.Forms.CheckBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageNotifications = new System.Windows.Forms.TabPage();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.pictureBoxNotificationsInfo = new System.Windows.Forms.PictureBox();
             this.labelNotificationsInfo = new System.Windows.Forms.Label();
             this.comboBoxRadiationNotificationUnit = new System.Windows.Forms.ComboBox();
@@ -53,25 +47,34 @@
             this.labelTemperatureNotification = new System.Windows.Forms.Label();
             this.checkBoxNotificationsEnable = new System.Windows.Forms.CheckBox();
             this.tabPageMisc = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.labelRadiationUnit = new System.Windows.Forms.Label();
             this.comboBoxRadiationUnit = new System.Windows.Forms.ComboBox();
             this.comboBoxPressureUnit = new System.Windows.Forms.ComboBox();
             this.comboBoxTemperatureUnit = new System.Windows.Forms.ComboBox();
             this.labelPressureUnit = new System.Windows.Forms.Label();
             this.labelTemperatureUnit = new System.Windows.Forms.Label();
+            this.tabPageLogging = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.pictureBoxLoggingInfo = new System.Windows.Forms.PictureBox();
+            this.labelLoggingInfo = new System.Windows.Forms.Label();
+            this.textBoxLogDirectoryPath = new System.Windows.Forms.TextBox();
+            this.buttonConfigureLogDirectoryPath = new System.Windows.Forms.Button();
+            this.checkBoxLoggingEnable = new System.Windows.Forms.CheckBox();
+            this.checkBoxAutomaticallyCheckForUpdates = new System.Windows.Forms.CheckBox();
             this.tabPageDisplay.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
-            this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoggingInfo)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabPageNotifications.SuspendLayout();
-            this.groupBox4.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotificationsInfo)).BeginInit();
             this.tabPageMisc.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.tabPageLogging.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoggingInfo)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonApply
@@ -160,7 +163,6 @@
             // 
             // tabPageGeneral
             // 
-            this.tabPageGeneral.Controls.Add(this.groupBox5);
             this.tabPageGeneral.Controls.Add(this.groupBox1);
             this.tabPageGeneral.Location = new System.Drawing.Point(4, 22);
             this.tabPageGeneral.Name = "tabPageGeneral";
@@ -170,72 +172,13 @@
             this.tabPageGeneral.Text = "General";
             this.tabPageGeneral.UseVisualStyleBackColor = true;
             // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.pictureBoxLoggingInfo);
-            this.groupBox5.Controls.Add(this.labelLoggingInfo);
-            this.groupBox5.Controls.Add(this.textBoxLogDirectoryPath);
-            this.groupBox5.Controls.Add(this.buttonConfigureLogDirectoryPath);
-            this.groupBox5.Controls.Add(this.checkBoxLoggingEnable);
-            this.groupBox5.Location = new System.Drawing.Point(3, 57);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(280, 119);
-            this.groupBox5.TabIndex = 4;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Logging";
-            // 
-            // pictureBoxLoggingInfo
-            // 
-            this.pictureBoxLoggingInfo.ErrorImage = null;
-            this.pictureBoxLoggingInfo.Image = global::uRADMonitorX.Properties.Resources.information;
-            this.pictureBoxLoggingInfo.Location = new System.Drawing.Point(19, 71);
-            this.pictureBoxLoggingInfo.Name = "pictureBoxLoggingInfo";
-            this.pictureBoxLoggingInfo.Size = new System.Drawing.Size(16, 16);
-            this.pictureBoxLoggingInfo.TabIndex = 6;
-            this.pictureBoxLoggingInfo.TabStop = false;
-            // 
-            // labelLoggingInfo
-            // 
-            this.labelLoggingInfo.AutoSize = true;
-            this.labelLoggingInfo.Location = new System.Drawing.Point(41, 72);
-            this.labelLoggingInfo.Name = "labelLoggingInfo";
-            this.labelLoggingInfo.Size = new System.Drawing.Size(150, 13);
-            this.labelLoggingInfo.TabIndex = 0;
-            this.labelLoggingInfo.Text = "Using default application path.";
-            // 
-            // textBoxLogDirectoryPath
-            // 
-            this.textBoxLogDirectoryPath.HideSelection = false;
-            this.textBoxLogDirectoryPath.Location = new System.Drawing.Point(19, 41);
-            this.textBoxLogDirectoryPath.Name = "textBoxLogDirectoryPath";
-            this.textBoxLogDirectoryPath.Size = new System.Drawing.Size(255, 20);
-            this.textBoxLogDirectoryPath.TabIndex = 2;
-            // 
-            // buttonConfigureLogDirectoryPath
-            // 
-            this.buttonConfigureLogDirectoryPath.Location = new System.Drawing.Point(199, 67);
-            this.buttonConfigureLogDirectoryPath.Name = "buttonConfigureLogDirectoryPath";
-            this.buttonConfigureLogDirectoryPath.Size = new System.Drawing.Size(75, 23);
-            this.buttonConfigureLogDirectoryPath.TabIndex = 3;
-            this.buttonConfigureLogDirectoryPath.Text = "Configure...";
-            this.buttonConfigureLogDirectoryPath.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxLoggingEnable
-            // 
-            this.checkBoxLoggingEnable.AutoSize = true;
-            this.checkBoxLoggingEnable.Location = new System.Drawing.Point(19, 19);
-            this.checkBoxLoggingEnable.Name = "checkBoxLoggingEnable";
-            this.checkBoxLoggingEnable.Size = new System.Drawing.Size(59, 17);
-            this.checkBoxLoggingEnable.TabIndex = 1;
-            this.checkBoxLoggingEnable.Text = "Enable";
-            this.checkBoxLoggingEnable.UseVisualStyleBackColor = true;
-            // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkBoxAutomaticallyCheckForUpdates);
             this.groupBox1.Controls.Add(this.checkBoxStartWithWindows);
             this.groupBox1.Location = new System.Drawing.Point(3, 1);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(280, 50);
+            this.groupBox1.Size = new System.Drawing.Size(280, 175);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
@@ -255,6 +198,7 @@
             this.tabControl.Controls.Add(this.tabPageGeneral);
             this.tabControl.Controls.Add(this.tabPageDisplay);
             this.tabControl.Controls.Add(this.tabPageNotifications);
+            this.tabControl.Controls.Add(this.tabPageLogging);
             this.tabControl.Controls.Add(this.tabPageMisc);
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
@@ -265,7 +209,7 @@
             // 
             // tabPageNotifications
             // 
-            this.tabPageNotifications.Controls.Add(this.groupBox4);
+            this.tabPageNotifications.Controls.Add(this.groupBox3);
             this.tabPageNotifications.Location = new System.Drawing.Point(4, 22);
             this.tabPageNotifications.Name = "tabPageNotifications";
             this.tabPageNotifications.Padding = new System.Windows.Forms.Padding(3);
@@ -274,23 +218,23 @@
             this.tabPageNotifications.Text = "Notifications";
             this.tabPageNotifications.UseVisualStyleBackColor = true;
             // 
-            // groupBox4
+            // groupBox3
             // 
-            this.groupBox4.Controls.Add(this.pictureBoxNotificationsInfo);
-            this.groupBox4.Controls.Add(this.labelNotificationsInfo);
-            this.groupBox4.Controls.Add(this.comboBoxRadiationNotificationUnit);
-            this.groupBox4.Controls.Add(this.textBoxRadiationNotificationValue);
-            this.groupBox4.Controls.Add(this.labelRadiationNotification);
-            this.groupBox4.Controls.Add(this.comboBoxTemperatureNotificationUnit);
-            this.groupBox4.Controls.Add(this.textBoxHighTemperatureNotificationValue);
-            this.groupBox4.Controls.Add(this.labelTemperatureNotification);
-            this.groupBox4.Controls.Add(this.checkBoxNotificationsEnable);
-            this.groupBox4.Location = new System.Drawing.Point(3, 1);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(280, 175);
-            this.groupBox4.TabIndex = 5;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Settings";
+            this.groupBox3.Controls.Add(this.pictureBoxNotificationsInfo);
+            this.groupBox3.Controls.Add(this.labelNotificationsInfo);
+            this.groupBox3.Controls.Add(this.comboBoxRadiationNotificationUnit);
+            this.groupBox3.Controls.Add(this.textBoxRadiationNotificationValue);
+            this.groupBox3.Controls.Add(this.labelRadiationNotification);
+            this.groupBox3.Controls.Add(this.comboBoxTemperatureNotificationUnit);
+            this.groupBox3.Controls.Add(this.textBoxHighTemperatureNotificationValue);
+            this.groupBox3.Controls.Add(this.labelTemperatureNotification);
+            this.groupBox3.Controls.Add(this.checkBoxNotificationsEnable);
+            this.groupBox3.Location = new System.Drawing.Point(3, 1);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(280, 175);
+            this.groupBox3.TabIndex = 5;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Settings";
             // 
             // pictureBoxNotificationsInfo
             // 
@@ -380,7 +324,7 @@
             // 
             // tabPageMisc
             // 
-            this.tabPageMisc.Controls.Add(this.groupBox3);
+            this.tabPageMisc.Controls.Add(this.groupBox5);
             this.tabPageMisc.Location = new System.Drawing.Point(4, 22);
             this.tabPageMisc.Name = "tabPageMisc";
             this.tabPageMisc.Padding = new System.Windows.Forms.Padding(3);
@@ -389,20 +333,20 @@
             this.tabPageMisc.Text = "Misc";
             this.tabPageMisc.UseVisualStyleBackColor = true;
             // 
-            // groupBox3
+            // groupBox5
             // 
-            this.groupBox3.Controls.Add(this.labelRadiationUnit);
-            this.groupBox3.Controls.Add(this.comboBoxRadiationUnit);
-            this.groupBox3.Controls.Add(this.comboBoxPressureUnit);
-            this.groupBox3.Controls.Add(this.comboBoxTemperatureUnit);
-            this.groupBox3.Controls.Add(this.labelPressureUnit);
-            this.groupBox3.Controls.Add(this.labelTemperatureUnit);
-            this.groupBox3.Location = new System.Drawing.Point(3, 1);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(280, 175);
-            this.groupBox3.TabIndex = 3;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Settings";
+            this.groupBox5.Controls.Add(this.labelRadiationUnit);
+            this.groupBox5.Controls.Add(this.comboBoxRadiationUnit);
+            this.groupBox5.Controls.Add(this.comboBoxPressureUnit);
+            this.groupBox5.Controls.Add(this.comboBoxTemperatureUnit);
+            this.groupBox5.Controls.Add(this.labelPressureUnit);
+            this.groupBox5.Controls.Add(this.labelTemperatureUnit);
+            this.groupBox5.Location = new System.Drawing.Point(3, 1);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(280, 175);
+            this.groupBox5.TabIndex = 3;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Settings";
             // 
             // labelRadiationUnit
             // 
@@ -458,6 +402,87 @@
             this.labelTemperatureUnit.TabIndex = 0;
             this.labelTemperatureUnit.Text = "Show temperature in";
             // 
+            // tabPageLogging
+            // 
+            this.tabPageLogging.Controls.Add(this.groupBox4);
+            this.tabPageLogging.Location = new System.Drawing.Point(4, 22);
+            this.tabPageLogging.Name = "tabPageLogging";
+            this.tabPageLogging.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageLogging.Size = new System.Drawing.Size(287, 182);
+            this.tabPageLogging.TabIndex = 4;
+            this.tabPageLogging.Text = "Logging";
+            this.tabPageLogging.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.pictureBoxLoggingInfo);
+            this.groupBox4.Controls.Add(this.labelLoggingInfo);
+            this.groupBox4.Controls.Add(this.textBoxLogDirectoryPath);
+            this.groupBox4.Controls.Add(this.buttonConfigureLogDirectoryPath);
+            this.groupBox4.Controls.Add(this.checkBoxLoggingEnable);
+            this.groupBox4.Location = new System.Drawing.Point(3, 1);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(280, 175);
+            this.groupBox4.TabIndex = 5;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Settings";
+            // 
+            // pictureBoxLoggingInfo
+            // 
+            this.pictureBoxLoggingInfo.ErrorImage = null;
+            this.pictureBoxLoggingInfo.Image = global::uRADMonitorX.Properties.Resources.information;
+            this.pictureBoxLoggingInfo.Location = new System.Drawing.Point(19, 71);
+            this.pictureBoxLoggingInfo.Name = "pictureBoxLoggingInfo";
+            this.pictureBoxLoggingInfo.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxLoggingInfo.TabIndex = 6;
+            this.pictureBoxLoggingInfo.TabStop = false;
+            // 
+            // labelLoggingInfo
+            // 
+            this.labelLoggingInfo.AutoSize = true;
+            this.labelLoggingInfo.Location = new System.Drawing.Point(41, 72);
+            this.labelLoggingInfo.Name = "labelLoggingInfo";
+            this.labelLoggingInfo.Size = new System.Drawing.Size(150, 13);
+            this.labelLoggingInfo.TabIndex = 0;
+            this.labelLoggingInfo.Text = "Using default application path.";
+            // 
+            // textBoxLogDirectoryPath
+            // 
+            this.textBoxLogDirectoryPath.HideSelection = false;
+            this.textBoxLogDirectoryPath.Location = new System.Drawing.Point(19, 41);
+            this.textBoxLogDirectoryPath.Name = "textBoxLogDirectoryPath";
+            this.textBoxLogDirectoryPath.Size = new System.Drawing.Size(255, 20);
+            this.textBoxLogDirectoryPath.TabIndex = 2;
+            // 
+            // buttonConfigureLogDirectoryPath
+            // 
+            this.buttonConfigureLogDirectoryPath.Location = new System.Drawing.Point(199, 67);
+            this.buttonConfigureLogDirectoryPath.Name = "buttonConfigureLogDirectoryPath";
+            this.buttonConfigureLogDirectoryPath.Size = new System.Drawing.Size(75, 23);
+            this.buttonConfigureLogDirectoryPath.TabIndex = 3;
+            this.buttonConfigureLogDirectoryPath.Text = "Configure...";
+            this.buttonConfigureLogDirectoryPath.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxLoggingEnable
+            // 
+            this.checkBoxLoggingEnable.AutoSize = true;
+            this.checkBoxLoggingEnable.Location = new System.Drawing.Point(19, 19);
+            this.checkBoxLoggingEnable.Name = "checkBoxLoggingEnable";
+            this.checkBoxLoggingEnable.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxLoggingEnable.TabIndex = 1;
+            this.checkBoxLoggingEnable.Text = "Enable";
+            this.checkBoxLoggingEnable.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAutomaticallyCheckForUpdates
+            // 
+            this.checkBoxAutomaticallyCheckForUpdates.AutoSize = true;
+            this.checkBoxAutomaticallyCheckForUpdates.Location = new System.Drawing.Point(19, 42);
+            this.checkBoxAutomaticallyCheckForUpdates.Name = "checkBoxAutomaticallyCheckForUpdates";
+            this.checkBoxAutomaticallyCheckForUpdates.Size = new System.Drawing.Size(177, 17);
+            this.checkBoxAutomaticallyCheckForUpdates.TabIndex = 1;
+            this.checkBoxAutomaticallyCheckForUpdates.Text = "Automatically check for updates";
+            this.checkBoxAutomaticallyCheckForUpdates.UseVisualStyleBackColor = true;
+            // 
             // FormOptions
             // 
             this.AcceptButton = this.buttonOK;
@@ -478,19 +503,20 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabPageGeneral.ResumeLayout(false);
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoggingInfo)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.tabPageNotifications.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotificationsInfo)).EndInit();
-            this.tabPageMisc.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotificationsInfo)).EndInit();
+            this.tabPageMisc.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.tabPageLogging.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoggingInfo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -510,21 +536,15 @@
         private System.Windows.Forms.CheckBox checkBoxStartWithWindows;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPageMisc;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label labelPressureUnit;
         private System.Windows.Forms.Label labelTemperatureUnit;
         private System.Windows.Forms.ComboBox comboBoxPressureUnit;
         private System.Windows.Forms.ComboBox comboBoxTemperatureUnit;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.PictureBox pictureBoxLoggingInfo;
-        private System.Windows.Forms.Label labelLoggingInfo;
-        private System.Windows.Forms.TextBox textBoxLogDirectoryPath;
-        private System.Windows.Forms.Button buttonConfigureLogDirectoryPath;
-        private System.Windows.Forms.CheckBox checkBoxLoggingEnable;
         private System.Windows.Forms.ComboBox comboBoxRadiationUnit;
         private System.Windows.Forms.Label labelRadiationUnit;
         private System.Windows.Forms.TabPage tabPageNotifications;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ComboBox comboBoxRadiationNotificationUnit;
         private System.Windows.Forms.TextBox textBoxRadiationNotificationValue;
         private System.Windows.Forms.Label labelRadiationNotification;
@@ -534,5 +554,13 @@
         private System.Windows.Forms.CheckBox checkBoxNotificationsEnable;
         private System.Windows.Forms.PictureBox pictureBoxNotificationsInfo;
         private System.Windows.Forms.Label labelNotificationsInfo;
+        private System.Windows.Forms.TabPage tabPageLogging;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.PictureBox pictureBoxLoggingInfo;
+        private System.Windows.Forms.Label labelLoggingInfo;
+        private System.Windows.Forms.TextBox textBoxLogDirectoryPath;
+        private System.Windows.Forms.Button buttonConfigureLogDirectoryPath;
+        private System.Windows.Forms.CheckBox checkBoxLoggingEnable;
+        private System.Windows.Forms.CheckBox checkBoxAutomaticallyCheckForUpdates;
     }
 }

@@ -29,6 +29,7 @@ namespace uRADMonitorX.Tests.Configuration {
             XMLSettings settings = XMLSettings.LoadFromFile(outputfilePath);
             Assert.AreEqual(outputfilePath, settings.FilePath);
             Assert.AreEqual(DefaultSettings.StartWithWindows, settings.StartWithWindows);
+            Assert.AreEqual(DefaultSettings.AutomaticallyCheckForUpdates, settings.AutomaticallyCheckForUpdates);
 
             Assert.AreEqual(DefaultSettings.StartMinimized, settings.StartMinimized);
             Assert.AreEqual(DefaultSettings.ShowInTaskbar, settings.ShowInTaskbar);
