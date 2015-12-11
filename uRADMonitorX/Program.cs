@@ -25,7 +25,7 @@ namespace uRADMonitorX {
         /// </summary>
         public static readonly String UpdaterUrl = "https://api.github.com/repos/cristianst85/uRADMonitorX/releases/latest";
         /// <summary>
-        /// Specifies the interval in minutes at that 
+        /// Specifies the interval in minutes at which the
         /// application automatically checks for updates.
         /// </summary>
         public static readonly int UpdaterInterval = 720; // 12 hours.
