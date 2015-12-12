@@ -120,7 +120,7 @@ namespace uRADMonitorX {
                         String checksum = ChecksumUtils.ComputeMD5(tempPath);
                         // TODO: Use SHA-1 instead.
                         if (!checksum.Equals(applicationUpdateInfo.FileHash, StringComparison.OrdinalIgnoreCase)) {
-                            throw new Exception("Checksum of the downloaded file doesn't match the one found in update.xml.");
+                            throw new Exception("Checksum of the downloaded file doesn't match the one found at the remote site.");
                         }
                         this.updateStatus(String.Format("Application needs to be restarted to complete the update process."));
                         if (!EnvironmentUtils.IsMonoRuntime()) {
