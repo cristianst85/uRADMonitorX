@@ -77,12 +77,21 @@ namespace uRADMonitorX {
 
             // Load settings.
             String settingsFilePath = String.Format("{0}{1}{2}", Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath), Path.DirectorySeparatorChar, Program.SettingsFileName);
-            if (File.Exists(settingsFilePath)) {
+            try {
+                if (!File.Exists(settingsFilePath)) {
+                    try {
+                        XMLSettings.CreateFile(settingsFilePath);
+                    }
+                    catch (Exception createSettingsFileException) {
+                        MessageBox.Show(String.Format("Cannot create settings file {0}.\n\nError details: {1}", settingsFilePath, createSettingsFileException.Message), "uRADMonitorX", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
                 settings = XMLSettings.LoadFromFile(settingsFilePath);
             }
-            else {
-                XMLSettings.CreateFile(settingsFilePath);
-                settings = XMLSettings.LoadFromFile(settingsFilePath);
+            catch (Exception loadSettingsFileException) {
+                MessageBox.Show(String.Format("Cannot load settings from file {0}.\n\nError details: {1}", settingsFilePath, loadSettingsFileException.Message), "uRADMonitorX", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             String loggerFilePath = null;
