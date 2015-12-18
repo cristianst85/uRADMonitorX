@@ -25,5 +25,6 @@ You can download compiled binaries from [here](http://www.disruptivesoftware.ro/
 
 * The source code in this repository is released under the GNU GPLv2 license. See the [bundled LICENSE](https://github.com/cristianst85/uRADMonitorX/blob/master/LICENSE) file for details.
 * The menu icons are from Silk set by [Mark James](http://www.famfamfam.com/lab/icons/silk/) licensed under [Creative Commons Attribution 2.5](http://creativecommons.org/licenses/by/2.5/).
-* The application icon "Atomic.ico" and menu icon "Radiation.png" are from Free Time set by [Aha-Soft](http://www.aha-soft.com/) licensed under [Creative Commons Attribution 3.0](http://creativecommons.org/licenses/by/3.0/).
+* The application icon "Atomic.ico" is from 48x48 Free Time Icons set and menu/system tray icon "Radiation.png" is from 16x16 Free Time Icons set by [Aha-Soft](http://www.aha-soft.com/) licensed under [Creative Commons Attribution 3.0](http://creativecommons.org/licenses/by/3.0/).
 * The rest of the icons are derived work licensed under [Creative Commons Attribution 3.0](http://creativecommons.org/licenses/by/3.0/).
+* Third party libraries like [FluentScheduler](https://github.com/fluentscheduler/FluentScheduler) and [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) are subject to their respective license agreements.
