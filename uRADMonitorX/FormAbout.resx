@@ -112,9 +112,26 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="richTextBoxCopyright.Text" xml:space="preserve">
+    <value>Application/system tray icons from Free Time Icons/Free Application Icons sets
+Copyright (c) 2009 Aha-Soft. All rights reserved.
+http://www.aha-soft.com
+
+Menu icons from Silk icon set v1.3
+Copyright (c) Mark James
+http://www.famfamfam.com/lab/icons/silk/
+
+FluentScheduler library v{fluentSchedulerLibVersion}
+Copyright (c) Jim Geurts &lt;jim@biacreations.com&gt;, Talles L &lt;talleslasmar@gmail.com&gt;. All rights reserved.
+https://github.com/fluentscheduler/FluentScheduler
+
+Newtonsoft.Json library v{newtonsoftJsonLibVersion} 
+Copyright (c) 2007 James Newton-King
+https://github.com/JamesNK/Newtonsoft.Json</value>
+  </data>
 </root>

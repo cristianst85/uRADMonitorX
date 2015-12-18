@@ -11,8 +11,12 @@ namespace uRADMonitorX.Commons {
 
         public static Version GetVersion() {
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            System.Reflection.AssemblyName assemblyName = assembly.GetName();
-            return assemblyName.Version;
+            return assembly.GetName().Version;
+        }
+
+        public static Version GetVersion(String assemblyName) {
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.Load(assemblyName);
+            return assembly.GetName().Version;
         }
 
         public static Assembly AssemblyResolver(object sender, ResolveEventArgs args) {
