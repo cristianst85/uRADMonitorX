@@ -173,9 +173,9 @@ namespace uRADMonitorX.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon RadiationColor {
+        internal static System.Drawing.Icon RadiationDisabled {
             get {
-                object obj = ResourceManager.GetObject("RadiationColor", resourceCulture);
+                object obj = ResourceManager.GetObject("RadiationDisabled", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -183,9 +183,9 @@ namespace uRADMonitorX.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon RadiationDisabled {
+        internal static System.Drawing.Icon RadiationIcon {
             get {
-                object obj = ResourceManager.GetObject("RadiationDisabled", resourceCulture);
+                object obj = ResourceManager.GetObject("RadiationIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

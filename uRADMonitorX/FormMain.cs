@@ -202,7 +202,7 @@ namespace uRADMonitorX {
                         if (!isRestart) {
                             this.updateDeviceStatus(String.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
                         }
-                        this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor;
+                        this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationIcon;
                     }
                     else {
                         this.updateDeviceStatus("Polling is disabled.");
@@ -403,7 +403,7 @@ namespace uRADMonitorX {
                 }
             }
             else {
-                this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor;
+                this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationIcon;
             }
 
             if (this.settings.AreNotificationsEnabled) {
@@ -491,7 +491,7 @@ namespace uRADMonitorX {
             this.settings.IsPollingEnabled = this.enablePollingToolStripMenuItem.Checked;
             this.settings.Commit();
             this.notifyIcon.Icon = this.settings.IsPollingEnabled ?
-                ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor) :
+                ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationIcon) :
                 ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationDisabled);
         }
 
