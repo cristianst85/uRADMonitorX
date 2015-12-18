@@ -233,9 +233,8 @@
     <None Include="Resources\Atomic.ico" />
     <None Include="Resources\Menus\chart_curve_go.png" />
     <None Include="Resources\Systray\RadiationWithError.ico" />
-    <Content Include="Resources\Menus\exclamation.png" />
+    <None Include="Resources\Menus\exclamation.png" />
     <None Include="Resources\Systray\RadiationIcon.ico" />
-    <Content Include="Resources\Systray\Radiationlcon.ico" />
     <Content Include="_todo.txt" />
   </ItemGroup>
   <ItemGroup />
