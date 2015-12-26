@@ -8,6 +8,7 @@ namespace uRADMonitorX.Configuration {
 
         // General
         Boolean StartWithWindows { get; set; }
+        Boolean AutomaticallyCheckForUpdates { get; set; }
 
         // Display
         Boolean StartMinimized { get; set; }

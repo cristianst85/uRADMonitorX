@@ -6,6 +6,7 @@ using System.Security.Permissions;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using FluentScheduler;
 using uRADMonitorX.Commons;
 using uRADMonitorX.Commons.Controls;
 using uRADMonitorX.Commons.Formatting;
@@ -15,7 +16,9 @@ using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
 using uRADMonitorX.Core.Device;
 using uRADMonitorX.Core.Fetchers;
+using uRADMonitorX.Updater;
 using uRADMonitorX.Windows;
+using FluentScheduler.Model;
 
 namespace uRADMonitorX {
 
@@ -116,8 +119,11 @@ namespace uRADMonitorX {
                 this.viewOnlyTextBoxId.TextChanged += new EventHandler(viewOnlyTextBoxId_TextChanged);
 
                 Thread startupThread = new Thread(new ThreadStart(delegate { this.initDevice(false); }));
-                startupThread.Name = "startupThread";
+                startupThread.Name = "initDeviceThread";
                 startupThread.Start();
+
+                TaskManager.Initialize(new Registry());
+                configureCheckForUpdatesTask();
             }
             catch (Exception ex) {
                 Debug.WriteLine(String.Format("FormMain > Exception: {0}", ex.ToString()));
@@ -125,6 +131,32 @@ namespace uRADMonitorX {
             }
             finally {
                 this.IsReady = true;
+            }
+        }
+
+        private void configureCheckForUpdatesTask() {
+            if (settings.AutomaticallyCheckForUpdates) {
+                if (TaskManager.GetSchedule("checkForUpdates") == null) {
+                    TaskManager.AddTask(
+                        () => {
+                            try {
+                                GitHubApplicationUpdater applicationUpdater = new GitHubApplicationUpdater(Program.UpdaterUrl);
+                                ApplicationUpdateInfo applicationUpdateInfo = applicationUpdater.Check();
+                                if (applicationUpdateInfo.IsNewVersionAvailable(AssemblyUtils.GetVersion())) {
+                                    this.notifyIcon.ShowBalloonTip(10000, "uRADMonitorX Update Available", String.Format("A new version of uRADMonitorX ({0}) is available.", applicationUpdateInfo.Version), ToolTipIcon.Info);
+                                }
+                            }
+                            catch {
+                                // Silently ignore all errors when automatically checking for updates.
+                                // There's no need to annoy users with these.
+                            }
+                        },
+                        (task) => task.WithName("checkForUpdates").ToRunOnceAt(DateTime.Now.AddMinutes(2)).AndEvery(Program.UpdaterInterval).Minutes()
+                    );
+                }
+            }
+            else {
+                TaskManager.RemoveTask("checkForUpdates");
             }
         }
 
@@ -170,7 +202,7 @@ namespace uRADMonitorX {
                         if (!isRestart) {
                             this.updateDeviceStatus(String.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
                         }
-                        this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor;
+                        this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationIcon;
                     }
                     else {
                         this.updateDeviceStatus("Polling is disabled.");
@@ -371,7 +403,7 @@ namespace uRADMonitorX {
                 }
             }
             else {
-                this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor;
+                this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationIcon;
             }
 
             if (this.settings.AreNotificationsEnabled) {
@@ -459,7 +491,7 @@ namespace uRADMonitorX {
             this.settings.IsPollingEnabled = this.enablePollingToolStripMenuItem.Checked;
             this.settings.Commit();
             this.notifyIcon.Icon = this.settings.IsPollingEnabled ?
-                ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationColor) :
+                ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationIcon) :
                 ((System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationDisabled);
         }
 
@@ -490,6 +522,7 @@ namespace uRADMonitorX {
             if (handler != null) {
                 handler(this, new SettingsChangedEventArgs(this.settings));
             }
+            configureCheckForUpdatesTask();
         }
 
         private void closeApplication(object sender, EventArgs e) {
@@ -662,6 +695,13 @@ namespace uRADMonitorX {
 
         private void openDataAPILink(String deviceId, String sensorData) {
             System.Diagnostics.Process.Start(String.Format("http://data.uradmonitor.com/api/v1/devices/{0}/{1}", deviceId, sensorData));
+        }
+
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e) {
+            using (FormUpdate form = new FormUpdate(this.logger)) {
+                form.Update();
+                DialogResult result = form.ShowDialog(this);
+            }
         }
     }
 }

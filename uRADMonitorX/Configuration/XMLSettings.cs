@@ -15,6 +15,7 @@ namespace uRADMonitorX.Configuration {
 
         // General
         public Boolean StartWithWindows { get; set; }
+        public Boolean AutomaticallyCheckForUpdates { get; set; }
 
         // Display
         public Boolean StartMinimized { get; set; }
@@ -76,6 +77,15 @@ namespace uRADMonitorX.Configuration {
             xmlDocument.Load(filePath);
             XmlNode xmlNode = xmlDocument.SelectSingleNode("/settings");
             xmlSettings.StartWithWindows = bool.Parse(xmlNode["general"].SelectSingleNode("start_with_windows").InnerText);
+
+            // Introduced with version 1.0.0.
+            if (xmlNode["general"].SelectSingleNode("automatically_check_for_updates") != null) {
+                xmlSettings.AutomaticallyCheckForUpdates = bool.Parse(xmlNode["general"].SelectSingleNode("automatically_check_for_updates").InnerText);
+            }
+            else {
+                xmlSettings.AutomaticallyCheckForUpdates = DefaultSettings.AutomaticallyCheckForUpdates;
+            }
+
             xmlSettings.StartMinimized = bool.Parse(xmlNode["display"].SelectSingleNode("start_minimized").InnerText);
             xmlSettings.ShowInTaskbar = bool.Parse(xmlNode["display"].SelectSingleNode("show_in_taskbar").InnerText);
             xmlSettings.CloseToSystemTray = bool.Parse(xmlNode["display"].SelectSingleNode("close_to_system_tray").InnerText);
@@ -126,6 +136,7 @@ namespace uRADMonitorX.Configuration {
                 xmlWriter.WriteStartElement("settings");
                 xmlWriter.WriteStartElement("general");
                 writeFullElement(xmlWriter, "start_with_windows", DefaultSettings.StartWithWindows);
+                writeFullElement(xmlWriter, "automatically_check_for_updates", DefaultSettings.AutomaticallyCheckForUpdates);
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("display");
                 writeFullElement(xmlWriter, "start_minimized", DefaultSettings.StartMinimized);
@@ -179,8 +190,15 @@ namespace uRADMonitorX.Configuration {
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(filePath);
             XmlNode xmlNode = xmlDocument.SelectSingleNode("/settings");
-            xmlNode["general"].SelectSingleNode("start_with_windows").InnerText = this.StartWithWindows.ToString().ToLower();
+            
+            // Introduced with version 1.0.0. 
+            if (xmlNode["general"].SelectSingleNode("automatically_check_for_updates") == null) {
+                xmlNode["general"].InsertAfter(xmlDocument.CreateNode(XmlNodeType.Element, "automatically_check_for_updates", null), xmlNode["general"].SelectSingleNode("start_with_windows"));
+            }
 
+            xmlNode["general"].SelectSingleNode("start_with_windows").InnerText = this.StartWithWindows.ToString().ToLower();
+            xmlNode["general"].SelectSingleNode("automatically_check_for_updates").InnerText = this.AutomaticallyCheckForUpdates.ToString().ToLower();
+            
             xmlNode["display"].SelectSingleNode("start_minimized").InnerText = this.StartMinimized.ToString().ToLower();
             xmlNode["display"].SelectSingleNode("show_in_taskbar").InnerText = this.ShowInTaskbar.ToString().ToLower();
             xmlNode["display"].SelectSingleNode("close_to_system_tray").InnerText = this.CloseToSystemTray.ToString().ToLower();

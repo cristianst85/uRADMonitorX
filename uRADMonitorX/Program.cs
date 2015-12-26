@@ -18,6 +18,17 @@ namespace uRADMonitorX {
         public static readonly String LoggerName = "fileLogger";
         public static readonly String LoggerFilePath = "uRADMonitorX.log";
         public static readonly String SettingsFileName = "config.xml";
+        public static readonly String UserAgent = "uRADMonitorX/1.0";
+        /// <summary>
+        /// Specifies the URL application uses to check 
+        /// for updates. Only use secure URLs (HTTPS).
+        /// </summary>
+        public static readonly String UpdaterUrl = "https://api.github.com/repos/cristianst85/uRADMonitorX/releases/latest";
+        /// <summary>
+        /// Specifies the interval in minutes at which the
+        /// application automatically checks for updates.
+        /// </summary>
+        public static readonly int UpdaterInterval = 720; // 12 hours.
 
         private static ProgramArguments arguments = null;
         private static ISettings settings = null;
@@ -30,11 +41,27 @@ namespace uRADMonitorX {
         /// </summary>
         [STAThread]
         static void Main(string[] args) {
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyUtils.AssemblyResolver);
+            internalMain(args);
+        }
+
+        static void internalMain(string[] args) {
 
             bool success = ProgramArguments.TryParse(args, out arguments);
 
             if (!success) {
                 arguments = new ProgramArguments(); // Get a new instance with default values.
+            }
+
+            if (arguments.CleanupUpdate || EnvironmentUtils.IsMonoRuntime()) {
+                if (!EnvironmentUtils.IsMonoRuntime()) {
+                    // Wait one second to allow the other instance to exit.
+                    Thread.Sleep(1000);
+                }
+                // Remove the old executable file.
+                if (File.Exists(String.Format("{0}.tmp", AssemblyUtils.GetApplicationPath()))) {
+                    File.Delete(String.Format("{0}.tmp", AssemblyUtils.GetApplicationPath()));
+                }
             }
 
             if (!arguments.AllowMultipleInstances) {
@@ -50,12 +77,21 @@ namespace uRADMonitorX {
 
             // Load settings.
             String settingsFilePath = String.Format("{0}{1}{2}", Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath), Path.DirectorySeparatorChar, Program.SettingsFileName);
-            if (File.Exists(settingsFilePath)) {
+            try {
+                if (!File.Exists(settingsFilePath)) {
+                    try {
+                        XMLSettings.CreateFile(settingsFilePath);
+                    }
+                    catch (Exception createSettingsFileException) {
+                        MessageBox.Show(String.Format("Cannot create settings file {0}.\n\nError details: {1}", settingsFilePath, createSettingsFileException.Message), "uRADMonitorX", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
                 settings = XMLSettings.LoadFromFile(settingsFilePath);
             }
-            else {
-                XMLSettings.CreateFile(settingsFilePath);
-                settings = XMLSettings.LoadFromFile(settingsFilePath);
+            catch (Exception loadSettingsFileException) {
+                MessageBox.Show(String.Format("Cannot load settings from file {0}.\n\nError details: {1}", settingsFilePath, loadSettingsFileException.Message), "uRADMonitorX", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             String loggerFilePath = null;
@@ -119,10 +155,10 @@ namespace uRADMonitorX {
         private static void registerAtWindowsStartup() {
             try {
                 if (settings.StartWithWindows) {
-                    Registry.RegisterAtWindowsStartup(Application.ProductName, String.Format("\"{0}\"", new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
+                    RegistryUtils.RegisterAtWindowsStartup(Application.ProductName, String.Format("\"{0}\"", new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
                 }
                 else {
-                    Registry.UnRegisterAtWindowsStartup(Application.ProductName);
+                    RegistryUtils.UnRegisterAtWindowsStartup(Application.ProductName);
                 }
             }
             catch (Exception e) {

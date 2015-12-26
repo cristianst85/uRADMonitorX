@@ -30,6 +30,7 @@ namespace uRADMonitorX.Tests.Configuration {
             Assert.IsTrue(File.Exists(outputfilePath));
             ISettings settings = XMLSettings.LoadFromFile(outputfilePath);
             Assert.AreEqual(DefaultSettings.StartWithWindows, settings.StartWithWindows);
+            Assert.AreEqual(DefaultSettings.AutomaticallyCheckForUpdates, settings.AutomaticallyCheckForUpdates);
             Assert.AreEqual(DefaultSettings.StartMinimized, settings.StartMinimized);
             Assert.AreEqual(DefaultSettings.ShowInTaskbar, settings.ShowInTaskbar);
             Assert.AreEqual(DefaultSettings.CloseToSystemTray, settings.CloseToSystemTray);
@@ -54,6 +55,7 @@ namespace uRADMonitorX.Tests.Configuration {
             settings.Commit();
             settings = XMLSettings.LoadFromFile(outputfilePath);
             Assert.AreEqual(DefaultSettings.StartWithWindows, settings.StartWithWindows);
+            Assert.AreEqual(DefaultSettings.AutomaticallyCheckForUpdates, settings.AutomaticallyCheckForUpdates);
             Assert.AreEqual(DefaultSettings.StartMinimized, settings.StartMinimized);
             Assert.AreEqual(DefaultSettings.ShowInTaskbar, settings.ShowInTaskbar);
             Assert.AreEqual(DefaultSettings.CloseToSystemTray, settings.CloseToSystemTray);
@@ -83,6 +85,7 @@ namespace uRADMonitorX.Tests.Configuration {
             Assert.IsTrue(File.Exists(outputfilePath));
             ISettings settings = XMLSettings.LoadFromFile(outputfilePath);
             Assert.AreEqual(DefaultSettings.StartWithWindows, settings.StartWithWindows);
+            Assert.AreEqual(DefaultSettings.AutomaticallyCheckForUpdates, settings.AutomaticallyCheckForUpdates);
             Assert.AreEqual(DefaultSettings.StartMinimized, settings.StartMinimized);
             Assert.AreEqual(DefaultSettings.ShowInTaskbar, settings.ShowInTaskbar);
             Assert.AreEqual(DefaultSettings.CloseToSystemTray, settings.CloseToSystemTray);
@@ -106,6 +109,7 @@ namespace uRADMonitorX.Tests.Configuration {
             Assert.AreEqual(DefaultSettings.RadiationNotificationUnitType, settings.RadiationNotificationUnitType);
             // Modify values
             settings.StartWithWindows = !settings.StartWithWindows;
+            settings.AutomaticallyCheckForUpdates = !settings.AutomaticallyCheckForUpdates;
             settings.StartMinimized = !settings.StartMinimized;
             settings.ShowInTaskbar = !settings.ShowInTaskbar;
             settings.CloseToSystemTray = !settings.CloseToSystemTray;
@@ -131,6 +135,7 @@ namespace uRADMonitorX.Tests.Configuration {
             // Reload and verify values.
             XMLSettings settingsAfterCommit = XMLSettings.LoadFromFile(outputfilePath);
             Assert.AreEqual(settingsAfterCommit.StartWithWindows, settings.StartWithWindows);
+            Assert.AreEqual(settingsAfterCommit.AutomaticallyCheckForUpdates, settings.AutomaticallyCheckForUpdates);
             Assert.AreEqual(settingsAfterCommit.StartMinimized, settings.StartMinimized);
             Assert.AreEqual(settingsAfterCommit.ShowInTaskbar, settings.ShowInTaskbar);
             Assert.AreEqual(settingsAfterCommit.CloseToSystemTray, settings.CloseToSystemTray);

@@ -26,8 +26,8 @@ namespace uRADMonitorX {
             this.settings = settings;
 
             this.checkBoxStartWithWindows.Checked = settings.StartWithWindows;
-
             this.checkBoxStartWithWindows.Enabled = !EnvironmentUtils.IsUnix();
+            this.checkBoxAutomaticallyCheckForUpdates.Checked = settings.AutomaticallyCheckForUpdates;
 
             this.checkBoxLoggingEnable.Checked = settings.IsLoggingEnabled;
             this.textBoxLogDirectoryPath.Text = settings.LogDirectoryPath;
@@ -152,6 +152,7 @@ namespace uRADMonitorX {
             this.radiationNotificationUnitSelectedIndex = this.comboBoxRadiationNotificationUnit.SelectedIndex;
 
             this.checkBoxStartWithWindows.CheckedChanged += new EventHandler(settingsChanged);
+            this.checkBoxAutomaticallyCheckForUpdates.CheckedChanged += new EventHandler(settingsChanged);
             this.checkBoxLoggingEnable.CheckedChanged += new EventHandler(settingsChanged);
             this.checkBoxStartMinimized.CheckedChanged += new EventHandler(settingsChanged);
             this.checkBoxCloseToSystemTray.CheckedChanged += new EventHandler(settingsChanged);
@@ -236,6 +237,7 @@ namespace uRADMonitorX {
 
         private void saveSettings() {
             this.settings.StartWithWindows = this.checkBoxStartWithWindows.Checked;
+            this.settings.AutomaticallyCheckForUpdates = this.checkBoxAutomaticallyCheckForUpdates.Checked;
 
             if (this.checkBoxLoggingEnable.Checked) {
                 this.settings.LogDirectoryPath = this.textBoxLogDirectoryPath.Text;

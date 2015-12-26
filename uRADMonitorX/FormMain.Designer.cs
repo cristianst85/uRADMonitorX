@@ -79,6 +79,7 @@ namespace uRADMonitorX {
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnlyTextBoxWDT = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.viewOnlyTextBoxVoltage = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.viewOnlyTextBoxPressure = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
@@ -271,6 +272,7 @@ namespace uRADMonitorX {
             this.uRADMonitorWebsiteToolStripMenuItem,
             this.uRADMonitorForumToolStripMenuItem,
             this.toolStripMenuItem8,
+            this.checkForUpdatesToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
@@ -534,6 +536,13 @@ namespace uRADMonitorX {
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
             // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check for updates";
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
+            // 
             // viewOnlyTextBoxWDT
             // 
             this.viewOnlyTextBoxWDT.Location = new System.Drawing.Point(237, 70);
@@ -726,6 +735,7 @@ namespace uRADMonitorX {
         private ToolStripMenuItem dutyToolStripMenuItem;
         private ToolStripMenuItem graphToolStripMenuItem;
         private ToolStripSeparator toolStripMenuItem7;
+        private ToolStripMenuItem checkForUpdatesToolStripMenuItem;
     }
 }
 

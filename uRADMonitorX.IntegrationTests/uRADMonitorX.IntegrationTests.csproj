@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>uRADMonitorX.IntegrationTests</RootNamespace>
     <AssemblyName>uRADMonitorX.IntegrationTests</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Core\Device\DeviceDataHttpReaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Updater\GitHubApplicationUpdaterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\uRADMonitorX\uRADMonitorX.csproj">

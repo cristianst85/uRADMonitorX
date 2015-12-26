@@ -1,3 +1,7 @@
+1.0.0
+
+ Added 'Check for updates' feature.
+
 0.40.0
 
  Improved compatibility with Mono for running under Linux.
