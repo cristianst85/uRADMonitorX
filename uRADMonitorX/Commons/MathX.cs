@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace uRADMonitorX.Commons {
 
-    public class MathX {
+    public static class MathX {
 
         public static double Truncate(double number, int decimals) {
             double order = Math.Pow((double)10, (double)decimals);
