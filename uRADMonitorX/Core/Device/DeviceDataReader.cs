@@ -18,7 +18,7 @@ namespace uRADMonitorX.Core.Device {
                         i++;
                     }
                     else if (token.StartsWith("type", StringComparison.OrdinalIgnoreCase)) {
-                        deviceData.DeviceInformation.DeviceType = int.Parse(token.Split(':')[1]);
+                        deviceData.DeviceInformation.DeviceModel = (DeviceModel)int.Parse(token.Split(':')[1]);
                     }
                     else if (token.StartsWith("hw", StringComparison.OrdinalIgnoreCase)) {
                         deviceData.DeviceInformation.HardwareVersion = int.Parse(token.Split(':')[1]);

@@ -12,7 +12,7 @@ namespace uRADMonitorX.GuiTest {
         public String DetectorName { get; private set; }
         public int FirmwareVersion { get; private set; }
         public int HardwareVersion { get; private set; }
-        public DeviceType Type { get; private set; }
+        public DeviceModel Model { get; private set; }
 
         private IList<DeviceReadings> readings;
 
@@ -24,12 +24,12 @@ namespace uRADMonitorX.GuiTest {
 
         public HttpStatus ServerResponseCode { get; set; }
 
-        public VirtualDevice(String deviceId, RadiationDetector detector, int fwVersion, int hwVersion, DeviceType type, String ipAddress, String serverIpAddres, ICollection<DeviceReadings> readings) {
+        public VirtualDevice(String deviceId, RadiationDetector detector, int fwVersion, int hwVersion, DeviceModel model, String ipAddress, String serverIpAddres, ICollection<DeviceReadings> readings) {
             this.DeviceId = deviceId;
             this.DetectorName = detector.Name;
             this.FirmwareVersion = fwVersion;
             this.HardwareVersion = hwVersion;
-            this.Type = type;
+            this.Model = model;
             this.IPAddress = ipAddress;
             this.ServerIPAddress = serverIpAddres;
             this.readings = new List<DeviceReadings>(readings);
@@ -66,7 +66,7 @@ namespace uRADMonitorX.GuiTest {
             deviceData.DeviceInformation.Detector = this.DetectorName;
             deviceData.DeviceInformation.FirmwareVersion = this.FirmwareVersion;
             deviceData.DeviceInformation.HardwareVersion = this.HardwareVersion;
-            deviceData.DeviceInformation.DeviceType = (int)this.Type;
+            deviceData.DeviceInformation.DeviceModel = this.Model;
 
             int secondsElapsedFromStartTime = (int)DateTime.Now.Subtract(this.startTime.Value).TotalSeconds;
            

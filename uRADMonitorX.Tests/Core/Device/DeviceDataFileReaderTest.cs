@@ -15,7 +15,7 @@ namespace uRADMonitorX.Tests.Core.Device {
             IDeviceDataReader deviceDataReader = new DeviceDataFileReader(filePath);
             DeviceData deviceData = deviceDataReader.Read();
             Assert.AreEqual(deviceId, deviceData.DeviceInformation.DeviceID);
-            Assert.AreEqual(deviceType, deviceData.DeviceInformation.DeviceType);
+            Assert.AreEqual(deviceType, (int)deviceData.DeviceInformation.DeviceModel);
             Assert.AreEqual(hwVersion, deviceData.DeviceInformation.HardwareVersion);
             Assert.AreEqual(fwVersion, deviceData.DeviceInformation.FirmwareVersion);
             Assert.AreEqual(DeviceModel.Unknown, deviceData.DeviceInformation.DeviceModel);

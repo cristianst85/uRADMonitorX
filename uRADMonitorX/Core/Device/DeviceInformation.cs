@@ -5,7 +5,6 @@ namespace uRADMonitorX.Core.Device {
     public class DeviceInformation {
 
         public String DeviceID { get; set; }
-        public int DeviceType { get; set; }
         public DeviceModel DeviceModel { get; set; }
         public int HardwareVersion { get; set; }
         public int FirmwareVersion { get; set; }

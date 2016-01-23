@@ -158,7 +158,6 @@
     <Compile Include="Core\TemperatureUnitType.cs" />
     <Compile Include="Configuration\XMLSettings.cs" />
     <Compile Include="Configuration\ISettings.cs" />
-    <Compile Include="Core\Device\DeviceType.cs" />
     <Compile Include="Core\Device\DeviceDataHttpReader.cs" />
     <Compile Include="Commons\Controls\ViewOnlyRichTextBox.cs">
       <SubType>Component</SubType>

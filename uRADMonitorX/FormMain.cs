@@ -220,7 +220,7 @@ namespace uRADMonitorX {
 
         private void updateDeviceInformation(DeviceInformation deviceInformation) {
             this.viewOnlyTextBoxId.Text = deviceInformation.DeviceID;
-            this.viewOnlyTextBoxModel.Text = String.Format("{0}", deviceInformation.DeviceType);
+            this.viewOnlyTextBoxModel.Text = String.Format("{0} ({1})", (int)deviceInformation.DeviceModel, deviceInformation.DeviceModel);
             this.viewOnlyTextBoxHardware.Text = String.Format("{0}", deviceInformation.HardwareVersion);
             this.viewOnlyTextBoxFirmware.Text = String.Format("{0}", deviceInformation.FirmwareVersion);
             this.viewOnlyTextBoxDetector.Text = deviceInformation.Detector;
