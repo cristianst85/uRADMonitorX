@@ -33,6 +33,7 @@
             this.checkBoxStartMinimized = new System.Windows.Forms.CheckBox();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBoxAutomaticallyCheckForUpdates = new System.Windows.Forms.CheckBox();
             this.checkBoxStartWithWindows = new System.Windows.Forms.CheckBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageNotifications = new System.Windows.Forms.TabPage();
@@ -46,6 +47,17 @@
             this.textBoxHighTemperatureNotificationValue = new System.Windows.Forms.TextBox();
             this.labelTemperatureNotification = new System.Windows.Forms.Label();
             this.checkBoxNotificationsEnable = new System.Windows.Forms.CheckBox();
+            this.tabPageLogging = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.buttonConfigureDataLogDirectoryPath = new System.Windows.Forms.Button();
+            this.textBoxDataLogDirectoryPath = new System.Windows.Forms.TextBox();
+            this.checkBoxDataLoggingToSeparateFile = new System.Windows.Forms.CheckBox();
+            this.checkBoxDataLoggingEnable = new System.Windows.Forms.CheckBox();
+            this.pictureBoxLoggingInfo = new System.Windows.Forms.PictureBox();
+            this.labelLoggingInfo = new System.Windows.Forms.Label();
+            this.textBoxLogDirectoryPath = new System.Windows.Forms.TextBox();
+            this.buttonConfigureLogDirectoryPath = new System.Windows.Forms.Button();
+            this.checkBoxLoggingEnable = new System.Windows.Forms.CheckBox();
             this.tabPageMisc = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.labelRadiationUnit = new System.Windows.Forms.Label();
@@ -54,14 +66,6 @@
             this.comboBoxTemperatureUnit = new System.Windows.Forms.ComboBox();
             this.labelPressureUnit = new System.Windows.Forms.Label();
             this.labelTemperatureUnit = new System.Windows.Forms.Label();
-            this.tabPageLogging = new System.Windows.Forms.TabPage();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.pictureBoxLoggingInfo = new System.Windows.Forms.PictureBox();
-            this.labelLoggingInfo = new System.Windows.Forms.Label();
-            this.textBoxLogDirectoryPath = new System.Windows.Forms.TextBox();
-            this.buttonConfigureLogDirectoryPath = new System.Windows.Forms.Button();
-            this.checkBoxLoggingEnable = new System.Windows.Forms.CheckBox();
-            this.checkBoxAutomaticallyCheckForUpdates = new System.Windows.Forms.CheckBox();
             this.tabPageDisplay.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
@@ -70,11 +74,11 @@
             this.tabPageNotifications.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotificationsInfo)).BeginInit();
-            this.tabPageMisc.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.tabPageLogging.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoggingInfo)).BeginInit();
+            this.tabPageMisc.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonApply
@@ -182,6 +186,16 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
+            // 
+            // checkBoxAutomaticallyCheckForUpdates
+            // 
+            this.checkBoxAutomaticallyCheckForUpdates.AutoSize = true;
+            this.checkBoxAutomaticallyCheckForUpdates.Location = new System.Drawing.Point(19, 42);
+            this.checkBoxAutomaticallyCheckForUpdates.Name = "checkBoxAutomaticallyCheckForUpdates";
+            this.checkBoxAutomaticallyCheckForUpdates.Size = new System.Drawing.Size(177, 17);
+            this.checkBoxAutomaticallyCheckForUpdates.TabIndex = 1;
+            this.checkBoxAutomaticallyCheckForUpdates.Text = "Automatically check for updates";
+            this.checkBoxAutomaticallyCheckForUpdates.UseVisualStyleBackColor = true;
             // 
             // checkBoxStartWithWindows
             // 
@@ -322,6 +336,119 @@
             this.checkBoxNotificationsEnable.Text = "Enable";
             this.checkBoxNotificationsEnable.UseVisualStyleBackColor = true;
             // 
+            // tabPageLogging
+            // 
+            this.tabPageLogging.Controls.Add(this.groupBox4);
+            this.tabPageLogging.Location = new System.Drawing.Point(4, 22);
+            this.tabPageLogging.Name = "tabPageLogging";
+            this.tabPageLogging.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageLogging.Size = new System.Drawing.Size(287, 182);
+            this.tabPageLogging.TabIndex = 4;
+            this.tabPageLogging.Text = "Logging";
+            this.tabPageLogging.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.buttonConfigureDataLogDirectoryPath);
+            this.groupBox4.Controls.Add(this.textBoxDataLogDirectoryPath);
+            this.groupBox4.Controls.Add(this.checkBoxDataLoggingToSeparateFile);
+            this.groupBox4.Controls.Add(this.checkBoxDataLoggingEnable);
+            this.groupBox4.Controls.Add(this.pictureBoxLoggingInfo);
+            this.groupBox4.Controls.Add(this.labelLoggingInfo);
+            this.groupBox4.Controls.Add(this.textBoxLogDirectoryPath);
+            this.groupBox4.Controls.Add(this.buttonConfigureLogDirectoryPath);
+            this.groupBox4.Controls.Add(this.checkBoxLoggingEnable);
+            this.groupBox4.Location = new System.Drawing.Point(3, 1);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(280, 175);
+            this.groupBox4.TabIndex = 5;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Settings";
+            // 
+            // buttonConfigureDataLogDirectoryPath
+            // 
+            this.buttonConfigureDataLogDirectoryPath.Location = new System.Drawing.Point(230, 139);
+            this.buttonConfigureDataLogDirectoryPath.Name = "buttonConfigureDataLogDirectoryPath";
+            this.buttonConfigureDataLogDirectoryPath.Size = new System.Drawing.Size(35, 21);
+            this.buttonConfigureDataLogDirectoryPath.TabIndex = 10;
+            this.buttonConfigureDataLogDirectoryPath.Text = "...";
+            this.buttonConfigureDataLogDirectoryPath.UseVisualStyleBackColor = true;
+            // 
+            // textBoxDataLogDirectoryPath
+            // 
+            this.textBoxDataLogDirectoryPath.HideSelection = false;
+            this.textBoxDataLogDirectoryPath.Location = new System.Drawing.Point(19, 139);
+            this.textBoxDataLogDirectoryPath.Name = "textBoxDataLogDirectoryPath";
+            this.textBoxDataLogDirectoryPath.Size = new System.Drawing.Size(205, 20);
+            this.textBoxDataLogDirectoryPath.TabIndex = 9;
+            // 
+            // checkBoxDataLoggingToSeparateFile
+            // 
+            this.checkBoxDataLoggingToSeparateFile.AutoSize = true;
+            this.checkBoxDataLoggingToSeparateFile.Location = new System.Drawing.Point(19, 116);
+            this.checkBoxDataLoggingToSeparateFile.Name = "checkBoxDataLoggingToSeparateFile";
+            this.checkBoxDataLoggingToSeparateFile.Size = new System.Drawing.Size(190, 17);
+            this.checkBoxDataLoggingToSeparateFile.TabIndex = 8;
+            this.checkBoxDataLoggingToSeparateFile.Text = "Use a separate file for data logging";
+            this.checkBoxDataLoggingToSeparateFile.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxDataLoggingEnable
+            // 
+            this.checkBoxDataLoggingEnable.AutoSize = true;
+            this.checkBoxDataLoggingEnable.Location = new System.Drawing.Point(19, 93);
+            this.checkBoxDataLoggingEnable.Name = "checkBoxDataLoggingEnable";
+            this.checkBoxDataLoggingEnable.Size = new System.Drawing.Size(120, 17);
+            this.checkBoxDataLoggingEnable.TabIndex = 7;
+            this.checkBoxDataLoggingEnable.Text = "Enable data logging";
+            this.checkBoxDataLoggingEnable.UseVisualStyleBackColor = true;
+            // 
+            // pictureBoxLoggingInfo
+            // 
+            this.pictureBoxLoggingInfo.ErrorImage = null;
+            this.pictureBoxLoggingInfo.Image = global::uRADMonitorX.Properties.Resources.information;
+            this.pictureBoxLoggingInfo.Location = new System.Drawing.Point(19, 71);
+            this.pictureBoxLoggingInfo.Name = "pictureBoxLoggingInfo";
+            this.pictureBoxLoggingInfo.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxLoggingInfo.TabIndex = 6;
+            this.pictureBoxLoggingInfo.TabStop = false;
+            // 
+            // labelLoggingInfo
+            // 
+            this.labelLoggingInfo.AutoSize = true;
+            this.labelLoggingInfo.Location = new System.Drawing.Point(41, 72);
+            this.labelLoggingInfo.Name = "labelLoggingInfo";
+            this.labelLoggingInfo.Size = new System.Drawing.Size(150, 13);
+            this.labelLoggingInfo.TabIndex = 0;
+            this.labelLoggingInfo.Text = "Using default application path.";
+            this.labelLoggingInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textBoxLogDirectoryPath
+            // 
+            this.textBoxLogDirectoryPath.HideSelection = false;
+            this.textBoxLogDirectoryPath.Location = new System.Drawing.Point(19, 41);
+            this.textBoxLogDirectoryPath.Name = "textBoxLogDirectoryPath";
+            this.textBoxLogDirectoryPath.Size = new System.Drawing.Size(205, 20);
+            this.textBoxLogDirectoryPath.TabIndex = 2;
+            // 
+            // buttonConfigureLogDirectoryPath
+            // 
+            this.buttonConfigureLogDirectoryPath.Location = new System.Drawing.Point(230, 40);
+            this.buttonConfigureLogDirectoryPath.Name = "buttonConfigureLogDirectoryPath";
+            this.buttonConfigureLogDirectoryPath.Size = new System.Drawing.Size(35, 20);
+            this.buttonConfigureLogDirectoryPath.TabIndex = 3;
+            this.buttonConfigureLogDirectoryPath.Text = "...";
+            this.buttonConfigureLogDirectoryPath.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxLoggingEnable
+            // 
+            this.checkBoxLoggingEnable.AutoSize = true;
+            this.checkBoxLoggingEnable.Location = new System.Drawing.Point(19, 19);
+            this.checkBoxLoggingEnable.Name = "checkBoxLoggingEnable";
+            this.checkBoxLoggingEnable.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxLoggingEnable.TabIndex = 1;
+            this.checkBoxLoggingEnable.Text = "Enable";
+            this.checkBoxLoggingEnable.UseVisualStyleBackColor = true;
+            // 
             // tabPageMisc
             // 
             this.tabPageMisc.Controls.Add(this.groupBox5);
@@ -402,87 +529,6 @@
             this.labelTemperatureUnit.TabIndex = 0;
             this.labelTemperatureUnit.Text = "Show temperature in";
             // 
-            // tabPageLogging
-            // 
-            this.tabPageLogging.Controls.Add(this.groupBox4);
-            this.tabPageLogging.Location = new System.Drawing.Point(4, 22);
-            this.tabPageLogging.Name = "tabPageLogging";
-            this.tabPageLogging.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLogging.Size = new System.Drawing.Size(287, 182);
-            this.tabPageLogging.TabIndex = 4;
-            this.tabPageLogging.Text = "Logging";
-            this.tabPageLogging.UseVisualStyleBackColor = true;
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.pictureBoxLoggingInfo);
-            this.groupBox4.Controls.Add(this.labelLoggingInfo);
-            this.groupBox4.Controls.Add(this.textBoxLogDirectoryPath);
-            this.groupBox4.Controls.Add(this.buttonConfigureLogDirectoryPath);
-            this.groupBox4.Controls.Add(this.checkBoxLoggingEnable);
-            this.groupBox4.Location = new System.Drawing.Point(3, 1);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(280, 175);
-            this.groupBox4.TabIndex = 5;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Settings";
-            // 
-            // pictureBoxLoggingInfo
-            // 
-            this.pictureBoxLoggingInfo.ErrorImage = null;
-            this.pictureBoxLoggingInfo.Image = global::uRADMonitorX.Properties.Resources.information;
-            this.pictureBoxLoggingInfo.Location = new System.Drawing.Point(19, 71);
-            this.pictureBoxLoggingInfo.Name = "pictureBoxLoggingInfo";
-            this.pictureBoxLoggingInfo.Size = new System.Drawing.Size(16, 16);
-            this.pictureBoxLoggingInfo.TabIndex = 6;
-            this.pictureBoxLoggingInfo.TabStop = false;
-            // 
-            // labelLoggingInfo
-            // 
-            this.labelLoggingInfo.AutoSize = true;
-            this.labelLoggingInfo.Location = new System.Drawing.Point(41, 72);
-            this.labelLoggingInfo.Name = "labelLoggingInfo";
-            this.labelLoggingInfo.Size = new System.Drawing.Size(150, 13);
-            this.labelLoggingInfo.TabIndex = 0;
-            this.labelLoggingInfo.Text = "Using default application path.";
-            // 
-            // textBoxLogDirectoryPath
-            // 
-            this.textBoxLogDirectoryPath.HideSelection = false;
-            this.textBoxLogDirectoryPath.Location = new System.Drawing.Point(19, 41);
-            this.textBoxLogDirectoryPath.Name = "textBoxLogDirectoryPath";
-            this.textBoxLogDirectoryPath.Size = new System.Drawing.Size(255, 20);
-            this.textBoxLogDirectoryPath.TabIndex = 2;
-            // 
-            // buttonConfigureLogDirectoryPath
-            // 
-            this.buttonConfigureLogDirectoryPath.Location = new System.Drawing.Point(199, 67);
-            this.buttonConfigureLogDirectoryPath.Name = "buttonConfigureLogDirectoryPath";
-            this.buttonConfigureLogDirectoryPath.Size = new System.Drawing.Size(75, 23);
-            this.buttonConfigureLogDirectoryPath.TabIndex = 3;
-            this.buttonConfigureLogDirectoryPath.Text = "Configure...";
-            this.buttonConfigureLogDirectoryPath.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxLoggingEnable
-            // 
-            this.checkBoxLoggingEnable.AutoSize = true;
-            this.checkBoxLoggingEnable.Location = new System.Drawing.Point(19, 19);
-            this.checkBoxLoggingEnable.Name = "checkBoxLoggingEnable";
-            this.checkBoxLoggingEnable.Size = new System.Drawing.Size(59, 17);
-            this.checkBoxLoggingEnable.TabIndex = 1;
-            this.checkBoxLoggingEnable.Text = "Enable";
-            this.checkBoxLoggingEnable.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxAutomaticallyCheckForUpdates
-            // 
-            this.checkBoxAutomaticallyCheckForUpdates.AutoSize = true;
-            this.checkBoxAutomaticallyCheckForUpdates.Location = new System.Drawing.Point(19, 42);
-            this.checkBoxAutomaticallyCheckForUpdates.Name = "checkBoxAutomaticallyCheckForUpdates";
-            this.checkBoxAutomaticallyCheckForUpdates.Size = new System.Drawing.Size(177, 17);
-            this.checkBoxAutomaticallyCheckForUpdates.TabIndex = 1;
-            this.checkBoxAutomaticallyCheckForUpdates.Text = "Automatically check for updates";
-            this.checkBoxAutomaticallyCheckForUpdates.UseVisualStyleBackColor = true;
-            // 
             // FormOptions
             // 
             this.AcceptButton = this.buttonOK;
@@ -510,13 +556,13 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotificationsInfo)).EndInit();
-            this.tabPageMisc.ResumeLayout(false);
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.tabPageLogging.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoggingInfo)).EndInit();
+            this.tabPageMisc.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -562,5 +608,9 @@
         private System.Windows.Forms.Button buttonConfigureLogDirectoryPath;
         private System.Windows.Forms.CheckBox checkBoxLoggingEnable;
         private System.Windows.Forms.CheckBox checkBoxAutomaticallyCheckForUpdates;
+        private System.Windows.Forms.CheckBox checkBoxDataLoggingEnable;
+        private System.Windows.Forms.Button buttonConfigureDataLogDirectoryPath;
+        private System.Windows.Forms.TextBox textBoxDataLogDirectoryPath;
+        private System.Windows.Forms.CheckBox checkBoxDataLoggingToSeparateFile;
     }
 }

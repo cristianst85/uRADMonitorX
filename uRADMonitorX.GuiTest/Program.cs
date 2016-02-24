@@ -43,7 +43,7 @@ namespace uRADMonitorX.GuiTest {
             };
 
             ILogger logger = new NullLogger();
-            
+
             ICollection<DeviceReadings> readings = new Collection<DeviceReadings>();
             readings.Add(new DeviceReadings() { Radiation = 19, RadiationAverage = 15, Temperature = 26, Pressure = 100040, Voltage = 375, VoltagePercent = 50 });
             readings.Add(new DeviceReadings() { Radiation = 20, RadiationAverage = 15, Temperature = 25, Pressure = 100000, Voltage = 375, VoltagePercent = 50 });

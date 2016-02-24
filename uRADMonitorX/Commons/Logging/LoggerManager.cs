@@ -5,7 +5,6 @@ namespace uRADMonitorX.Commons.Logging {
 
     public class LoggerManager {
 
-        private static object _locker = new object();
         private static object _syncRoot = new object();
         private static volatile LoggerManager _instance;
 

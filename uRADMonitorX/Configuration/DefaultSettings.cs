@@ -86,7 +86,34 @@ namespace uRADMonitorX.Configuration {
                 return String.Empty;
             }
         }
-        
+
+        /// <summary>
+        /// Value: <c>false</c>.
+        /// </summary>
+        public static Boolean IsDataLoggingEnabled {
+            get {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Value: <c>true</c>.
+        /// </summary>
+        public static Boolean DataLoggingToSeparateFile {
+            get {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Value: <c>\logs\</c>.
+        /// </summary>
+        public static String DataLogDirectoryPath {
+            get {
+                return @"\logs\";
+            }
+        }
+
         /// <summary>
         /// Value: <c>String.Empty</c>.
         /// </summary>

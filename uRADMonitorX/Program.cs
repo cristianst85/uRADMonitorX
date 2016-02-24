@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -16,7 +18,9 @@ namespace uRADMonitorX {
     static class Program {
 
         public static readonly String LoggerName = "fileLogger";
-        public static readonly String LoggerFilePath = "uRADMonitorX.log";
+        public static readonly String DataLoggerName = "dataLogger";
+        public static readonly String LoggerFileName = "uRADMonitorX.log";
+        public static readonly String DataLoggerFileName = "data.log";
         public static readonly String SettingsFileName = "config.xml";
         public static readonly String UserAgent = "uRADMonitorX/1.0";
         /// <summary>
@@ -94,19 +98,29 @@ namespace uRADMonitorX {
                 return;
             }
 
-            String loggerFilePath = null;
-            if (settings.LogDirectoryPath.Length > 0) {
-                loggerFilePath = Path.Combine(settings.LogDirectoryPath, Program.LoggerFilePath);
-            }
-            else {
-                loggerFilePath = Path.Combine(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()), Program.LoggerFilePath);
-            }
+            var loggerFilePath = getLoggerPath(settings.LogDirectoryPath, Program.LoggerFileName, false);
+            var dataLoggerFilePath = getLoggerPath(settings.DataLoggingToSeparateFile ? settings.DataLogDirectoryPath : settings.LogDirectoryPath, Program.DataLoggerFileName, settings.IsLoggingEnabled && settings.IsDataLoggingEnabled && settings.DataLoggingToSeparateFile);
 
             LoggerManager.GetInstance().Add(Program.LoggerName,
                                             new ThreadSafeLogger(
-                                                new FileAppender(Path.Combine((Path.GetDirectoryName(AssemblyUtils.GetApplicationPath())), Program.LoggerFilePath)) { Enabled = true },
-                                                new SimpleFormatter()) { Enabled = settings.IsLoggingEnabled }
-                                           );
+                                                new Logger(
+                                                    new ReconfigurableFileAppender(loggerFilePath),
+                                                    new DateTimeFormatter()
+                                                ) {
+                                                    Enabled = settings.IsLoggingEnabled
+                                                }
+                                            ));
+            LoggerManager.GetInstance().Add(Program.DataLoggerName,
+                                          new ThreadSafeLogger(
+                                                new Logger(
+                                                    new NLogDailyFileAppender(dataLoggerFilePath),
+                                                    new DateTimeFormatter()
+                                                ) {
+                                                    Enabled = settings.IsLoggingEnabled &&
+                                                    settings.IsDataLoggingEnabled &&
+                                                    settings.DataLoggingToSeparateFile
+                                                }
+                                            ));
             logger = LoggerManager.GetInstance().GetLogger(Program.LoggerName);
 
             IDeviceDataReaderFactory deviceDataReaderFactory = new DeviceDataHttpReaderFactory(settings);
@@ -126,25 +140,54 @@ namespace uRADMonitorX {
 
         private static void formMain_SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e) {
             if (logger != null) {
-                configLogger();
+                configLogger(
+                    LoggerManager.GetInstance().GetLogger(Program.LoggerName),
+                    getLoggerPath(settings.LogDirectoryPath, Program.LoggerFileName, false),
+                    settings.IsLoggingEnabled
+                );
+                configLogger(
+                    LoggerManager.GetInstance().GetLogger(Program.DataLoggerName),
+                    getLoggerPath(settings.DataLoggingToSeparateFile ? settings.DataLogDirectoryPath : settings.LogDirectoryPath, Program.DataLoggerFileName, true),
+                    settings.IsLoggingEnabled && settings.IsDataLoggingEnabled && settings.DataLoggingToSeparateFile
+                );
             }
             if (!arguments.IgnoreRegisteringAtWindowsStartup && !EnvironmentUtils.IsUnix()) {
                 registerAtWindowsStartup();
             }
         }
 
-        private static void configLogger() {
-            logger.Enabled = settings.IsLoggingEnabled;
+        private static String getLoggerPath(String loggerDirectoryPath, String loggerFileName, bool createIfNotExists) {
+            loggerDirectoryPath = loggerDirectoryPath.TrimStart('\\');
+            String loggerFilePath = null;
+            if (Path.IsPathRooted(loggerDirectoryPath)) {
+                loggerFilePath = Path.Combine(loggerDirectoryPath, loggerFileName);
+            }
+            else {
+                if (loggerDirectoryPath.Length > 0) {
+                    loggerFilePath = Path.Combine(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()), loggerDirectoryPath, loggerFileName);
+                }
+                else {
+                    loggerFilePath = Path.Combine(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()), loggerFileName);
+                }
+            }
+
+            if (createIfNotExists) {
+                var dirPath = Path.GetDirectoryName(loggerFilePath);
+                if (!Directory.Exists(dirPath)) {
+                    Directory.CreateDirectory(dirPath);
+                }
+            }
+
+            return loggerFilePath;
+        }
+
+        private static void configLogger(ILogger logger, String loggerNewFilePath, bool enable) {
+            logger.Enabled = enable;
+            Debug.WriteLine(loggerNewFilePath);
             try {
-                ILoggerAppender appender = LoggerManager.GetInstance().GetLogger(Program.LoggerName).Appender;
-                if (appender is ICanReconfigureAppender) {
-                    // TODO: Verify if logger path is in application root directory.
-                    if (settings.LogDirectoryPath.Length > 0) {
-                        ((ICanReconfigureAppender)appender).Reconfigure(Path.Combine(settings.LogDirectoryPath, Program.LoggerFilePath));
-                    }
-                    else {
-                        ((ICanReconfigureAppender)appender).Reconfigure(Path.Combine(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()), Program.LoggerFilePath));
-                    }
+                ILoggerAppender appender = logger.Appender;
+                if (appender is IReconfigurableFileAppender) {
+                    ((IReconfigurableFileAppender)appender).Reconfigure(loggerNewFilePath);
                 }
             }
             catch (UnauthorizedAccessException ex) {
@@ -155,7 +198,7 @@ namespace uRADMonitorX {
         private static void registerAtWindowsStartup() {
             try {
                 if (settings.StartWithWindows) {
-                    RegistryUtils.RegisterAtWindowsStartup(Application.ProductName, String.Format("\"{0}\"", new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
+                    RegistryUtils.RegisterAtWindowsStartup(Application.ProductName, String.Format("\"{0}\"", new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
                 }
                 else {
                     RegistryUtils.UnRegisterAtWindowsStartup(Application.ProductName);

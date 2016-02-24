@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.IO;
 
 namespace uRADMonitorX.Commons {
 
@@ -7,6 +8,10 @@ namespace uRADMonitorX.Commons {
 
         public static String GetApplicationPath() {
             return new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath;
+        }
+
+        public static String GetApplicationDirPath() {
+            return Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath);
         }
 
         public static Version GetVersion() {

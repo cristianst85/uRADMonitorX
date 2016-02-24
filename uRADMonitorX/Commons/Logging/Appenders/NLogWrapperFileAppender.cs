@@ -2,9 +2,9 @@
 
 namespace uRADMonitorX.Commons.Logging.Appenders {
 
-    public class RollingFileAppender : FileAppender {
+    public class NLogWrapperFileAppender : ReconfigurableFileAppender {
 
-        public RollingFileAppender(String filePath)
+        public NLogWrapperFileAppender(String filePath)
             : base(filePath) {
             throw new NotImplementedException();
         }

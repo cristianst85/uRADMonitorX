@@ -45,6 +45,10 @@ namespace uRADMonitorX {
                 this.pictureBoxLoggingInfo.Image = global::uRADMonitorX.Properties.Resources.information;
             }
 
+            this.checkBoxDataLoggingEnable.Checked = settings.IsDataLoggingEnabled;
+            this.checkBoxDataLoggingToSeparateFile.Checked = settings.DataLoggingToSeparateFile;
+            this.textBoxDataLogDirectoryPath.Text = settings.DataLogDirectoryPath;
+
             this.checkBoxShowInTaskbar.Checked = settings.ShowInTaskbar;
             this.checkBoxStartMinimized.Checked = settings.StartMinimized;
             this.checkBoxCloseToSystemTray.Checked = settings.CloseToSystemTray;
@@ -154,6 +158,8 @@ namespace uRADMonitorX {
             this.checkBoxStartWithWindows.CheckedChanged += new EventHandler(settingsChanged);
             this.checkBoxAutomaticallyCheckForUpdates.CheckedChanged += new EventHandler(settingsChanged);
             this.checkBoxLoggingEnable.CheckedChanged += new EventHandler(settingsChanged);
+            this.checkBoxDataLoggingEnable.CheckedChanged += new EventHandler(settingsChanged);
+            this.checkBoxDataLoggingToSeparateFile.CheckedChanged += new EventHandler(settingsChanged);
             this.checkBoxStartMinimized.CheckedChanged += new EventHandler(settingsChanged);
             this.checkBoxCloseToSystemTray.CheckedChanged += new EventHandler(settingsChanged);
             this.checkBoxShowInTaskbar.CheckedChanged += new EventHandler(settingsChanged);
@@ -171,18 +177,21 @@ namespace uRADMonitorX {
             this.textBoxLogDirectoryPath.TextChanged += new EventHandler(textBoxLogDirectoryPathTextChanged);
             this.buttonConfigureLogDirectoryPath.Click += new System.EventHandler(buttonConfigureLogDirectoryPath_Click);
             this.checkBoxLoggingEnable.CheckedChanged += new EventHandler(checkBoxLoggingEnable_CheckedChanged);
+            this.checkBoxDataLoggingEnable.CheckedChanged += new EventHandler(checkBoxDataLoggingEnable_CheckedChanged);
+            this.checkBoxDataLoggingToSeparateFile.CheckedChanged += new EventHandler(checkBoxDataLoggingToSeparateFile_CheckedChanged);
 
             this.checkBoxNotificationsEnable.CheckedChanged += new EventHandler(settingsChanged);
             this.checkBoxNotificationsEnable.CheckedChanged += new EventHandler(checkBoxNotificationsEnable_CheckedChanged);
 
             this.checkBoxLoggingEnable_CheckedChanged(null, null);
+            this.checkBoxDataLoggingEnable_CheckedChanged(null, null);
             this.checkBoxNotificationsEnable_CheckedChanged(null, null);
             this.buttonApply.Enabled = false;
         }
 
         private void settingsChanged(Object sender, EventArgs e) {
-            if (loggingDirectoryIsValid() && !this.checkBoxNotificationsEnable.Checked ||
-                loggingDirectoryIsValid() && (this.checkBoxNotificationsEnable.Checked && this.inputControlsValuesAreValid())
+            if (loggingDirectoryIsValid() && loggingDataDirectoryIsValid() && !this.checkBoxNotificationsEnable.Checked ||
+                loggingDirectoryIsValid() && loggingDataDirectoryIsValid() && (this.checkBoxNotificationsEnable.Checked && this.inputControlsValuesAreValid())
                 ) {
                 this.buttonApply.Enabled = true;
             }
@@ -209,7 +218,8 @@ namespace uRADMonitorX {
         }
 
         private bool loggingDirectoryIsValid() {
-            if (this.checkBoxLoggingEnable.Checked && this.textBoxLogDirectoryPath.Text.Length > 0 && Directory.Exists(this.textBoxLogDirectoryPath.Text)) {
+            String logDirPath = PathUtils.GetFullPath(AssemblyUtils.GetApplicationDirPath(), this.textBoxLogDirectoryPath.Text);
+            if (this.checkBoxLoggingEnable.Checked && this.textBoxLogDirectoryPath.Text.Length > 0 && Directory.Exists(logDirPath)) {
                 this.pictureBoxLoggingInfo.Hide();
                 this.labelLoggingInfo.Hide();
                 return true;
@@ -219,7 +229,7 @@ namespace uRADMonitorX {
                 this.labelLoggingInfo.Hide();
                 return true;
             }
-            else if (this.textBoxLogDirectoryPath.Text.Length > 0 && !Directory.Exists(this.textBoxLogDirectoryPath.Text)) {
+            else if (this.textBoxLogDirectoryPath.Text.Length > 0 && !Directory.Exists(logDirPath)) {
                 this.labelLoggingInfo.Text = "Directory does not exist.";
                 this.pictureBoxLoggingInfo.Image = global::uRADMonitorX.Properties.Resources.error;
                 this.pictureBoxLoggingInfo.Show();
@@ -235,6 +245,16 @@ namespace uRADMonitorX {
             }
         }
 
+        private bool loggingDataDirectoryIsValid() {
+            String logDirPath = PathUtils.GetFullPath(AssemblyUtils.GetApplicationDirPath(), this.textBoxDataLogDirectoryPath.Text);
+            if (this.textBoxDataLogDirectoryPath.Text.Length > 0 && Directory.Exists(logDirPath)) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
         private void saveSettings() {
             this.settings.StartWithWindows = this.checkBoxStartWithWindows.Checked;
             this.settings.AutomaticallyCheckForUpdates = this.checkBoxAutomaticallyCheckForUpdates.Checked;
@@ -243,6 +263,13 @@ namespace uRADMonitorX {
                 this.settings.LogDirectoryPath = this.textBoxLogDirectoryPath.Text;
             }
             this.settings.IsLoggingEnabled = this.checkBoxLoggingEnable.Checked;
+
+            if (this.checkBoxDataLoggingEnable.Checked) {
+                this.settings.DataLogDirectoryPath = this.textBoxDataLogDirectoryPath.Text;
+            }
+            this.settings.IsDataLoggingEnabled = this.checkBoxDataLoggingEnable.Checked;
+            this.settings.DataLoggingToSeparateFile = this.checkBoxDataLoggingToSeparateFile.Checked;
+
 
             this.settings.ShowInTaskbar = this.checkBoxShowInTaskbar.Checked;
             this.settings.StartMinimized = this.checkBoxStartMinimized.Checked;
@@ -267,23 +294,45 @@ namespace uRADMonitorX {
         private void checkBoxLoggingEnable_CheckedChanged(object sender, EventArgs e) {
             this.textBoxLogDirectoryPath.Enabled = this.checkBoxLoggingEnable.Checked;
             this.buttonConfigureLogDirectoryPath.Enabled = this.checkBoxLoggingEnable.Checked;
+            this.checkBoxDataLoggingEnable.Enabled = this.checkBoxLoggingEnable.Checked;
             textBoxLogDirectoryPathTextChanged(sender, e);
+            checkBoxDataLoggingEnable_CheckedChanged(sender, e);
+        }
+
+        private void checkBoxDataLoggingEnable_CheckedChanged(object sender, EventArgs e) {
+            this.checkBoxDataLoggingToSeparateFile.Enabled = this.checkBoxLoggingEnable.Checked
+                && this.checkBoxDataLoggingEnable.Checked;
+            checkBoxDataLoggingToSeparateFile_CheckedChanged(sender, e);
+            // TODO: textBoxDataLogDirectoryPathTextChanged(sender, e);
+        }
+
+        private void checkBoxDataLoggingToSeparateFile_CheckedChanged(object sender, EventArgs e) {
+            this.textBoxDataLogDirectoryPath.Enabled = this.checkBoxDataLoggingToSeparateFile.Checked
+                && this.checkBoxDataLoggingToSeparateFile.Enabled;
+            this.buttonConfigureDataLogDirectoryPath.Enabled = this.checkBoxDataLoggingToSeparateFile.Checked
+               && this.checkBoxDataLoggingToSeparateFile.Enabled;
         }
 
         private void buttonConfigureLogDirectoryPath_Click(object sender, EventArgs e) {
             FolderBrowserDialog folderBrowseDialog = new FolderBrowserDialog();
             try {
                 if (this.textBoxLogDirectoryPath.Text.Length == 0) {
-                    folderBrowseDialog.SelectedPath = AppDomain.CurrentDomain.BaseDirectory;
+                    folderBrowseDialog.SelectedPath = Path.GetDirectoryName(AssemblyUtils.GetApplicationPath());
                 }
                 else {
                     folderBrowseDialog.SelectedPath = this.textBoxLogDirectoryPath.Text;
                 }
                 folderBrowseDialog.ShowNewFolderButton = true;
-                folderBrowseDialog.Description = "Select a directory to save log files.";
+                folderBrowseDialog.Description = "Select a directory where to save the log files.";
                 DialogResult result = folderBrowseDialog.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK) {
-                    this.textBoxLogDirectoryPath.Text = folderBrowseDialog.SelectedPath;
+                    // If the selected path is in a subdirectory of the application path then keep only the relative path.
+                    if (folderBrowseDialog.SelectedPath.StartsWith(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()))) {
+                        this.textBoxLogDirectoryPath.Text = folderBrowseDialog.SelectedPath.Substring(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()).Length);
+                    }
+                    else {
+                        this.textBoxLogDirectoryPath.Text = folderBrowseDialog.SelectedPath;
+                    }
                 }
             }
             finally {
@@ -359,7 +408,7 @@ namespace uRADMonitorX {
         private bool temperatureNotificationValueIsValid(String temperature, TemperatureUnitType unit) {
             int value = 0;
             bool isInteger = int.TryParse(temperature, out value);
-            // Device working temperature is between -20 °C to +60 °C.
+            // Device working temperature is between -20 °C and +60 °C.
             // For High Temperature notification we allow only the positive part of the interval.
             return (isInteger &&
                     ((unit == TemperatureUnitType.Celsius && value >= 0 && value <= 60) ||
