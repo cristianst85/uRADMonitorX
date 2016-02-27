@@ -17,7 +17,7 @@ namespace uRADMonitorX.Tests.Core.Device {
             Assert.AreEqual(deviceId, deviceData.DeviceInformation.DeviceID);
             Assert.AreEqual(hwVersion, deviceData.DeviceInformation.HardwareVersion);
             Assert.AreEqual(fwVersion, deviceData.DeviceInformation.FirmwareVersion);
-            Assert.AreEqual(DeviceModel.A2, deviceData.DeviceInformation.DeviceModel);
+            Assert.AreEqual(DeviceModelType.A2, deviceData.DeviceInformation.DeviceModel);
             Assert.AreEqual(detector, deviceData.DeviceInformation.Detector);
             Assert.AreEqual(radiation, deviceData.Radiation);
             Assert.AreEqual(double.Parse(radiationAverage), deviceData.RadiationAverage);

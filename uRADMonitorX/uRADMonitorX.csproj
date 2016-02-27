@@ -132,7 +132,7 @@
     <Compile Include="Core\Device\DeviceInformation.cs" />
     <Compile Include="Core\Device\DeviceDataReader.cs" />
     <Compile Include="Core\Device\DeviceDataFileReader.cs" />
-    <Compile Include="Core\Device\DeviceModel.cs" />
+    <Compile Include="Core\Device\DeviceModelType.cs" />
     <Compile Include="Core\Device\IDeviceDataReader.cs" />
     <Compile Include="Core\Device\DeviceDataJSON.cs" />
     <Compile Include="Core\Device\DeviceData.cs" />

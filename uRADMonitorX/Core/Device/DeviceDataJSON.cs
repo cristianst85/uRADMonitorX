@@ -5,7 +5,7 @@ namespace uRADMonitorX.Core.Device {
     public class DeviceDataJSON {
 
         public String Id { get; set; }
-        public DeviceModel Type { get; set; }
+        public DeviceModelType Type { get; set; }
         public String Detector { get; set; }
         public int Cpm { get; set; }
         public int Temperature { get; set; }

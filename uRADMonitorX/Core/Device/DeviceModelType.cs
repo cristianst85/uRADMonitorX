@@ -3,7 +3,7 @@
     /// Source:
     /// <para>https://github.com/radhoo/uradmonitor_kit1/blob/master/code/misc/models.h</para>
     /// </summary>
-    public enum DeviceModel {
+    public enum DeviceModelType {
         Unknown = 0,
         A = 1,
         B = 2,

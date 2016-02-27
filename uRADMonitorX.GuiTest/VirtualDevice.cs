@@ -12,7 +12,7 @@ namespace uRADMonitorX.GuiTest {
         public String DetectorName { get; private set; }
         public int FirmwareVersion { get; private set; }
         public int HardwareVersion { get; private set; }
-        public DeviceModel Model { get; private set; }
+        public DeviceModelType Model { get; private set; }
 
         private IList<DeviceReadings> readings;
 
@@ -24,7 +24,7 @@ namespace uRADMonitorX.GuiTest {
 
         public HttpStatus ServerResponseCode { get; set; }
 
-        public VirtualDevice(String deviceId, RadiationDetector detector, int fwVersion, int hwVersion, DeviceModel model, String ipAddress, String serverIpAddres, ICollection<DeviceReadings> readings) {
+        public VirtualDevice(String deviceId, RadiationDetector detector, int fwVersion, int hwVersion, DeviceModelType model, String ipAddress, String serverIpAddres, ICollection<DeviceReadings> readings) {
             this.DeviceId = deviceId;
             this.DetectorName = detector.Name;
             this.FirmwareVersion = fwVersion;
