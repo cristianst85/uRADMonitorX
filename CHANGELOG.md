@@ -1,3 +1,7 @@
+1.0.2
+
+ Minor improvements.
+
 1.0.0
 
  Added 'Check for updates' feature.
