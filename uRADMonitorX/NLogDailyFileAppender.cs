@@ -15,7 +15,7 @@ namespace uRADMonitorX {
             var target = new FileTarget();
             target.Encoding = System.Text.Encoding.UTF8;
             target.FileName = filePath;
-            target.ArchiveFileName = Path.GetFileNameWithoutExtension(filePath) + "-{#}" + Path.GetExtension(filePath);
+            target.ArchiveFileName = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath) + "-{#}" + Path.GetExtension(filePath));
             target.ArchiveNumbering = ArchiveNumberingMode.Date;
             target.ArchiveEvery = NLog.Targets.FileArchivePeriod.Day;
             target.Layout = @"${message}";
@@ -24,7 +24,7 @@ namespace uRADMonitorX {
             var config = new LoggingConfiguration();
 
             config.AddTarget("fileTarget", target);
-            
+
             var rule = new LoggingRule("fileLogger", LogLevel.Info, target);
             config.LoggingRules.Add(rule);
 
