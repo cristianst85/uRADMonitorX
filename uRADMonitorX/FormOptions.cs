@@ -175,6 +175,7 @@ namespace uRADMonitorX {
             this.comboBoxRadiationNotificationUnit.SelectedIndexChanged += new EventHandler(comboBoxRadiationNotificationUnit_SelectedIndexChanged);
 
             this.textBoxLogDirectoryPath.TextChanged += new EventHandler(textBoxLogDirectoryPathTextChanged);
+            this.textBoxDataLogDirectoryPath.TextChanged += new EventHandler(textBoxDataLogDirectoryPathTextChanged);
             this.buttonConfigureLogDirectoryPath.Click += new System.EventHandler(buttonConfigureLogDirectoryPath_Click);
             this.checkBoxLoggingEnable.CheckedChanged += new EventHandler(checkBoxLoggingEnable_CheckedChanged);
             this.checkBoxDataLoggingEnable.CheckedChanged += new EventHandler(checkBoxDataLoggingEnable_CheckedChanged);
@@ -217,6 +218,11 @@ namespace uRADMonitorX {
             this.settingsChanged(sender, e);
         }
 
+        private void textBoxDataLogDirectoryPathTextChanged(object sender, EventArgs e) {
+            loggingDataDirectoryIsValid();
+            this.settingsChanged(sender, e);
+        }
+
         private bool loggingDirectoryIsValid() {
             String logDirPath = PathUtils.GetFullPath(AssemblyUtils.GetApplicationDirPath(), this.textBoxLogDirectoryPath.Text);
             if (this.checkBoxLoggingEnable.Checked && this.textBoxLogDirectoryPath.Text.Length > 0 && Directory.Exists(logDirPath)) {
@@ -247,11 +253,14 @@ namespace uRADMonitorX {
 
         private bool loggingDataDirectoryIsValid() {
             String logDirPath = PathUtils.GetFullPath(AssemblyUtils.GetApplicationDirPath(), this.textBoxDataLogDirectoryPath.Text);
-            if (this.textBoxDataLogDirectoryPath.Text.Length > 0 && Directory.Exists(logDirPath)) {
-                return false;
+            if (this.textBoxDataLogDirectoryPath.Enabled && this.textBoxDataLogDirectoryPath.Text.Length > 0 && Directory.Exists(logDirPath)) {
+                return true;
+            }
+            else if (!this.textBoxDataLogDirectoryPath.Enabled) {
+                return true;
             }
             else {
-                return true;
+                return false;
             }
         }
 
@@ -300,10 +309,9 @@ namespace uRADMonitorX {
         }
 
         private void checkBoxDataLoggingEnable_CheckedChanged(object sender, EventArgs e) {
-            this.checkBoxDataLoggingToSeparateFile.Enabled = this.checkBoxLoggingEnable.Checked
-                && this.checkBoxDataLoggingEnable.Checked;
+            this.checkBoxDataLoggingToSeparateFile.Enabled = this.checkBoxLoggingEnable.Checked && this.checkBoxDataLoggingEnable.Checked;
             checkBoxDataLoggingToSeparateFile_CheckedChanged(sender, e);
-            // TODO: textBoxDataLogDirectoryPathTextChanged(sender, e);
+            textBoxDataLogDirectoryPathTextChanged(sender, e);
         }
 
         private void checkBoxDataLoggingToSeparateFile_CheckedChanged(object sender, EventArgs e) {
@@ -314,24 +322,32 @@ namespace uRADMonitorX {
         }
 
         private void buttonConfigureLogDirectoryPath_Click(object sender, EventArgs e) {
+            buttonConfigureLogDirectoryPath_Click(sender, e, this.textBoxLogDirectoryPath, "log");
+        }
+
+        private void buttonConfigureDataLogDirectoryPath_Click(object sender, EventArgs e) {
+            buttonConfigureLogDirectoryPath_Click(sender, e, this.textBoxDataLogDirectoryPath, "data log");
+        }
+
+        private void buttonConfigureLogDirectoryPath_Click(object sender, EventArgs e, TextBox textbox, String customText) {
             FolderBrowserDialog folderBrowseDialog = new FolderBrowserDialog();
             try {
-                if (this.textBoxLogDirectoryPath.Text.Length == 0) {
+                if (textbox.Text.Length == 0) {
                     folderBrowseDialog.SelectedPath = Path.GetDirectoryName(AssemblyUtils.GetApplicationPath());
                 }
                 else {
-                    folderBrowseDialog.SelectedPath = this.textBoxLogDirectoryPath.Text;
+                    folderBrowseDialog.SelectedPath = textbox.Text;
                 }
                 folderBrowseDialog.ShowNewFolderButton = true;
-                folderBrowseDialog.Description = "Select a directory where to save the log files.";
+                folderBrowseDialog.Description = String.Format("Select a directory where to save the {0} files.", customText);
                 DialogResult result = folderBrowseDialog.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK) {
                     // If the selected path is in a subdirectory of the application path then keep only the relative path.
                     if (folderBrowseDialog.SelectedPath.StartsWith(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()))) {
-                        this.textBoxLogDirectoryPath.Text = folderBrowseDialog.SelectedPath.Substring(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()).Length);
+                        textbox.Text = folderBrowseDialog.SelectedPath.Substring(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()).Length);
                     }
                     else {
-                        this.textBoxLogDirectoryPath.Text = folderBrowseDialog.SelectedPath;
+                        textbox.Text = folderBrowseDialog.SelectedPath;
                     }
                 }
             }

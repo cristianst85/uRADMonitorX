@@ -373,6 +373,7 @@
             this.buttonConfigureDataLogDirectoryPath.TabIndex = 10;
             this.buttonConfigureDataLogDirectoryPath.Text = "...";
             this.buttonConfigureDataLogDirectoryPath.UseVisualStyleBackColor = true;
+            this.buttonConfigureDataLogDirectoryPath.Click += new System.EventHandler(this.buttonConfigureDataLogDirectoryPath_Click);
             // 
             // textBoxDataLogDirectoryPath
             // 
