@@ -61,7 +61,6 @@
     <Compile Include="Commons\Formatting\TextStyleFormatter.cs" />
     <Compile Include="Commons\Logging\Appenders\MemoryAppender.cs" />
     <Compile Include="Commons\Logging\Appenders\DuplicateFilterAppender.cs" />
-    <Compile Include="Commons\Logging\Appenders\NLogWrapperFileAppender.cs" />
     <Compile Include="Commons\Logging\Formatters\DateTimeFormatter.cs" />
     <Compile Include="Commons\PathUtils.cs" />
     <Compile Include="HashCheck\ChecksumEntry.cs" />
@@ -70,7 +69,7 @@
     <Compile Include="HashCheck\MD5Checksum.cs" />
     <Compile Include="HashCheck\ReadOnlyMD5File.cs" />
     <None Include="packages.config" />
-    <Compile Include="NLogDailyFileAppender.cs" />
+    <Compile Include="Commons\Logging\Appenders\NLogDailyFileAppender.cs" />
     <Compile Include="Updater\GitHubApplicationUpdater.cs" />
     <Compile Include="Updater\GitHubApi\Release.cs" />
     <Compile Include="FormUpdate.cs">
