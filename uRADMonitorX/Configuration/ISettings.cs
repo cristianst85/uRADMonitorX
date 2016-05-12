@@ -20,6 +20,9 @@ namespace uRADMonitorX.Configuration {
         // Logging
         Boolean IsLoggingEnabled { get; set; }
         String LogDirectoryPath { get; set; }
+        Boolean IsDataLoggingEnabled { get; set; }
+        Boolean DataLoggingToSeparateFile { get; set; }
+        String DataLogDirectoryPath { get; set; }
 
         // Device
         String DetectorName { get; set; }

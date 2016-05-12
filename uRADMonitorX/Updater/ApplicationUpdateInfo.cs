@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace uRADMonitorX.Updater {
 
-    public class ApplicationUpdateInfo {
+    public class ApplicationUpdateInfo : IApplicationUpdateInfo {
 
         public String Version { get; set; }
         public String DownloadUrl { get; set; }

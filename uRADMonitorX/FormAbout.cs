@@ -24,6 +24,7 @@ namespace uRADMonitorX {
 
             this.richTextBoxCopyright.Text = this.richTextBoxCopyright.Text.Replace("{fluentSchedulerLibVersion}", AssemblyUtils.GetVersion("FluentScheduler").ToString());
             this.richTextBoxCopyright.Text = this.richTextBoxCopyright.Text.Replace("{newtonsoftJsonLibVersion}", AssemblyUtils.GetVersion("Newtonsoft.Json").ToString());
+            this.richTextBoxCopyright.Text = this.richTextBoxCopyright.Text.Replace("{nlogLibVersion}", AssemblyUtils.GetVersion("NLog").ToString());
 
             this.KeyDown += new KeyEventHandler(formAbout_KeyPress);
             this.richTextBoxCopyright.LinkClicked += new LinkClickedEventHandler(richTextBoxCopyright_LinkClicked);

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using FluentScheduler;
+using Newtonsoft.Json;
 using uRADMonitorX.Commons;
 using uRADMonitorX.Commons.Controls;
 using uRADMonitorX.Commons.Formatting;
@@ -18,7 +19,6 @@ using uRADMonitorX.Core.Device;
 using uRADMonitorX.Core.Fetchers;
 using uRADMonitorX.Updater;
 using uRADMonitorX.Windows;
-using FluentScheduler.Model;
 
 namespace uRADMonitorX {
 
@@ -57,6 +57,7 @@ namespace uRADMonitorX {
         private volatile bool allowVisible;
 
         private DateTime? notifyIconBalloonLastShownAt = null;
+        private DateTime? lastDataReadingTimestamp = null;
 
         public FormMain(IDeviceDataReaderFactory deviceDataReaderFactory, ISettings settings, ILogger logger) {
             try {
@@ -81,7 +82,6 @@ namespace uRADMonitorX {
                     this.Text += " (Mono)";
                 }
 #endif
-
                 // Pre-init.
                 // From settings.
                 if (String.IsNullOrEmpty(this.settings.DeviceIPAddress)) {
@@ -141,7 +141,7 @@ namespace uRADMonitorX {
                         () => {
                             try {
                                 GitHubApplicationUpdater applicationUpdater = new GitHubApplicationUpdater(Program.UpdaterUrl);
-                                ApplicationUpdateInfo applicationUpdateInfo = applicationUpdater.Check();
+                                var applicationUpdateInfo = applicationUpdater.Check();
                                 if (applicationUpdateInfo.IsNewVersionAvailable(AssemblyUtils.GetVersion())) {
                                     this.notifyIcon.ShowBalloonTip(10000, "uRADMonitorX Update Available", String.Format("A new version of uRADMonitorX ({0}) is available.", applicationUpdateInfo.Version), ToolTipIcon.Info);
                                 }
@@ -287,7 +287,28 @@ namespace uRADMonitorX {
             if (!this.settings.IsPollingEnabled) {
                 return;
             }
+
+            DateTime now = DateTime.UtcNow;
+            DateTime dataReadingsTimeStamp = now.AddSeconds(-(deviceData.WDT % 60));
+
             this.updateDeviceInformation(deviceData.DeviceInformation);
+
+            try {
+                if (this.settings.IsLoggingEnabled && this.settings.IsDataLoggingEnabled) {
+                    if (!this.lastDataReadingTimestamp.HasValue || (this.lastDataReadingTimestamp.HasValue && now.Subtract(this.lastDataReadingTimestamp.Value).TotalSeconds >= 60)) {
+                        this.lastDataReadingTimestamp = dataReadingsTimeStamp;
+                        if (this.settings.DataLoggingToSeparateFile) {
+                            LoggerManager.GetInstance().GetLogger(Program.DataLoggerName).Write(JsonConvert.SerializeObject(deviceData));
+                        }
+                        else {
+                            LoggerManager.GetInstance().GetLogger(Program.LoggerName).Write(JsonConvert.SerializeObject(deviceData));
+                        }
+                    }
+                }
+            }
+            catch (Exception loggingException) {
+                Debug.WriteLine(loggingException.ToString());
+            }
 
             // Use normalized name only for conversions.
             String radiationDetectorName = RadiationDetector.Normalize(deviceData.DeviceInformation.Detector);
@@ -454,9 +475,6 @@ namespace uRADMonitorX {
                 }
                 if (showBalloon) {
                     balloonTitle += " Alert";
-
-                    DateTime now = DateTime.UtcNow;
-                    DateTime dataReadingsTimeStamp = now.AddSeconds(-(deviceData.WDT % 60));
 
                     // Add the date and time when the event occurs to notification message. This is useful because
                     // Windows queues notifications when user is away from computer (e.g.: screen is locked).

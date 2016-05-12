@@ -2,13 +2,13 @@
 
 namespace uRADMonitorX.Commons.Logging.Formatters {
 
-    public class SimpleFormatter : ILoggerFormatter {
+    public class DateTimeFormatter : ILoggerFormatter {
 
         public const string DefaultDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
         private String dateTimeFormat = null;
 
-        public SimpleFormatter() {
+        public DateTimeFormatter() {
             this.dateTimeFormat = DefaultDateTimeFormat;
         }
 

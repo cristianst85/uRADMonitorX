@@ -4,7 +4,7 @@ namespace uRADMonitorX.Updater {
 
     public interface IHttpApplicationUpdater {
 
-        ApplicationUpdateInfo Check();
+        IApplicationUpdateInfo Check();
 
         void Download(String downloadUrl, String filePath);
 

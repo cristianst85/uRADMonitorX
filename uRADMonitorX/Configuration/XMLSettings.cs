@@ -27,6 +27,9 @@ namespace uRADMonitorX.Configuration {
         // Logging
         public Boolean IsLoggingEnabled { get; set; }
         public String LogDirectoryPath { get; set; }
+        public Boolean IsDataLoggingEnabled { get; set; }
+        public Boolean DataLoggingToSeparateFile { get; set; }
+        public String DataLogDirectoryPath { get; set; }
 
         // Device
         public String DetectorName { get; set; }
@@ -94,6 +97,26 @@ namespace uRADMonitorX.Configuration {
             xmlSettings.IsLoggingEnabled = bool.Parse(xmlNode["logging"].SelectSingleNode("enabled").InnerText);
             xmlSettings.LogDirectoryPath = xmlNode["logging"].SelectSingleNode("path").InnerText;
 
+            // Introduced with version 1.1.0.
+            if (xmlNode["logging"].SelectSingleNode("is_data_logging_enabled") != null) {
+                xmlSettings.IsDataLoggingEnabled = bool.Parse(xmlNode["logging"].SelectSingleNode("is_data_logging_enabled").InnerText);
+            }
+            else {
+                xmlSettings.IsDataLoggingEnabled = DefaultSettings.IsDataLoggingEnabled;
+            }
+            if (xmlNode["logging"].SelectSingleNode("data_logging_to_separate_file") != null) {
+                xmlSettings.DataLoggingToSeparateFile = bool.Parse(xmlNode["logging"].SelectSingleNode("data_logging_to_separate_file").InnerText);
+            }
+            else {
+                xmlSettings.DataLoggingToSeparateFile = DefaultSettings.DataLoggingToSeparateFile;
+            }
+            if (xmlNode["logging"].SelectSingleNode("data_log_path") != null) {
+                xmlSettings.DataLogDirectoryPath = xmlNode["logging"].SelectSingleNode("data_log_path").InnerText;
+            }
+            else {
+                xmlSettings.DataLogDirectoryPath = DefaultSettings.DataLogDirectoryPath;
+            }
+
             // Introduced with version 0.39.0.
             if (xmlNode["device"].SelectSingleNode("detector_name") != null) {
                 xmlSettings.DetectorName = xmlNode["device"].SelectSingleNode("detector_name").InnerText;
@@ -148,6 +171,9 @@ namespace uRADMonitorX.Configuration {
                 xmlWriter.WriteStartElement("logging");
                 writeFullElement(xmlWriter, "enabled", DefaultSettings.IsLoggingEnabled);
                 writeFullElement(xmlWriter, "path", DefaultSettings.LogDirectoryPath);
+                writeFullElement(xmlWriter, "is_data_logging_enabled", DefaultSettings.IsDataLoggingEnabled);
+                writeFullElement(xmlWriter, "data_logging_to_separate_file", DefaultSettings.DataLoggingToSeparateFile);
+                writeFullElement(xmlWriter, "data_log_path", DefaultSettings.DataLogDirectoryPath);
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("device");
                 writeFullElement(xmlWriter, "detector_name", DefaultSettings.DetectorName);
@@ -190,7 +216,7 @@ namespace uRADMonitorX.Configuration {
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(filePath);
             XmlNode xmlNode = xmlDocument.SelectSingleNode("/settings");
-            
+
             // Introduced with version 1.0.0. 
             if (xmlNode["general"].SelectSingleNode("automatically_check_for_updates") == null) {
                 xmlNode["general"].InsertAfter(xmlDocument.CreateNode(XmlNodeType.Element, "automatically_check_for_updates", null), xmlNode["general"].SelectSingleNode("start_with_windows"));
@@ -198,7 +224,7 @@ namespace uRADMonitorX.Configuration {
 
             xmlNode["general"].SelectSingleNode("start_with_windows").InnerText = this.StartWithWindows.ToString().ToLower();
             xmlNode["general"].SelectSingleNode("automatically_check_for_updates").InnerText = this.AutomaticallyCheckForUpdates.ToString().ToLower();
-            
+
             xmlNode["display"].SelectSingleNode("start_minimized").InnerText = this.StartMinimized.ToString().ToLower();
             xmlNode["display"].SelectSingleNode("show_in_taskbar").InnerText = this.ShowInTaskbar.ToString().ToLower();
             xmlNode["display"].SelectSingleNode("close_to_system_tray").InnerText = this.CloseToSystemTray.ToString().ToLower();
@@ -207,6 +233,14 @@ namespace uRADMonitorX.Configuration {
 
             xmlNode["logging"].SelectSingleNode("enabled").InnerText = this.IsLoggingEnabled.ToString().ToLower();
             xmlNode["logging"].SelectSingleNode("path").InnerText = this.LogDirectoryPath ?? String.Empty;
+
+            // Introduced with version 1.1.0.
+            createNodeIfNotExists(xmlDocument, xmlNode, "logging", "is_data_logging_enabled", "path",
+                this.IsDataLoggingEnabled.ToString().ToLower());
+            createNodeIfNotExists(xmlDocument, xmlNode, "logging", "data_logging_to_separate_file", "is_data_logging_enabled",
+                this.DataLoggingToSeparateFile.ToString().ToLower());
+            createNodeIfNotExists(xmlDocument, xmlNode, "logging", "data_log_path", "data_logging_to_separate_file",
+                this.DataLogDirectoryPath ?? String.Empty);
 
             // Introduced with version 0.39.0. 
             if (xmlNode["device"].SelectSingleNode("detector_name") == null) {
@@ -243,6 +277,15 @@ namespace uRADMonitorX.Configuration {
             using (XmlWriter xmlWriter = XmlWriter.Create(filePath, XmlWriterSettings)) {
                 xmlDocument.Save(xmlWriter);
             }
+        }
+
+        private void createNodeIfNotExists(XmlDocument document, XmlNode rootNode, String parentNode, String node, String refNode, String value) {
+            if (rootNode[parentNode].SelectSingleNode(node) == null) {
+                rootNode[parentNode].InsertAfter(
+                    document.CreateNode(XmlNodeType.Element, node, null),
+                    rootNode[parentNode].SelectSingleNode(refNode));
+            }
+            rootNode[parentNode].SelectSingleNode(node).InnerText = value;
         }
     }
 }

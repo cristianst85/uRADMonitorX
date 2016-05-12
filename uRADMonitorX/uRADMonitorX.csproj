@@ -43,6 +43,11 @@
       <Private>False</Private>
       <EmbedAssembly>true</EmbedAssembly>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.3.1\lib\net40\NLog.dll</HintPath>
+      <Private>False</Private>
+      <EmbedAssembly>true</EmbedAssembly>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -54,12 +59,18 @@
     <Compile Include="Commons\CharUtils.cs" />
     <Compile Include="Commons\ChecksumUtils.cs" />
     <Compile Include="Commons\Formatting\TextStyleFormatter.cs" />
+    <Compile Include="Commons\Logging\Appenders\MemoryAppender.cs" />
+    <Compile Include="Commons\Logging\Appenders\DuplicateFilterAppender.cs" />
+    <Compile Include="Commons\Logging\Formatters\DateTimeFormatter.cs" />
+    <Compile Include="Commons\PathUtils.cs" />
     <Compile Include="HashCheck\ChecksumEntry.cs" />
     <Compile Include="HashCheck\IChecksum.cs" />
     <Compile Include="HashCheck\IReadOnlyChecksumFile.cs" />
     <Compile Include="HashCheck\MD5Checksum.cs" />
     <Compile Include="HashCheck\ReadOnlyMD5File.cs" />
     <None Include="packages.config" />
+    <Compile Include="Commons\Logging\Appenders\NLogDailyFileAppender.cs" />
+    <Compile Include="Updater\GitHubApplicationUpdateInfo.cs" />
     <Compile Include="Updater\GitHubApplicationUpdater.cs" />
     <Compile Include="Updater\GitHubApi\Release.cs" />
     <Compile Include="FormUpdate.cs">
@@ -70,6 +81,7 @@
     </Compile>
     <Compile Include="Updater\ApplicationUpdateInfo.cs" />
     <Compile Include="Updater\GitHubApi\ReleaseAsset.cs" />
+    <Compile Include="Updater\IApplicationUpdateInfo.cs" />
     <Compile Include="Updater\UnsecureHttpApplicationUpdater.cs" />
     <Compile Include="Updater\HttpApplicationUpdater.cs" />
     <Compile Include="ArgumentDescription.cs" />
@@ -77,11 +89,8 @@
     <Compile Include="Commons\Controls\NotifyIconUtils.cs" />
     <Compile Include="Commons\EnumHelper.cs" />
     <Compile Include="Commons\Logging\Appenders\NullAppender.cs" />
-    <Compile Include="Commons\Logging\Appenders\ICanReconfigureAppender.cs" />
-    <Compile Include="Commons\Logging\Appenders\RollingFileAppender.cs" />
-    <Compile Include="Commons\Logging\Appenders\DailyRollingFileAppender.cs" />
-    <Compile Include="Commons\Logging\Appenders\FileAppender.cs" />
-    <Compile Include="Commons\Logging\Formatters\SimpleFormatter.cs" />
+    <Compile Include="Commons\Logging\Appenders\IReconfigurableFileAppender.cs" />
+    <Compile Include="Commons\Logging\Appenders\ReconfigurableFileAppender.cs" />
     <Compile Include="Commons\Logging\ThreadSafeLogger.cs" />
     <Compile Include="Commons\Logging\FileLoggerFactory.cs" />
     <Compile Include="Commons\Logging\Formatters\PassthroughFormatter.cs" />

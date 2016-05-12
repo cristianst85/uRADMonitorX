@@ -132,6 +132,10 @@ https://github.com/fluentscheduler/FluentScheduler
 
 Newtonsoft.Json library v{newtonsoftJsonLibVersion} 
 Copyright (c) 2007 James Newton-King
-https://github.com/JamesNK/Newtonsoft.Json</value>
+https://github.com/JamesNK/Newtonsoft.Json
+
+NLog library v{nlogLibVersion}
+Copyright (c) 2004-2016 Jaroslaw Kowalski &lt;jaak@jkowalski.net&gt;, Kim Christensen, Julian Verdurmen. All rights reserved.
+http://nlog-project.org/</value>
   </data>
 </root>
