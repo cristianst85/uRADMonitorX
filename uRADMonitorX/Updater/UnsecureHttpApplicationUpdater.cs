@@ -9,7 +9,7 @@ namespace uRADMonitorX.Updater {
             : base(updateUrl) {
         }
 
-        public override ApplicationUpdateInfo Check() {
+        public override IApplicationUpdateInfo Check() {
             ServicePointManager.ServerCertificateValidationCallback += AcceptAllCertificates;
             return base.Check();
         }

@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using uRADMonitorX.Updater;
-using System;
 
 namespace uRADMonitorX.IntegrationTests.Updater {
 

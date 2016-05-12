@@ -16,7 +16,7 @@ namespace uRADMonitorX {
         private ILogger logger = null;
 
         private IHttpApplicationUpdater httpApplicationUpdater = null;
-        private ApplicationUpdateInfo applicationUpdateInfo = null;
+        private IApplicationUpdateInfo applicationUpdateInfo = null;
         private String tempPath = null;
 
         public FormUpdate(ILogger logger) {

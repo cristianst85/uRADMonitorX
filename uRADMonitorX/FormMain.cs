@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using FluentScheduler;
+using Newtonsoft.Json;
 using uRADMonitorX.Commons;
 using uRADMonitorX.Commons.Controls;
 using uRADMonitorX.Commons.Formatting;
@@ -18,8 +19,6 @@ using uRADMonitorX.Core.Device;
 using uRADMonitorX.Core.Fetchers;
 using uRADMonitorX.Updater;
 using uRADMonitorX.Windows;
-using FluentScheduler.Model;
-using Newtonsoft.Json;
 
 namespace uRADMonitorX {
 
@@ -83,7 +82,6 @@ namespace uRADMonitorX {
                     this.Text += " (Mono)";
                 }
 #endif
-
                 // Pre-init.
                 // From settings.
                 if (String.IsNullOrEmpty(this.settings.DeviceIPAddress)) {
@@ -143,7 +141,7 @@ namespace uRADMonitorX {
                         () => {
                             try {
                                 GitHubApplicationUpdater applicationUpdater = new GitHubApplicationUpdater(Program.UpdaterUrl);
-                                ApplicationUpdateInfo applicationUpdateInfo = applicationUpdater.Check();
+                                var applicationUpdateInfo = applicationUpdater.Check();
                                 if (applicationUpdateInfo.IsNewVersionAvailable(AssemblyUtils.GetVersion())) {
                                     this.notifyIcon.ShowBalloonTip(10000, "uRADMonitorX Update Available", String.Format("A new version of uRADMonitorX ({0}) is available.", applicationUpdateInfo.Version), ToolTipIcon.Info);
                                 }

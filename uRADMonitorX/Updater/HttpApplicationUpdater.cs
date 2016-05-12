@@ -21,7 +21,7 @@ namespace uRADMonitorX.Updater {
             this.Url = updateUrl;
         }
 
-        public virtual ApplicationUpdateInfo Check() {
+        public virtual IApplicationUpdateInfo Check() {
             String fileContent = this.retrieveContentFromUrl(this.Url);
             return ApplicationUpdateInfo.LoadFromXml(fileContent);
         }

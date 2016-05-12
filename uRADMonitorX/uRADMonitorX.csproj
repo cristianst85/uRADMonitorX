@@ -70,6 +70,7 @@
     <Compile Include="HashCheck\ReadOnlyMD5File.cs" />
     <None Include="packages.config" />
     <Compile Include="Commons\Logging\Appenders\NLogDailyFileAppender.cs" />
+    <Compile Include="Updater\GitHubApplicationUpdateInfo.cs" />
     <Compile Include="Updater\GitHubApplicationUpdater.cs" />
     <Compile Include="Updater\GitHubApi\Release.cs" />
     <Compile Include="FormUpdate.cs">
@@ -80,6 +81,7 @@
     </Compile>
     <Compile Include="Updater\ApplicationUpdateInfo.cs" />
     <Compile Include="Updater\GitHubApi\ReleaseAsset.cs" />
+    <Compile Include="Updater\IApplicationUpdateInfo.cs" />
     <Compile Include="Updater\UnsecureHttpApplicationUpdater.cs" />
     <Compile Include="Updater\HttpApplicationUpdater.cs" />
     <Compile Include="ArgumentDescription.cs" />
