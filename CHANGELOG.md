@@ -1,3 +1,8 @@
+1.1.0
+
+ Added data logging.
+ Minor improvements.
+
 1.0.2
 
  Minor improvements.
