@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Cristian Stoica")]
 [assembly: AssemblyProduct("uRADMonitorX")]
-[assembly: AssemblyCopyright("Copyright © 2015 Cristian Stoica")]
+[assembly: AssemblyCopyright("Copyright © 2015-2016 Cristian Stoica")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
