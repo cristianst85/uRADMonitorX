@@ -243,7 +243,6 @@
     <None Include="Resources\Systray\RadiationWithError.ico" />
     <None Include="Resources\Menus\exclamation.png" />
     <None Include="Resources\Systray\RadiationIcon.ico" />
-    <Content Include="_todo.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
