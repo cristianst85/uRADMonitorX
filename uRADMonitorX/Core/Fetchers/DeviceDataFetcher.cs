@@ -13,7 +13,7 @@ namespace uRADMonitorX.Core.Fetchers {
             get {
                 return this._isRunning;
             }
-            set {
+            private set {
                 this._isRunning = value;
             }
         }
