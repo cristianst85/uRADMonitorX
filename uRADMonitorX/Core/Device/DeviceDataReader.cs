@@ -31,6 +31,10 @@ namespace uRADMonitorX.Core.Device {
                     else if (token.StartsWith("radiation", StringComparison.OrdinalIgnoreCase)) {
                         String radiation = token.Split(':')[1];
                         deviceData.Radiation = int.Parse(radiation.Substring(0, radiation.IndexOf("CPM", StringComparison.OrdinalIgnoreCase)));
+                        if (tokens[i + 1].Contains("(")) {
+                            String radiationAvg = tokens[++i];
+                            deviceData.RadiationAverage = double.Parse(radiationAvg.Substring(1, radiationAvg.IndexOf("CPM", StringComparison.OrdinalIgnoreCase) - 1), NumberStyles.AllowDecimalPoint, numberFormatInfo);
+                        }
                     }
                     else if (token.StartsWith("average", StringComparison.OrdinalIgnoreCase)) {
                         String radiationAvg = token.Split(':')[1];
@@ -40,14 +44,19 @@ namespace uRADMonitorX.Core.Device {
                         String temperature = token.Split(':')[1];
                         deviceData.Temperature = double.Parse(temperature.Substring(0, temperature.IndexOf("C", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, numberFormatInfo);
                     }
-                    else if (token.StartsWith("P", StringComparison.OrdinalIgnoreCase)) {
+                    else if (token.StartsWith("P", StringComparison.OrdinalIgnoreCase) && token.EndsWith("Pa", StringComparison.OrdinalIgnoreCase)) {
                         String pressure = token.Split(':')[1];
-                        deviceData.Pressure = int.Parse(pressure.Substring(0, pressure.IndexOf("Pa", StringComparison.OrdinalIgnoreCase)));
+                        deviceData.Pressure = double.Parse(pressure.Substring(0, pressure.IndexOf("Pa", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint, numberFormatInfo);
                     }
-                    else if (token.StartsWith("voltage", StringComparison.OrdinalIgnoreCase)) {
+                    else if (token.StartsWith("vol", StringComparison.OrdinalIgnoreCase)) {
                         String voltage = token.Split(':')[1];
                         deviceData.Voltage = int.Parse(voltage.Substring(0, voltage.IndexOf("V", StringComparison.OrdinalIgnoreCase)));
-                        deviceData.VoltagePercent = int.Parse(tokens[i + 1].TrimStart('(').TrimEnd(')').TrimEnd('%'));
+                        if (tokens[i + 1].Contains("/")) {
+                            deviceData.VoltagePercent = int.Parse(tokens[i + 1].TrimStart('(').TrimEnd(')').Split('/')[0].TrimEnd('%'));
+                        }
+                        else {
+                            deviceData.VoltagePercent = int.Parse(tokens[i + 1].TrimStart('(').TrimEnd(')').TrimEnd('%'));
+                        }
                         i++;
                     }
                     else if (token.StartsWith("uptime", StringComparison.OrdinalIgnoreCase)) {
@@ -63,6 +72,10 @@ namespace uRADMonitorX.Core.Device {
                     }
                     else if (token.StartsWith("server", StringComparison.OrdinalIgnoreCase)) {
                         deviceData.ServerIPAddress = token.Split(':')[1];
+                    }
+                    else if (token.StartsWith("eth", StringComparison.OrdinalIgnoreCase)) {
+                        deviceData.IPAddress = token.Split(':')[1];
+                        deviceData.ServerIPAddress = tokens[++i].TrimStart('(').TrimEnd(')');
                     }
                     else if (token.StartsWith("http", StringComparison.OrdinalIgnoreCase)) {
                         deviceData.ServerResponseCode = token.Split(':')[1];
