@@ -1,3 +1,8 @@
+1.1.1
+
+ Added partial support for A3 model.
+ Fixed minor bug.
+
 1.1.0
 
  Added data logging.
