@@ -254,6 +254,11 @@ namespace uRADMonitorX {
         private delegate void updateDeviceStatusOnErrorCallback(Exception ex);
 
         private void updateDeviceStatusOnError(Exception ex) {
+            // Do not update UI if user disables polling before first update.
+            if (!this.settings.IsPollingEnabled) {
+                return;
+            }
+
             this.logger.Write(String.Format("Device data fetch error. Exception: {0}", ex.ToString()));
             this.toolStripStatusLabelDeviceStatus.Text = "Device data fetch error.";
             this.statusStrip.Update();
