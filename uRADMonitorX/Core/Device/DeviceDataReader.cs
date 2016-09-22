@@ -55,7 +55,12 @@ namespace uRADMonitorX.Core.Device {
                             deviceData.VoltagePercent = int.Parse(tokens[i + 1].TrimStart('(').TrimEnd(')').Split('/')[0].TrimEnd('%'));
                         }
                         else {
-                            deviceData.VoltagePercent = int.Parse(tokens[i + 1].TrimStart('(').TrimEnd(')').TrimEnd('%'));
+                            if (tokens[i + 1].StartsWith("duty")) {
+                                deviceData.VoltagePercent = int.Parse(tokens[i + 1].Split(':')[1].TrimEnd('%'));
+                            }
+                            else {
+                                deviceData.VoltagePercent = int.Parse(tokens[i + 1].TrimStart('(').TrimEnd(')').TrimEnd('%'));
+                            }
                         }
                         i++;
                     }
