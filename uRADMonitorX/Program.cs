@@ -92,6 +92,9 @@ namespace uRADMonitorX {
                     }
                 }
                 settings = XMLSettings.LoadFromFile(settingsFilePath);
+                // Fixes an issue with data log directory name on Linux due to trailing slash.
+                settings.DataLogDirectoryPath = settings.DataLogDirectoryPath.TrimEnd('\\');
+                settings.Commit();
             }
             catch (Exception loadSettingsFileException) {
                 MessageBox.Show(String.Format("Cannot load settings from file {0}.\n\nError details: {1}", settingsFilePath, loadSettingsFileException.Message), "uRADMonitorX", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -157,7 +160,7 @@ namespace uRADMonitorX {
         }
 
         private static String getLoggerPath(String loggerDirectoryPath, String loggerFileName, bool createIfNotExists) {
-            loggerDirectoryPath = loggerDirectoryPath.TrimStart('\\');
+            loggerDirectoryPath = loggerDirectoryPath.TrimStart('\\').TrimEnd('\\');
             String loggerFilePath = null;
             if (Path.IsPathRooted(loggerDirectoryPath)) {
                 loggerFilePath = Path.Combine(loggerDirectoryPath, loggerFileName);

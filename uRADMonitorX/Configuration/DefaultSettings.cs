@@ -106,11 +106,11 @@ namespace uRADMonitorX.Configuration {
         }
 
         /// <summary>
-        /// Value: <c>\logs\</c>.
+        /// Value: <c>\logs</c>.
         /// </summary>
         public static String DataLogDirectoryPath {
             get {
-                return @"\logs\";
+                return @"\logs";
             }
         }
 
