@@ -1,3 +1,9 @@
+1.1.2
+
+ Added a fix for A3 model with firmware version 119.
+ Fixed minor bug under Linux.
+ Minor UI changes.
+
 1.1.1
 
  Added partial support for A3 model.
