@@ -41,7 +41,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(255, 15);
             this.label2.TabIndex = 0;
-            this.label2.Text = "Version {version}.{build}.{revision}";
+            this.label2.Text = "Version {version}";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label1

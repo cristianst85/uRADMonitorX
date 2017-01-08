@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using uRADMonitorX.Commons;
 
@@ -12,15 +13,10 @@ namespace uRADMonitorX {
 
             Version version = AssemblyUtils.GetVersion();
 
-            this.label2.Text = this.label2.Text
-                            .Replace("{version}", String.Format("{0}.{1}", version.Major, version.Minor))
-                            .Replace("{build}", version.Build.ToString());
-#if DEBUG
-            this.label2.Text = this.label2.Text
-                            .Replace("{revision}", version.Revision.ToString());
-#endif
-            this.label2.Text = this.label2.Text
-                            .Replace("{revision}", String.Empty).TrimEnd('.');
+            bool isDebug = false;
+            Debug.Assert(isDebug = true);
+            var strVersion = isDebug ? version.ToString() : version.ToString(3);
+            this.label2.Text = this.label2.Text.Replace("{version}", strVersion);
 
             this.richTextBoxCopyright.Text = this.richTextBoxCopyright.Text.Replace("{fluentSchedulerLibVersion}", AssemblyUtils.GetVersion("FluentScheduler").ToString());
             this.richTextBoxCopyright.Text = this.richTextBoxCopyright.Text.Replace("{newtonsoftJsonLibVersion}", AssemblyUtils.GetVersion("Newtonsoft.Json").ToString());

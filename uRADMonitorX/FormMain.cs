@@ -76,12 +76,15 @@ namespace uRADMonitorX {
                 this.toolStripStatusLabelDeviceUptime.Text = "n/a";
 
                 Version version = AssemblyUtils.GetVersion();
-                this.Text = this.Text.Replace("{version}", String.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build));
-#if DEBUG
-                if (EnvironmentUtils.IsMonoRuntime()) {
+                this.Text = this.Text.Replace("{version}", version.ToString(3));
+
+                bool isDebug = false;
+                Debug.Assert(isDebug = true);
+
+                if (isDebug && EnvironmentUtils.IsMonoRuntime()) {
                     this.Text += " (Mono)";
                 }
-#endif
+
                 // Pre-init.
                 // From settings.
                 if (String.IsNullOrEmpty(this.settings.DeviceIPAddress)) {
