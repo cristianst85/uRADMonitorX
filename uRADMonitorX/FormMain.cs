@@ -267,7 +267,11 @@ namespace uRADMonitorX {
             this.statusStrip.Update();
             // Update icon and ToolTip text for notification area icon.
             this.notifyIcon.Icon = (System.Drawing.Icon)global::uRADMonitorX.Properties.Resources.RadiationWithError;
-            this.updateNotifyIconText("Device data fetch error.");
+            var notifyText = "Device data fetch error.";
+            if (this.lastDataReadingTimestamp.HasValue) {
+                notifyText += String.Format("\nLast successful data fetch was at {0}", this.lastDataReadingTimestamp.Value.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.CurrentCulture));
+            }
+            this.updateNotifyIconText(notifyText);
         }
 
         private void updateNotifyIconText() {
