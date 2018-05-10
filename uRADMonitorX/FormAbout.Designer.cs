@@ -82,7 +82,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(252, 15);
             this.label3.TabIndex = 0;
-            this.label3.Text = "Copyright (c) 2015-2016, Cristian Stoica.\r\n";
+            this.label3.Text = "Copyright (c) 2015-2017, Cristian Stoica.\r\n";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // linkLabel3
