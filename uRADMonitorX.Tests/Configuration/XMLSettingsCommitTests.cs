@@ -14,6 +14,11 @@ namespace uRADMonitorX.Tests.Configuration {
 
         [SetUp]
         public void SetUp() {
+            var directory = Path.GetDirectoryName(outputfilePath);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
             Assert.IsFalse(File.Exists(outputfilePath));
         }
 
