@@ -1,4 +1,3 @@
-
 Workspace/*
 uRADMonitorX/bin/
 uRADMonitorX/obj/
@@ -11,4 +10,3 @@ uRADMonitorX.IntegrationTests/obj/
 uRADMonitorX.suo
 packages/
 /.vs/
-*.user
