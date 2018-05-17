@@ -684,6 +684,7 @@ namespace uRADMonitorX {
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
             using (FormAbout form = new FormAbout()) {
+                form.Text = form.Text.Replace("{title}", Application.ProductName);
                 form.Update();
                 DialogResult result = form.ShowDialog(this);
             }
