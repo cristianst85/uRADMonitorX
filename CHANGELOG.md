@@ -1,3 +1,8 @@
+1.2.0
+
+ Fixed an issue with 'Check for updates' due to GitHub API no longer supporting requests made with TLSv1 / TLSv1.1.
+ Show timestamp of the last successful data fetch in the tooltip text of the system tray icon when an error occurs.
+
 1.1.2
 
  Added a fix for A3 model with firmware version 119.
