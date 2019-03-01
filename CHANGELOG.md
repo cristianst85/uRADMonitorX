@@ -1,3 +1,7 @@
+1.3.0
+
+ Fixed compatibility issue with firmware version 138 for model A.
+
 1.2.0
 
  Fixed an issue with 'Check for updates' due to GitHub API no longer supporting requests made with TLSv1 / TLSv1.1.
