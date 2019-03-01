@@ -28,7 +28,7 @@ namespace uRADMonitorX.Core.Device {
                         deviceData.DeviceInformation.Detector = tokens[i + 1];
                         i++;
                     }
-                    else if (token.StartsWith("radiation", StringComparison.OrdinalIgnoreCase)) {
+                    else if (token.StartsWith("radiation", StringComparison.OrdinalIgnoreCase) || token.StartsWith("rad:", StringComparison.OrdinalIgnoreCase)) {
                         String radiation = token.Split(':')[1];
                         deviceData.Radiation = int.Parse(radiation.Substring(0, radiation.IndexOf("CPM", StringComparison.OrdinalIgnoreCase)));
                         if (tokens[i + 1].Contains("(")) {
@@ -40,7 +40,7 @@ namespace uRADMonitorX.Core.Device {
                         String radiationAvg = token.Split(':')[1];
                         deviceData.RadiationAverage = double.Parse(radiationAvg.Substring(0, radiationAvg.IndexOf("CPM", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint, numberFormatInfo);
                     }
-                    else if (token.StartsWith("temp", StringComparison.OrdinalIgnoreCase)) {
+                    else if (token.StartsWith("temp", StringComparison.OrdinalIgnoreCase) || token.StartsWith("t:", StringComparison.OrdinalIgnoreCase)) {
                         String temperature = token.Split(':')[1];
                         deviceData.Temperature = double.Parse(temperature.Substring(0, temperature.IndexOf("C", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, numberFormatInfo);
                     }
@@ -64,7 +64,7 @@ namespace uRADMonitorX.Core.Device {
                         }
                         i++;
                     }
-                    else if (token.StartsWith("uptime", StringComparison.OrdinalIgnoreCase)) {
+                    else if (token.StartsWith("uptime", StringComparison.OrdinalIgnoreCase) || token.StartsWith("UP:", StringComparison.OrdinalIgnoreCase)) {
                         String uptime = token.Split(':')[1];
                         deviceData.Uptime = int.Parse(uptime.Substring(0, uptime.IndexOf("s", StringComparison.OrdinalIgnoreCase)));
                     }
