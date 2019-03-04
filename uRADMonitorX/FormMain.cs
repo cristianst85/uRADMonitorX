@@ -376,8 +376,14 @@ namespace uRADMonitorX {
                 if (this.settings.PressureUnitType == Core.PressureUnitType.Pa) {
                     this.viewOnlyTextBoxPressure.Text = String.Format("{0} Pa", deviceData.Pressure.Value);
                 }
+                else if (this.settings.PressureUnitType == Core.PressureUnitType.hPa) {
+                    this.viewOnlyTextBoxPressure.Text = String.Format("{0} hPa", Pressure.PascalsToHectoPascals(deviceData.Pressure.Value));
+                }
                 else if (this.settings.PressureUnitType == Core.PressureUnitType.kPa) {
-                    this.viewOnlyTextBoxPressure.Text = String.Format("{0} kPa", Pressure.PascalToKiloPascal(deviceData.Pressure.Value));
+                    this.viewOnlyTextBoxPressure.Text = String.Format("{0} kPa", Pressure.PascalsToKiloPascals(deviceData.Pressure.Value));
+                }
+                else if (this.settings.PressureUnitType == Core.PressureUnitType.mbar) {
+                    this.viewOnlyTextBoxPressure.Text = String.Format("{0} mbar", Pressure.PascalsToMilliBars(deviceData.Pressure.Value));
                 }
                 else {
                     // If conversion to other pressure unit type is not implemented fallback silently to default (Pascal).

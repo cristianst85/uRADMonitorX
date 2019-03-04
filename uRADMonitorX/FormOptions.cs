@@ -57,7 +57,9 @@ namespace uRADMonitorX {
             this.comboBoxTemperatureUnit.Items.Add(TemperatureUnitType.Fahrenheit);
 
             this.comboBoxPressureUnit.Items.Add(PressureUnitType.Pa);
+            this.comboBoxPressureUnit.Items.Add(PressureUnitType.hPa);
             this.comboBoxPressureUnit.Items.Add(PressureUnitType.kPa);
+            this.comboBoxPressureUnit.Items.Add(PressureUnitType.mbar);
 
             this.comboBoxRadiationUnit.Items.Add(EnumHelper.GetEnumDescription<RadiationUnitType>(RadiationUnitType.Cpm));
             this.comboBoxRadiationUnit.Items.Add(EnumHelper.GetEnumDescription<RadiationUnitType>(RadiationUnitType.uSvH));
@@ -77,8 +79,15 @@ namespace uRADMonitorX {
             if (settings.PressureUnitType == PressureUnitType.Pa) {
                 this.comboBoxPressureUnit.SelectedIndex = 0;
             }
-            else if (settings.PressureUnitType == PressureUnitType.kPa) {
+            else if (settings.PressureUnitType == PressureUnitType.hPa)
+            {
                 this.comboBoxPressureUnit.SelectedIndex = 1;
+            }
+            else if (settings.PressureUnitType == PressureUnitType.kPa) {
+                this.comboBoxPressureUnit.SelectedIndex = 2;
+            }
+            else if (settings.PressureUnitType == PressureUnitType.mbar) {
+                this.comboBoxPressureUnit.SelectedIndex = 3;
             }
             else {
                 // Other values defaults to Pascal.

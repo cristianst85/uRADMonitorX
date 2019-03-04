@@ -4,17 +4,16 @@ namespace uRADMonitorX.Commons {
 
     public static class Pressure {
 
-        public static double PascalToKiloPascal(double pascal) {
-            double kPascal = (pascal / 1000);
-            return kPascal;
+        public static double PascalsToHectoPascals(double pascals) {
+            return pascals / 100d;
         }
 
-        public static double PascalToAtm(double pascal) {
-            throw new NotImplementedException();
+        public static double PascalsToKiloPascals(double pascals) {
+            return pascals / 1000d;
         }
 
-        public static double PascalToBar(double pascal) {
-            throw new NotImplementedException();
+        public static double PascalsToMilliBars(double pascals) {
+            return PascalsToHectoPascals(pascals);
         }
     }
 }
