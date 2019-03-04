@@ -1,3 +1,7 @@
+1.3.1
+
+ Added more conversion units (hPa, mbar) for pressure.
+
 1.3.0
 
  Fixed compatibility issue with firmware version 138 for model A.
