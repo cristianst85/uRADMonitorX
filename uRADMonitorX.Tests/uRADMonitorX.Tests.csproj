@@ -66,8 +66,7 @@
     <Compile Include="ProgramArgumentsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configuration\XMLSettingsTests.cs" />
-    <Compile Include="Updater\ApplicationUpdateInfoSaveAndLoadTests.cs" />
-    <Compile Include="Updater\ApplicationUpdateInfoTests.cs" />
+    <Compile Include="Updater\UpdateInfoTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\uRADMonitorX\uRADMonitorX.csproj">

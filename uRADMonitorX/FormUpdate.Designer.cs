@@ -40,7 +40,7 @@
             this.buttonClose.TabIndex = 0;
             this.buttonClose.Text = "Close";
             this.buttonClose.UseVisualStyleBackColor = true;
-            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            this.buttonClose.Click += new System.EventHandler(this.ButtonClose_Click);
             // 
             // buttonUpdate
             // 
@@ -50,7 +50,7 @@
             this.buttonUpdate.TabIndex = 1;
             this.buttonUpdate.Text = "Update";
             this.buttonUpdate.UseVisualStyleBackColor = true;
-            this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
+            this.buttonUpdate.Click += new System.EventHandler(this.ButtonUpdate_Click);
             // 
             // buttonGoToDownloadPage
             // 
@@ -60,7 +60,7 @@
             this.buttonGoToDownloadPage.TabIndex = 2;
             this.buttonGoToDownloadPage.Text = "Go to download page";
             this.buttonGoToDownloadPage.UseVisualStyleBackColor = true;
-            this.buttonGoToDownloadPage.Click += new System.EventHandler(this.buttonGoToDownloadPage_Click);
+            this.buttonGoToDownloadPage.Click += new System.EventHandler(this.ButtonGoToDownloadPage_Click);
             // 
             // labelStatus
             // 
@@ -97,7 +97,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Check for updates";
+            this.Text = "Check for Updates";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStatus)).EndInit();
             this.ResumeLayout(false);
 

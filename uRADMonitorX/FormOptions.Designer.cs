@@ -194,7 +194,7 @@
             this.checkBoxAutomaticallyCheckForUpdates.Name = "checkBoxAutomaticallyCheckForUpdates";
             this.checkBoxAutomaticallyCheckForUpdates.Size = new System.Drawing.Size(177, 17);
             this.checkBoxAutomaticallyCheckForUpdates.TabIndex = 1;
-            this.checkBoxAutomaticallyCheckForUpdates.Text = "Automatically check for updates";
+            this.checkBoxAutomaticallyCheckForUpdates.Text = "Automatically Check for Updates";
             this.checkBoxAutomaticallyCheckForUpdates.UseVisualStyleBackColor = true;
             // 
             // checkBoxStartWithWindows

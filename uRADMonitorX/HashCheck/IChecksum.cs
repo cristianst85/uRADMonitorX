@@ -1,11 +1,9 @@
-﻿using System;
+﻿namespace HashCheck
+{
+    public interface IChecksum
+    {
+        string Value { get; }
 
-namespace HashCheck {
-
-    public interface IChecksum {
-
-        String Value { get; }
-
-        bool Verify(String filePath);
+        bool Verify(string filePath);
     }
 }

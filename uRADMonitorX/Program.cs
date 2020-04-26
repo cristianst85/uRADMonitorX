@@ -11,11 +11,12 @@ using uRADMonitorX.Commons.Logging.Appenders;
 using uRADMonitorX.Commons.Logging.Formatters;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
+using uRADMonitorX.Updater;
 using uRADMonitorX.Windows;
 
 namespace uRADMonitorX {
 
-    static class Program {
+    internal static class Program {
 
         public static readonly String LoggerName = "fileLogger";
         public static readonly String DataLoggerName = "dataLogger";
@@ -27,7 +28,7 @@ namespace uRADMonitorX {
         /// Specifies the URL application uses to check 
         /// for updates. Only use secure URLs (HTTPS).
         /// </summary>
-        public static readonly String UpdaterUrl = "https://api.github.com/repos/cristianst85/uRADMonitorX/releases/latest";
+        public static readonly String UpdateUrl = "https://api.github.com/repos/cristianst85/uRADMonitorX/releases/latest";
         /// <summary>
         /// Specifies the interval in minutes at which the
         /// application automatically checks for updates.
@@ -39,6 +40,8 @@ namespace uRADMonitorX {
         private static ILogger logger = null;
 
         private static Mutex mutex;
+
+        internal static readonly IWebUpdater ApplicationUpdater = new GitHubUpdater();
 
         /// <summary>
         /// The main entry point for the application.

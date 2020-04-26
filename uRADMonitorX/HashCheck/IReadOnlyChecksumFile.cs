@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
-namespace HashCheck {
-
-    public interface IReadOnlyChecksumFile {
-
+namespace HashCheck
+{
+    public interface IReadOnlyChecksumFile
+    {
         ReadOnlyCollection<ChecksumEntry> Entries { get; }
-
     }
 }

@@ -127,7 +127,7 @@ namespace uRADMonitorX {
                 startupThread.Start();
 
                 TaskManager.Initialize(new Registry());
-                configureCheckForUpdatesTask();
+                ConfigureCheckForUpdatesTask();
             }
             catch (Exception ex) {
                 Debug.WriteLine(String.Format("FormMain > Exception: {0}", ex.ToString()));
@@ -138,28 +138,35 @@ namespace uRADMonitorX {
             }
         }
 
-        private void configureCheckForUpdatesTask() {
-            if (settings.AutomaticallyCheckForUpdates) {
-                if (TaskManager.GetSchedule("checkForUpdates") == null) {
+        private void ConfigureCheckForUpdatesTask()
+        {
+            if (settings.AutomaticallyCheckForUpdates)
+            {
+                if (TaskManager.GetSchedule("checkForUpdates").IsNull())
+                {
                     TaskManager.AddTask(
-                        () => {
-                            try {
-                                GitHubApplicationUpdater applicationUpdater = new GitHubApplicationUpdater(Program.UpdaterUrl);
-                                var applicationUpdateInfo = applicationUpdater.Check();
-                                if (applicationUpdateInfo.IsNewVersionAvailable(AssemblyUtils.GetVersion())) {
-                                    this.notifyIcon.ShowBalloonTip(10000, "uRADMonitorX Update Available", String.Format("A new version of uRADMonitorX ({0}) is available.", applicationUpdateInfo.Version), ToolTipIcon.Info);
+                        () =>
+                        {
+                            try
+                            {
+                                var updateInfo = Program.ApplicationUpdater.Check(Program.UpdateUrl);
+
+                                if (updateInfo.IsNewVersionAvailable(AssemblyUtils.GetVersion()))
+                                {
+                                    this.notifyIcon.ShowBalloonTip(10000, "uRADMonitorX Update Available", string.Format("A new version of uRADMonitorX ({0}) is available.", updateInfo.Version), ToolTipIcon.Info);
                                 }
                             }
-                            catch {
+                            catch
+                            {
                                 // Silently ignore all errors when automatically checking for updates.
-                                // There's no need to annoy users with these.
                             }
                         },
                         (task) => task.WithName("checkForUpdates").ToRunOnceAt(DateTime.Now.AddMinutes(2)).AndEvery(Program.UpdaterInterval).Minutes()
                     );
                 }
             }
-            else {
+            else
+            {
                 TaskManager.RemoveTask("checkForUpdates");
             }
         }
@@ -561,7 +568,7 @@ namespace uRADMonitorX {
             if (handler != null) {
                 handler(this, new SettingsChangedEventArgs(this.settings));
             }
-            configureCheckForUpdatesTask();
+            ConfigureCheckForUpdatesTask();
         }
 
         private void closeApplication(object sender, EventArgs e) {

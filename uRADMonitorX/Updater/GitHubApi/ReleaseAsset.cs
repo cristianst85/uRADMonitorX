@@ -1,13 +1,13 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace uRADMonitorX.Updater.GitHubApi {
+namespace uRADMonitorX.Updater.GitHubApi
+{
+    public class ReleaseAsset
+    {
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
 
-    public class ReleaseAsset {
-
-        [JsonPropertyAttribute(PropertyName = "name")]
-        public String Name { get; set; }
-        [JsonPropertyAttribute(PropertyName = "browser_download_url")]
-        public String BrowserDownloadUrl { get; set; }
+        [JsonProperty(PropertyName = "browser_download_url")]
+        public string BrowserDownloadUrl { get; set; }
     }
 }

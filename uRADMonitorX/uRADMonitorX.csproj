@@ -57,13 +57,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commons\CharUtils.cs" />
-    <Compile Include="Commons\ChecksumUtils.cs" />
     <Compile Include="Commons\Formatting\TextStyleFormatter.cs" />
     <Compile Include="Commons\Logging\Appenders\MemoryAppender.cs" />
     <Compile Include="Commons\Logging\Appenders\DuplicateFilterAppender.cs" />
     <Compile Include="Commons\Logging\Formatters\DateTimeFormatter.cs" />
     <Compile Include="Commons\PathUtils.cs" />
     <Compile Include="Extensions\ControlExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="HashCheck\ChecksumEntry.cs" />
     <Compile Include="HashCheck\IChecksum.cs" />
     <Compile Include="HashCheck\IReadOnlyChecksumFile.cs" />
@@ -71,8 +72,8 @@
     <Compile Include="HashCheck\ReadOnlyMD5File.cs" />
     <None Include="packages.config" />
     <Compile Include="Commons\Logging\Appenders\NLogDailyFileAppender.cs" />
-    <Compile Include="Updater\GitHubApplicationUpdateInfo.cs" />
-    <Compile Include="Updater\GitHubApplicationUpdater.cs" />
+    <Compile Include="Helpers\ServicePointManagerHelper.cs" />
+    <Compile Include="Updater\GitHubUpdater.cs" />
     <Compile Include="Updater\GitHubApi\Release.cs" />
     <Compile Include="FormUpdate.cs">
       <SubType>Form</SubType>
@@ -80,11 +81,11 @@
     <Compile Include="FormUpdate.Designer.cs">
       <DependentUpon>FormUpdate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Updater\ApplicationUpdateInfo.cs" />
+    <Compile Include="Updater\UnsecureGitHubUpdater.cs" />
+    <Compile Include="Updater\UpdateInfo.cs" />
     <Compile Include="Updater\GitHubApi\ReleaseAsset.cs" />
-    <Compile Include="Updater\IApplicationUpdateInfo.cs" />
-    <Compile Include="Updater\UnsecureHttpApplicationUpdater.cs" />
-    <Compile Include="Updater\HttpApplicationUpdater.cs" />
+    <Compile Include="Updater\IUpdateInfo.cs" />
+    <Compile Include="Updater\WebUpdater.cs" />
     <Compile Include="ArgumentDescription.cs" />
     <Compile Include="Commons\EnvironmentUtils.cs" />
     <Compile Include="Commons\Controls\NotifyIconUtils.cs" />
@@ -126,7 +127,7 @@
     </Compile>
     <Compile Include="Core\Fetchers\DeviceDataFetcherErrorEventArgs.cs" />
     <Compile Include="Core\Fetchers\DeviceDataFetcherEventArgs.cs" />
-    <Compile Include="Updater\IHttpApplicationUpdater.cs" />
+    <Compile Include="Updater\IWebUpdater.cs" />
     <Compile Include="ProgramArguments.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
