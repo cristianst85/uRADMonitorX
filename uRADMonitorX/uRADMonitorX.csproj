@@ -63,6 +63,7 @@
     <Compile Include="Commons\Logging\Appenders\DuplicateFilterAppender.cs" />
     <Compile Include="Commons\Logging\Formatters\DateTimeFormatter.cs" />
     <Compile Include="Commons\PathUtils.cs" />
+    <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="HashCheck\ChecksumEntry.cs" />
     <Compile Include="HashCheck\IChecksum.cs" />
     <Compile Include="HashCheck\IReadOnlyChecksumFile.cs" />
@@ -132,6 +133,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="uRADMonitorHelper.cs" />
     <Compile Include="Windows\NativeMethods.cs" />
     <Compile Include="Commons\Formatting\ITimeSpanFormatter.cs" />
     <Compile Include="Commons\Formatting\TimeSpanFormatter.cs" />

@@ -39,13 +39,11 @@ namespace uRADMonitorX {
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.viewDeviceWebpageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewDeviceOnlineDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.graphToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dashboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
             this.temperatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pressureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cpmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.voltageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dutyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -54,6 +52,7 @@ namespace uRADMonitorX {
             this.uRADMonitorWebsiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uRADMonitorForumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
+            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelDeviceStatus = new System.Windows.Forms.ToolStripStatusLabel();
@@ -79,7 +78,6 @@ namespace uRADMonitorX {
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnlyTextBoxWDT = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.viewOnlyTextBoxVoltage = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.viewOnlyTextBoxPressure = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
@@ -181,64 +179,51 @@ namespace uRADMonitorX {
             // viewDeviceOnlineDataToolStripMenuItem
             // 
             this.viewDeviceOnlineDataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.graphToolStripMenuItem,
+            this.dashboardToolStripMenuItem,
             this.toolStripMenuItem7,
             this.temperatureToolStripMenuItem,
             this.pressureToolStripMenuItem,
-            this.cpmToolStripMenuItem,
-            this.voltageToolStripMenuItem,
-            this.dutyToolStripMenuItem});
+            this.cpmToolStripMenuItem});
             this.viewDeviceOnlineDataToolStripMenuItem.Image = global::uRADMonitorX.Properties.Resources.chart_curve_go;
             this.viewDeviceOnlineDataToolStripMenuItem.Name = "viewDeviceOnlineDataToolStripMenuItem";
             this.viewDeviceOnlineDataToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.viewDeviceOnlineDataToolStripMenuItem.Text = "View device online data";
             // 
-            // graphToolStripMenuItem
+            // dashboardToolStripMenuItem
             // 
-            this.graphToolStripMenuItem.Name = "graphToolStripMenuItem";
-            this.graphToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.graphToolStripMenuItem.Text = "Graph";
-            this.graphToolStripMenuItem.Click += new System.EventHandler(this.graphToolStripMenuItem_Click);
+            this.dashboardToolStripMenuItem.Name = "dashboardToolStripMenuItem";
+            this.dashboardToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.dashboardToolStripMenuItem.Text = "Dashboard";
+            this.dashboardToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceDashboardToolStripMenuItem_Click);
             // 
             // toolStripMenuItem7
             // 
             this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-            this.toolStripMenuItem7.Size = new System.Drawing.Size(139, 6);
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(177, 6);
             // 
             // temperatureToolStripMenuItem
             // 
             this.temperatureToolStripMenuItem.Name = "temperatureToolStripMenuItem";
-            this.temperatureToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.temperatureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.temperatureToolStripMenuItem.Name = "Temperature";
             this.temperatureToolStripMenuItem.Text = "Temperature";
-            this.temperatureToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceOnlineDataToolStripMenuItem_Click);
+            this.temperatureToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceGraphDataToolStripMenuItem_Click);
             // 
             // pressureToolStripMenuItem
             // 
             this.pressureToolStripMenuItem.Name = "pressureToolStripMenuItem";
-            this.pressureToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.pressureToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pressureToolStripMenuItem.Name = "Pressure";
             this.pressureToolStripMenuItem.Text = "Pressure";
-            this.pressureToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceOnlineDataToolStripMenuItem_Click);
+            this.pressureToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceGraphDataToolStripMenuItem_Click);
             // 
             // cpmToolStripMenuItem
             // 
             this.cpmToolStripMenuItem.Name = "cpmToolStripMenuItem";
-            this.cpmToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.cpmToolStripMenuItem.Text = "Cpm";
-            this.cpmToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceOnlineDataToolStripMenuItem_Click);
-            // 
-            // voltageToolStripMenuItem
-            // 
-            this.voltageToolStripMenuItem.Name = "voltageToolStripMenuItem";
-            this.voltageToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.voltageToolStripMenuItem.Text = "Voltage";
-            this.voltageToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceOnlineDataToolStripMenuItem_Click);
-            // 
-            // dutyToolStripMenuItem
-            // 
-            this.dutyToolStripMenuItem.Name = "dutyToolStripMenuItem";
-            this.dutyToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.dutyToolStripMenuItem.Text = "Duty";
-            this.dutyToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceOnlineDataToolStripMenuItem_Click);
+            this.cpmToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cpmToolStripMenuItem.Name = "Cpm";
+            this.cpmToolStripMenuItem.Text = "Radiation";
+            this.cpmToolStripMenuItem.Click += new System.EventHandler(this.viewDeviceGraphDataToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
@@ -298,6 +283,13 @@ namespace uRADMonitorX {
             // 
             this.toolStripMenuItem8.Name = "toolStripMenuItem8";
             this.toolStripMenuItem8.Size = new System.Drawing.Size(189, 6);
+            // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check for updates";
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -536,13 +528,6 @@ namespace uRADMonitorX {
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
             // 
-            // checkForUpdatesToolStripMenuItem
-            // 
-            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.checkForUpdatesToolStripMenuItem.Text = "Check for updates";
-            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdatesToolStripMenuItem_Click);
-            // 
             // viewOnlyTextBoxWDT
             // 
             this.viewOnlyTextBoxWDT.Location = new System.Drawing.Point(237, 70);
@@ -731,9 +716,7 @@ namespace uRADMonitorX {
         private ToolStripMenuItem temperatureToolStripMenuItem;
         private ToolStripMenuItem pressureToolStripMenuItem;
         private ToolStripMenuItem cpmToolStripMenuItem;
-        private ToolStripMenuItem voltageToolStripMenuItem;
-        private ToolStripMenuItem dutyToolStripMenuItem;
-        private ToolStripMenuItem graphToolStripMenuItem;
+        private ToolStripMenuItem dashboardToolStripMenuItem;
         private ToolStripSeparator toolStripMenuItem7;
         private ToolStripMenuItem checkForUpdatesToolStripMenuItem;
     }

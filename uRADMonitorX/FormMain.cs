@@ -17,6 +17,7 @@ using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
 using uRADMonitorX.Core.Device;
 using uRADMonitorX.Core.Fetchers;
+using uRADMonitorX.Extensions;
 using uRADMonitorX.Updater;
 using uRADMonitorX.Windows;
 
@@ -720,20 +721,19 @@ namespace uRADMonitorX {
             this.viewDeviceOnlineDataToolStripMenuItem.Enabled = this.viewOnlyTextBoxId.Text.Length > 0;
         }
 
-        private void graphToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (this.viewOnlyTextBoxId.Text.Length > 0) {
-                System.Diagnostics.Process.Start(String.Format("http://www.uradmonitor.com?open={0}", this.viewOnlyTextBoxId.Text));
+        private void viewDeviceDashboardToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (this.viewOnlyTextBoxId.HasText())
+            {
+                uRADMonitorHelper.OpenDashboardUrl(this.viewOnlyTextBoxId.Text);
             }
         }
 
-        private void viewDeviceOnlineDataToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (this.viewOnlyTextBoxId.Text.Length > 0) {
-                openDataAPILink(this.viewOnlyTextBoxId.Text, ((ToolStripMenuItem)sender).Text.ToLower());
+        private void viewDeviceGraphDataToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (this.viewOnlyTextBoxId.HasText())
+            {
+                var sensorDataType = ((ToolStripMenuItem)sender).Name.ToLower();
+                uRADMonitorHelper.OpenGraphUrl(this.viewOnlyTextBoxId.Text, sensorDataType);
             }
-        }
-
-        private void openDataAPILink(String deviceId, String sensorData) {
-            System.Diagnostics.Process.Start(String.Format("http://data.uradmonitor.com/api/v1/devices/{0}/{1}", deviceId, sensorData));
         }
 
         private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e) {
