@@ -19,7 +19,7 @@ See [CHANGELOG](https://github.com/cristianst85/uRADMonitorX/blob/master/CHANGEL
 
 ## Download
 
-You can download compiled binaries from [here](http://www.disruptivesoftware.ro/projects/uRADMonitorX/) and [here](https://github.com/cristianst85/uRADMonitorX/releases).
+You can download compiled binaries from [here](https://github.com/cristianst85/uRADMonitorX/releases).
 
 ## License
 
