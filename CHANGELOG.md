@@ -1,3 +1,8 @@
+1.3.2
+
+ Updated View device online data sub-menu entries.
+ Improved Check for Updates functionality.
+
 1.3.1
 
  Added more conversion units (hPa, mbar) for pressure.
