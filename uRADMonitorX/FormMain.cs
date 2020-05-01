@@ -126,8 +126,8 @@ namespace uRADMonitorX {
                 startupThread.Name = "initDeviceThread";
                 startupThread.Start();
 
-                TaskManager.Initialize(new Registry());
-                ConfigureCheckForUpdatesTask();
+                JobManager.Initialize(new Registry());
+                ConfigureCheckForUpdatesJob();
             }
             catch (Exception ex) {
                 Debug.WriteLine(String.Format("FormMain > Exception: {0}", ex.ToString()));
@@ -138,13 +138,13 @@ namespace uRADMonitorX {
             }
         }
 
-        private void ConfigureCheckForUpdatesTask()
+        private void ConfigureCheckForUpdatesJob()
         {
             if (settings.AutomaticallyCheckForUpdates)
             {
-                if (TaskManager.GetSchedule("checkForUpdates").IsNull())
+                if (JobManager.GetSchedule("checkForUpdates").IsNull())
                 {
-                    TaskManager.AddTask(
+                    JobManager.AddJob(
                         () =>
                         {
                             try
@@ -161,13 +161,13 @@ namespace uRADMonitorX {
                                 // Silently ignore all errors when automatically checking for updates.
                             }
                         },
-                        (task) => task.WithName("checkForUpdates").ToRunOnceAt(DateTime.Now.AddMinutes(2)).AndEvery(Program.UpdaterInterval).Minutes()
+                        (job) => job.WithName("checkForUpdates").ToRunOnceAt(DateTime.Now.AddMinutes(2)).AndEvery(Program.UpdaterInterval).Minutes()
                     );
                 }
             }
             else
             {
-                TaskManager.RemoveTask("checkForUpdates");
+                JobManager.RemoveJob("checkForUpdates");
             }
         }
 
@@ -555,20 +555,19 @@ namespace uRADMonitorX {
             }
         }
 
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e) {
-            using (FormOptions form = new FormOptions(this.settings)) {
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var form = new FormOptions(this.settings))
+            {
                 form.SettingsChangedEventHandler += new SettingsChangedEventHandler(form_SettingsChangedEventHandler);
-                DialogResult result = form.ShowDialog(this);
+                form.ShowDialog(this);
             }
         }
 
-        private void form_SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e) {
-            // this.ShowInTaskbar = this.settings.ShowInTaskbar; // TODO: fix this not to flicker.
-            SettingsChangedEventHandler handler = SettingsChangedEventHandler;
-            if (handler != null) {
-                handler(this, new SettingsChangedEventArgs(this.settings));
-            }
-            ConfigureCheckForUpdatesTask();
+        private void form_SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e)
+        {
+            SettingsChangedEventHandler?.Invoke(this, new SettingsChangedEventArgs(this.settings));
+            ConfigureCheckForUpdatesJob();
         }
 
         private void closeApplication(object sender, EventArgs e) {
