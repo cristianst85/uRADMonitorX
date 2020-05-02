@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Timers;
 using uRADMonitorX.Core.Device;
 using uRADMonitorX.Extensions;
@@ -11,49 +12,25 @@ namespace uRADMonitorX.Core.Jobs
 
     public class DeviceDataJob : IDeviceDataJob
     {
+        /// <summary>
+        /// The default polling interval (10 seconds) on which the next 
+        /// polling should occur after <c>deviceDataReader</c> fails. 
+        /// </summary>
+        public readonly TimeSpan DefaultPollingInterval = TimeSpan.FromSeconds(10);
+
         private readonly IDeviceDataReader deviceDataReader;
         private readonly IPollingStrategy pollingStrategy;
 
-        private volatile bool _isRunning;
+        private Timer timer;
+
+        private volatile bool isRunning;
+        private volatile bool isStopped;
+
         public bool IsRunning
         {
             get
             {
-                return this._isRunning;
-            }
-            private set
-            {
-                this._isRunning = value;
-            }
-        }
-
-        private Timer timer;
-        private volatile bool stopped;
-
-        private int _defaultPollingInterval = 5;
-        /// <summary>
-        /// Sets the default polling interval in seconds on which 
-        /// next polling occurs after <c>deviceDataReader</c> fails.
-        /// <para> </para>
-        /// <para>By default, this value is set to 5 seconds.</para>
-        /// <para> </para>
-        /// <para>Throws <c>System.ArgumentException</c> if the default 
-        /// polling interval is less than one second.</para>
-        /// </summary>
-        public int DefaultPollingInterval
-        {
-            get
-            {
-                return _defaultPollingInterval;
-            }
-            private set
-            {
-                if (value < 1)
-                {
-                    throw new ArgumentException();
-                }
-
-                this._defaultPollingInterval = value;
+                return isRunning;
             }
         }
 
@@ -69,29 +46,26 @@ namespace uRADMonitorX.Core.Jobs
 
         public void Start()
         {
-            this.stopped = false;
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(DeviceDataJob)}] Start()");
+
+            this.isStopped = false;
 
             if (this.timer.IsNull())
             {
-                this.timer = new Timer
-                {
-                    Interval = 1000, // Execute immediately.
-                    Enabled = true
-                };
-
+                this.timer = new Timer();
                 this.timer.Elapsed += new ElapsedEventHandler(Run);
-                this.timer.Start();
             }
-            else
-            {
-                this.timer.Interval = 1000; // Execute immediately.
-                this.timer.Start();
-            }
+
+            // When the job is started, start the timer immediately.
+            this.timer.Interval = TimeSpan.FromSeconds(1).TotalMilliseconds;
+            this.timer.Start();
         }
 
         public void Stop()
         {
-            this.stopped = true;
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(DeviceDataJob)}] Stop()");
+
+            this.isStopped = true;
 
             if (this.timer.IsNotNull())
             {
@@ -101,20 +75,30 @@ namespace uRADMonitorX.Core.Jobs
 
         private void Run(object o, EventArgs e)
         {
-            this.IsRunning = true;
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(DeviceDataJob)}] Run()");
+
+            if (this.isRunning)
+            {
+                return;
+            }
+
+            this.isRunning = true;
 
             try
             {
+                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(DeviceDataJob)}] Timer Interval is {this.timer.Interval } ms");
                 this.timer.Stop();
 
                 // Set timer interval to the default polling interval in case that deviceDataReader fails.
-                this.timer.Interval = this.DefaultPollingInterval;
+                this.timer.Interval = DefaultPollingInterval.TotalMilliseconds;
 
                 // Read device data.
+                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(DeviceDataJob)}] DeviceDataReader.Read()");
                 var deviceData = this.deviceDataReader.Read();
 
-                // Update timer interval according with polling strategy.
-                this.timer.Interval = this.pollingStrategy.GetNextInterval(deviceData.WDT) * 1000;
+                // Update the timer interval according to the polling strategy.
+                this.timer.Interval = this.pollingStrategy.GetNextInterval(deviceData.WDT).TotalMilliseconds;
+                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(DeviceDataJob)}] Timer Interval was set to {this.timer.Interval } ms");
 
                 this.OnSuccess(deviceData);
             }
@@ -124,9 +108,9 @@ namespace uRADMonitorX.Core.Jobs
             }
             finally
             {
-                this.IsRunning = false;
+                this.isRunning = false;
 
-                if (!this.stopped)
+                if (!this.isStopped)
                 {
                     this.timer.Start();
                 }
@@ -135,11 +119,13 @@ namespace uRADMonitorX.Core.Jobs
 
         protected virtual void OnSuccess(DeviceData deviceData)
         {
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(DeviceDataJob)}] OnSuccess()");
             DeviceDataJobEventHandler?.Invoke(this, new DeviceDataJobEventArgs(deviceData));
         }
 
         protected virtual void OnError(Exception exception)
         {
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(DeviceDataJob)}] OnError()");
             DeviceDataJobErrorEventHandler?.Invoke(this, new DeviceDataJobErrorEventArgs(exception));
         }
     }

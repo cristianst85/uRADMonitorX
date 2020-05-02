@@ -17,15 +17,15 @@ namespace uRADMonitorX.Core.Jobs
         }
 
         /// <summary>
-        /// Returns the number of seconds when the next polling should occur.
+        /// Returns the interval when the next polling should occur.
         /// This is always the value of polling interval passed to the
         /// constructor. The current value of the Watchdog Timer is ignored.
         /// </summary>
         /// <param name="wdt">Current value of the Watchdog Timer.</param>
         /// <returns></returns>
-        public int GetNextInterval(int wdt)
+        public TimeSpan GetNextInterval(int wdt)
         {
-            return this.PollingInterval;
+            return TimeSpan.FromSeconds(this.PollingInterval);
         }
     }
 }

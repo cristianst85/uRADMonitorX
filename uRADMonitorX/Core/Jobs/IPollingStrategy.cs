@@ -1,7 +1,9 @@
-﻿namespace uRADMonitorX.Core.Jobs
+﻿using System;
+
+namespace uRADMonitorX.Core.Jobs
 {
     public interface IPollingStrategy
     {
-        int GetNextInterval(int wdt);
+        TimeSpan GetNextInterval(int wdt);
     }
 }
