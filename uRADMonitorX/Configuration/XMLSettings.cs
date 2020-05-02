@@ -3,64 +3,30 @@ using System.Globalization;
 using System.Xml;
 using uRADMonitorX.Core;
 
-namespace uRADMonitorX.Configuration {
-
+namespace uRADMonitorX.Configuration
+{
     public delegate void SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e);
 
-    public class XMLSettings : ISettings {
-
+    public class XMLSettings : Settings
+    {
         private static NumberFormatInfo numberFormatInfo = CultureInfo.CurrentCulture.NumberFormat;
 
-        public String FilePath { get; private set; }
+        public string FilePath { get; private set; }
 
-        // General
-        public Boolean StartWithWindows { get; set; }
-        public Boolean AutomaticallyCheckForUpdates { get; set; }
-
-        // Display
-        public Boolean StartMinimized { get; set; }
-        public Boolean ShowInTaskbar { get; set; }
-        public Boolean CloseToSystemTray { get; set; }
-        public int LastWindowXPos { get; set; }
-        public int LastWindowYPos { get; set; }
-
-        // Logging
-        public Boolean IsLoggingEnabled { get; set; }
-        public String LogDirectoryPath { get; set; }
-        public Boolean IsDataLoggingEnabled { get; set; }
-        public Boolean DataLoggingToSeparateFile { get; set; }
-        public String DataLogDirectoryPath { get; set; }
-
-        // Device
-        public String DetectorName { get; set; }
-
-        public bool HasPressureSensor { get; set; }
-
-        public String DeviceIPAddress { get; set; }
-        public TemperatureUnitType TemperatureUnitType { get; set; }
-        public PressureUnitType PressureUnitType { get; set; }
-        public RadiationUnitType RadiationUnitType { get; set; }
-        public PollingType PollingType { get; set; }
-        public int PollingInterval { get; set; }
-        public bool IsPollingEnabled { get; set; }
-
-        // Notifications
-        public bool AreNotificationsEnabled { get; set; }
-        public int HighTemperatureNotificationValue { get; set; }
-        public double RadiationNotificationValue { get; set; }
-        public TemperatureUnitType TemperatureNotificationUnitType { get; set; }
-        public RadiationUnitType RadiationNotificationUnitType { get; set; }
-
-        public static XmlWriterSettings XmlWriterSettings {
-            get {
-                return new XmlWriterSettings() {
+        public static XmlWriterSettings XmlWriterSettings
+        {
+            get
+            {
+                return new XmlWriterSettings()
+                {
                     Indent = true,
                     IndentChars = "  "
                 };
             }
         }
 
-        private XMLSettings(String filePath) {
+        private XMLSettings(string filePath)
+        {
             this.FilePath = filePath;
         }
 
@@ -70,22 +36,28 @@ namespace uRADMonitorX.Configuration {
         /// <param name="filePath"></param>
         /// <param name="ignoreBadOrMissingValues">If set <c>true</c> ignores bad or missing values and replaces them with default values.</param>
         /// <returns></returns>
-        public static XMLSettings LoadFromFile(String filePath, bool ignoreBadOrMissingValues) {
+        public static XMLSettings LoadFromFile(string filePath, bool ignoreBadOrMissingValues)
+        {
             throw new NotImplementedException();
         }
 
-        public static XMLSettings LoadFromFile(String filePath) {
-            XMLSettings xmlSettings = new XMLSettings(filePath);
-            XmlDocument xmlDocument = new XmlDocument();
+        public static XMLSettings LoadFromFile(string filePath)
+        {
+            var xmlSettings = new XMLSettings(filePath);
+
+            var xmlDocument = new XmlDocument();
             xmlDocument.Load(filePath);
-            XmlNode xmlNode = xmlDocument.SelectSingleNode("/settings");
+
+            var xmlNode = xmlDocument.SelectSingleNode("/settings");
             xmlSettings.StartWithWindows = bool.Parse(xmlNode["general"].SelectSingleNode("start_with_windows").InnerText);
 
             // Introduced with version 1.0.0.
-            if (xmlNode["general"].SelectSingleNode("automatically_check_for_updates") != null) {
+            if (xmlNode["general"].SelectSingleNode("automatically_check_for_updates") != null)
+            {
                 xmlSettings.AutomaticallyCheckForUpdates = bool.Parse(xmlNode["general"].SelectSingleNode("automatically_check_for_updates").InnerText);
             }
-            else {
+            else
+            {
                 xmlSettings.AutomaticallyCheckForUpdates = DefaultSettings.AutomaticallyCheckForUpdates;
             }
 
@@ -98,30 +70,40 @@ namespace uRADMonitorX.Configuration {
             xmlSettings.LogDirectoryPath = xmlNode["logging"].SelectSingleNode("path").InnerText;
 
             // Introduced with version 1.1.0.
-            if (xmlNode["logging"].SelectSingleNode("is_data_logging_enabled") != null) {
+            if (xmlNode["logging"].SelectSingleNode("is_data_logging_enabled") != null)
+            {
                 xmlSettings.IsDataLoggingEnabled = bool.Parse(xmlNode["logging"].SelectSingleNode("is_data_logging_enabled").InnerText);
             }
-            else {
+            else
+            {
                 xmlSettings.IsDataLoggingEnabled = DefaultSettings.IsDataLoggingEnabled;
             }
-            if (xmlNode["logging"].SelectSingleNode("data_logging_to_separate_file") != null) {
+
+            if (xmlNode["logging"].SelectSingleNode("data_logging_to_separate_file") != null)
+            {
                 xmlSettings.DataLoggingToSeparateFile = bool.Parse(xmlNode["logging"].SelectSingleNode("data_logging_to_separate_file").InnerText);
             }
-            else {
+            else
+            {
                 xmlSettings.DataLoggingToSeparateFile = DefaultSettings.DataLoggingToSeparateFile;
             }
-            if (xmlNode["logging"].SelectSingleNode("data_log_path") != null) {
+
+            if (xmlNode["logging"].SelectSingleNode("data_log_path") != null)
+            {
                 xmlSettings.DataLogDirectoryPath = xmlNode["logging"].SelectSingleNode("data_log_path").InnerText;
             }
-            else {
+            else
+            {
                 xmlSettings.DataLogDirectoryPath = DefaultSettings.DataLogDirectoryPath;
             }
 
             // Introduced with version 0.39.0.
-            if (xmlNode["device"].SelectSingleNode("detector_name") != null) {
+            if (xmlNode["device"].SelectSingleNode("detector_name") != null)
+            {
                 xmlSettings.DetectorName = xmlNode["device"].SelectSingleNode("detector_name").InnerText;
             }
-            else {
+            else
+            {
                 xmlSettings.DetectorName = DefaultSettings.DetectorName;
             }
 
@@ -136,14 +118,16 @@ namespace uRADMonitorX.Configuration {
 
             // Notifications were introduced with version 0.39.0.
             // If the 'notifications' element is missing then load the default settings.
-            if (xmlNode["notifications"] != null) {
+            if (xmlNode["notifications"] != null)
+            {
                 xmlSettings.AreNotificationsEnabled = bool.Parse(xmlNode["notifications"].SelectSingleNode("enabled").InnerText);
                 xmlSettings.HighTemperatureNotificationValue = int.Parse(xmlNode["notifications"].SelectSingleNode("high_temperature_value").InnerText);
                 xmlSettings.TemperatureNotificationUnitType = (TemperatureUnitType)Enum.Parse(typeof(TemperatureUnitType), xmlNode["notifications"].SelectSingleNode("temperature_unit_type").InnerText, true);
                 xmlSettings.RadiationNotificationValue = double.Parse(xmlNode["notifications"].SelectSingleNode("radiation_value").InnerText, NumberStyles.AllowDecimalPoint, numberFormatInfo);
                 xmlSettings.RadiationNotificationUnitType = (RadiationUnitType)Enum.Parse(typeof(RadiationUnitType), xmlNode["notifications"].SelectSingleNode("radiation_unit_type").InnerText, true);
             }
-            else {
+            else
+            {
                 xmlSettings.AreNotificationsEnabled = DefaultSettings.AreNotificationsEnabled;
                 xmlSettings.HighTemperatureNotificationValue = DefaultSettings.HighTemperatureNotificationValue;
                 xmlSettings.TemperatureNotificationUnitType = DefaultSettings.TemperatureNotificationUnitType;
@@ -154,8 +138,10 @@ namespace uRADMonitorX.Configuration {
             return xmlSettings;
         }
 
-        public static void CreateFile(string filePath) {
-            using (XmlWriter xmlWriter = XmlWriter.Create(filePath, XmlWriterSettings)) {
+        public static void CreateFile(string filePath)
+        {
+            using (var xmlWriter = XmlWriter.Create(filePath, XmlWriterSettings))
+            {
                 xmlWriter.WriteStartElement("settings");
                 xmlWriter.WriteStartElement("general");
                 writeFullElement(xmlWriter, "start_with_windows", DefaultSettings.StartWithWindows);
@@ -197,28 +183,37 @@ namespace uRADMonitorX.Configuration {
             }
         }
 
-        private static void writeFullElement(XmlWriter xmlWriter, String name, object value) {
+        private static void writeFullElement(XmlWriter xmlWriter, String name, object value)
+        {
             xmlWriter.WriteStartElement(name);
-            if (value == null) {
+
+            if (value == null)
+            {
                 xmlWriter.WriteValue(String.Empty);
             }
-            else {
+            else
+            {
                 xmlWriter.WriteValue(value);
             }
+
             xmlWriter.WriteEndElement();
         }
 
-        public void Commit() {
-            this.internalCommit(FilePath);
+        public override void Commit()
+        {
+            this.InternalCommit(FilePath);
         }
 
-        private void internalCommit(String filePath) {
-            XmlDocument xmlDocument = new XmlDocument();
+        private void InternalCommit(String filePath)
+        {
+            var xmlDocument = new XmlDocument();
             xmlDocument.Load(filePath);
-            XmlNode xmlNode = xmlDocument.SelectSingleNode("/settings");
+
+            var xmlNode = xmlDocument.SelectSingleNode("/settings");
 
             // Introduced with version 1.0.0. 
-            if (xmlNode["general"].SelectSingleNode("automatically_check_for_updates") == null) {
+            if (xmlNode["general"].SelectSingleNode("automatically_check_for_updates") == null)
+            {
                 xmlNode["general"].InsertAfter(xmlDocument.CreateNode(XmlNodeType.Element, "automatically_check_for_updates", null), xmlNode["general"].SelectSingleNode("start_with_windows"));
             }
 
@@ -235,15 +230,16 @@ namespace uRADMonitorX.Configuration {
             xmlNode["logging"].SelectSingleNode("path").InnerText = this.LogDirectoryPath ?? String.Empty;
 
             // Introduced with version 1.1.0.
-            createNodeIfNotExists(xmlDocument, xmlNode, "logging", "is_data_logging_enabled", "path",
+            CreateNodeIfNotExists(xmlDocument, xmlNode, "logging", "is_data_logging_enabled", "path",
                 this.IsDataLoggingEnabled.ToString().ToLower());
-            createNodeIfNotExists(xmlDocument, xmlNode, "logging", "data_logging_to_separate_file", "is_data_logging_enabled",
+            CreateNodeIfNotExists(xmlDocument, xmlNode, "logging", "data_logging_to_separate_file", "is_data_logging_enabled",
                 this.DataLoggingToSeparateFile.ToString().ToLower());
-            createNodeIfNotExists(xmlDocument, xmlNode, "logging", "data_log_path", "data_logging_to_separate_file",
+            CreateNodeIfNotExists(xmlDocument, xmlNode, "logging", "data_log_path", "data_logging_to_separate_file",
                 this.DataLogDirectoryPath ?? String.Empty);
 
             // Introduced with version 0.39.0. 
-            if (xmlNode["device"].SelectSingleNode("detector_name") == null) {
+            if (xmlNode["device"].SelectSingleNode("detector_name") == null)
+            {
                 xmlNode["device"].InsertBefore(xmlDocument.CreateNode(XmlNodeType.Element, "detector_name", null), xmlNode["device"].SelectSingleNode("has_pressure_sensor"));
             }
 
@@ -259,7 +255,8 @@ namespace uRADMonitorX.Configuration {
 
             // Notifications were introduced with version 0.39.0. 
             // If the 'notifications' element is missing then it must be created.
-            if (xmlNode["notifications"] == null) {
+            if (xmlNode["notifications"] == null)
+            {
                 XmlNode notificationsXmlNode = xmlDocument.CreateNode(XmlNodeType.Element, "notifications", null);
                 notificationsXmlNode.AppendChild(xmlDocument.CreateNode(XmlNodeType.Element, "enabled", null));
                 notificationsXmlNode.AppendChild(xmlDocument.CreateNode(XmlNodeType.Element, "high_temperature_value", null));
@@ -268,23 +265,28 @@ namespace uRADMonitorX.Configuration {
                 notificationsXmlNode.AppendChild(xmlDocument.CreateNode(XmlNodeType.Element, "radiation_unit_type", null));
                 xmlNode.InsertAfter(notificationsXmlNode, xmlNode["device"]);
             }
+
             xmlNode["notifications"].SelectSingleNode("enabled").InnerText = this.AreNotificationsEnabled.ToString().ToLower();
             xmlNode["notifications"].SelectSingleNode("high_temperature_value").InnerText = this.HighTemperatureNotificationValue.ToString();
             xmlNode["notifications"].SelectSingleNode("temperature_unit_type").InnerText = this.TemperatureNotificationUnitType.ToString();
             xmlNode["notifications"].SelectSingleNode("radiation_value").InnerText = this.RadiationNotificationValue.ToString();
             xmlNode["notifications"].SelectSingleNode("radiation_unit_type").InnerText = this.RadiationNotificationUnitType.ToString();
 
-            using (XmlWriter xmlWriter = XmlWriter.Create(filePath, XmlWriterSettings)) {
+            using (XmlWriter xmlWriter = XmlWriter.Create(filePath, XmlWriterSettings))
+            {
                 xmlDocument.Save(xmlWriter);
             }
         }
 
-        private void createNodeIfNotExists(XmlDocument document, XmlNode rootNode, String parentNode, String node, String refNode, String value) {
-            if (rootNode[parentNode].SelectSingleNode(node) == null) {
+        private void CreateNodeIfNotExists(XmlDocument document, XmlNode rootNode, String parentNode, String node, String refNode, String value)
+        {
+            if (rootNode[parentNode].SelectSingleNode(node) == null)
+            {
                 rootNode[parentNode].InsertAfter(
                     document.CreateNode(XmlNodeType.Element, node, null),
                     rootNode[parentNode].SelectSingleNode(refNode));
             }
+
             rootNode[parentNode].SelectSingleNode(node).InnerText = value;
         }
     }

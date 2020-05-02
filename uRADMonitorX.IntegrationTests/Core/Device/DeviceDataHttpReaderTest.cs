@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using uRADMonitorX.Commons;
 using uRADMonitorX.Core.Device;
 
 namespace uRADMonitorX.IntegrationTests.Core.Device
@@ -9,8 +10,10 @@ namespace uRADMonitorX.IntegrationTests.Core.Device
         [TestCase("10.10.0.103")]
         public void Read(string ipAddress)
         {
-            IDeviceDataReader deviceDataReader = new DeviceDataHttpReader(ipAddress);
+            var deviceDataReader = new DeviceDataHttpReader(new HttpClient(Program.UserAgent), ipAddress);
+
             Assert.DoesNotThrow(() => deviceDataReader.Read());
         }
     }
 }
+

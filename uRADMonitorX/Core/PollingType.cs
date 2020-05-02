@@ -1,14 +1,14 @@
-﻿
-namespace uRADMonitorX.Core {
-
-    public enum PollingType {
-
+﻿namespace uRADMonitorX.Core
+{
+    public enum PollingType
+    {
         /// <summary>
-        /// Fixed interval specified by user.
+        /// A fixed interval specified by the user.
         /// </summary>
         FixedInterval,
+
         /// <summary>
-        /// Synchronize with watchdog timer.
+        /// Synchronize with the Watchdog Timer.
         /// </summary>
         WDTSync
     }

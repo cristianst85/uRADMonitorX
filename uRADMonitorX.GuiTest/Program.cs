@@ -57,11 +57,12 @@ namespace uRADMonitorX.GuiTest {
             virtualDevice.Start();
 
             IDeviceDataReaderFactory deviceDataReaderFactory = new DeviceDataVirtualReaderFactory(virtualDevice);
+            IDeviceDataJobFactory deviceDataJobFactory = new DeviceDataJobFactory(settings, deviceDataReaderFactory);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            FormMain formMain = new FormMain(deviceDataReaderFactory, settings, logger);
+            FormMain formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, settings, logger);
             formMain.SettingsChangedEventHandler += new SettingsChangedEventHandler(formMain_SettingsChangedEventHandler);
 
             Application.Run(formMain);

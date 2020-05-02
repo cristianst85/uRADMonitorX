@@ -64,13 +64,19 @@
   <ItemGroup>
     <Compile Include="Commons\CharUtils.cs" />
     <Compile Include="Commons\Formatting\TextStyleFormatter.cs" />
+    <Compile Include="Commons\HttpClient.cs" />
+    <Compile Include="Commons\IHttpClient.cs" />
     <Compile Include="Commons\Logging\Appenders\MemoryAppender.cs" />
     <Compile Include="Commons\Logging\Appenders\DuplicateFilterAppender.cs" />
     <Compile Include="Commons\Logging\Formatters\DateTimeFormatter.cs" />
     <Compile Include="Commons\PathUtils.cs" />
+    <Compile Include="Core\DeviceDataJobFactory.cs" />
+    <Compile Include="Core\Jobs\DeviceDataJob.cs" />
+    <Compile Include="Core\IDeviceDataJobFactory.cs" />
     <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Configuration\Settings.cs" />
     <Compile Include="HashCheck\ChecksumEntry.cs" />
     <Compile Include="HashCheck\IChecksum.cs" />
     <Compile Include="HashCheck\IReadOnlyChecksumFile.cs" />
@@ -117,22 +123,20 @@
     <Compile Include="Commons\AssemblyUtils.cs" />
     <Compile Include="Configuration\SettingsChangedEventArgs.cs" />
     <Compile Include="Core\DeviceDataHttpReaderFactory.cs" />
-    <Compile Include="Core\Device\DeviceReadings.cs" />
-    <Compile Include="Core\Fetchers\DeviceDataFetcher.cs" />
-    <Compile Include="Core\Fetchers\WDTSyncPollingStrategy.cs" />
-    <Compile Include="Core\Fetchers\FixedIntervalPollingStrategy.cs" />
-    <Compile Include="Core\Fetchers\IPollingStrategy.cs" />
+    <Compile Include="Core\Jobs\WDTSyncPollingStrategy.cs" />
+    <Compile Include="Core\Jobs\FixedIntervalPollingStrategy.cs" />
+    <Compile Include="Core\Jobs\IPollingStrategy.cs" />
     <Compile Include="Core\IDeviceDataReaderFactory.cs" />
     <Compile Include="Core\RadiationUnitType.cs" />
-    <Compile Include="Commons\RadiationDetector.cs" />
+    <Compile Include="Core\Device\RadiationDetector.cs" />
     <Compile Include="FormAbout.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormAbout.Designer.cs">
       <DependentUpon>FormAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\Fetchers\DeviceDataFetcherErrorEventArgs.cs" />
-    <Compile Include="Core\Fetchers\DeviceDataFetcherEventArgs.cs" />
+    <Compile Include="Core\Jobs\DeviceDataJobErrorEventArgs.cs" />
+    <Compile Include="Core\Jobs\DeviceDataJobEventArgs.cs" />
     <Compile Include="Updater\IWebUpdater.cs" />
     <Compile Include="ProgramArguments.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -149,10 +153,8 @@
     <Compile Include="Configuration\DefaultSettings.cs" />
     <Compile Include="Core\Device\DeviceInformation.cs" />
     <Compile Include="Core\Device\DeviceDataReader.cs" />
-    <Compile Include="Core\Device\DeviceDataFileReader.cs" />
     <Compile Include="Core\Device\DeviceModelType.cs" />
     <Compile Include="Core\Device\IDeviceDataReader.cs" />
-    <Compile Include="Core\Device\DeviceDataJSON.cs" />
     <Compile Include="Core\Device\DeviceData.cs" />
     <Compile Include="Core\PollingType.cs" />
     <Compile Include="Core\PressureUnitType.cs" />
@@ -170,9 +172,7 @@
       <DependentUpon>FormOptions.cs</DependentUpon>
     </Compile>
     <Compile Include="Commons\Networking\IPAddress.cs" />
-    <Compile Include="Core\Fetchers\FixedIntervalDeviceDataFetcher.cs" />
-    <Compile Include="Core\Fetchers\IDeviceDataFetcher.cs" />
-    <Compile Include="Configuration\RegistrySettings.cs" />
+    <Compile Include="Core\Jobs\IDeviceDataJob.cs" />
     <Compile Include="Core\TemperatureUnitType.cs" />
     <Compile Include="Configuration\XMLSettings.cs" />
     <Compile Include="Configuration\ISettings.cs" />

@@ -1,39 +1,48 @@
-﻿using System;
+﻿using NUnit.Framework;
 using System.IO;
-using NUnit.Framework;
-using uRADMonitorX.Commons;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
+using uRADMonitorX.Core.Device;
 
-namespace uRADMonitorX.Tests.Configuration {
-
+namespace uRADMonitorX.Tests.Configuration
+{
     [TestFixture]
-    public class XMLSettingsCommitTests {
-
-        private String outputfilePath = Path.GetFullPath(@"..\..\..\uRADMonitorX.Tests.Files\configs\Settings.xml");
+    public class XMLSettingsCommitTests
+    {
+        private readonly string outputfilePath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\uRADMonitorX.Tests.Files\configs\Settings.xml"));
 
         [SetUp]
-        public void SetUp() {
+        public void SetUp()
+        {
             var directory = Path.GetDirectoryName(outputfilePath);
+
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
+
             Assert.IsFalse(File.Exists(outputfilePath));
         }
 
         [TearDown]
-        public void TearDown() {
+        public void TearDown()
+        {
             Assert.IsTrue(File.Exists(outputfilePath));
+
             File.Delete(outputfilePath);
+
             Assert.IsFalse(File.Exists(outputfilePath));
         }
 
         [Test]
-        public void CommitWithoutModify() {
+        public void CommitWithoutModify()
+        {
             XMLSettings.CreateFile(outputfilePath);
+
             Assert.IsTrue(File.Exists(outputfilePath));
+
             ISettings settings = XMLSettings.LoadFromFile(outputfilePath);
+
             Assert.AreEqual(DefaultSettings.StartWithWindows, settings.StartWithWindows);
             Assert.AreEqual(DefaultSettings.AutomaticallyCheckForUpdates, settings.AutomaticallyCheckForUpdates);
             Assert.AreEqual(DefaultSettings.StartMinimized, settings.StartMinimized);
@@ -57,8 +66,11 @@ namespace uRADMonitorX.Tests.Configuration {
             Assert.AreEqual(DefaultSettings.RadiationNotificationValue, settings.RadiationNotificationValue);
             Assert.AreEqual(DefaultSettings.TemperatureNotificationUnitType, settings.TemperatureNotificationUnitType);
             Assert.AreEqual(DefaultSettings.RadiationNotificationUnitType, settings.RadiationNotificationUnitType);
+
             settings.Commit();
+
             settings = XMLSettings.LoadFromFile(outputfilePath);
+
             Assert.AreEqual(DefaultSettings.StartWithWindows, settings.StartWithWindows);
             Assert.AreEqual(DefaultSettings.AutomaticallyCheckForUpdates, settings.AutomaticallyCheckForUpdates);
             Assert.AreEqual(DefaultSettings.StartMinimized, settings.StartMinimized);
@@ -85,10 +97,14 @@ namespace uRADMonitorX.Tests.Configuration {
         }
 
         [Test]
-        public void CommitWithModify() {
+        public void CommitWithModify()
+        {
             XMLSettings.CreateFile(outputfilePath);
+
             Assert.IsTrue(File.Exists(outputfilePath));
+
             ISettings settings = XMLSettings.LoadFromFile(outputfilePath);
+
             Assert.AreEqual(DefaultSettings.StartWithWindows, settings.StartWithWindows);
             Assert.AreEqual(DefaultSettings.AutomaticallyCheckForUpdates, settings.AutomaticallyCheckForUpdates);
             Assert.AreEqual(DefaultSettings.StartMinimized, settings.StartMinimized);
@@ -112,6 +128,7 @@ namespace uRADMonitorX.Tests.Configuration {
             Assert.AreEqual(DefaultSettings.RadiationNotificationValue, settings.RadiationNotificationValue);
             Assert.AreEqual(DefaultSettings.TemperatureNotificationUnitType, settings.TemperatureNotificationUnitType);
             Assert.AreEqual(DefaultSettings.RadiationNotificationUnitType, settings.RadiationNotificationUnitType);
+
             // Modify values
             settings.StartWithWindows = !settings.StartWithWindows;
             settings.AutomaticallyCheckForUpdates = !settings.AutomaticallyCheckForUpdates;
@@ -136,9 +153,12 @@ namespace uRADMonitorX.Tests.Configuration {
             settings.RadiationNotificationValue = settings.RadiationNotificationValue + 1;
             settings.TemperatureNotificationUnitType = TemperatureUnitType.Fahrenheit;
             settings.RadiationNotificationUnitType = RadiationUnitType.uRemH;
+
             settings.Commit();
+
             // Reload and verify values.
             XMLSettings settingsAfterCommit = XMLSettings.LoadFromFile(outputfilePath);
+
             Assert.AreEqual(settingsAfterCommit.StartWithWindows, settings.StartWithWindows);
             Assert.AreEqual(settingsAfterCommit.AutomaticallyCheckForUpdates, settings.AutomaticallyCheckForUpdates);
             Assert.AreEqual(settingsAfterCommit.StartMinimized, settings.StartMinimized);

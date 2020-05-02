@@ -1,32 +1,39 @@
-﻿using System;
+﻿using NUnit.Framework;
 using System.IO;
-using NUnit.Framework;
 using uRADMonitorX.Configuration;
 
-namespace uRADMonitorX.Tests.Configuration {
-
+namespace uRADMonitorX.Tests.Configuration
+{
     [TestFixture]
-    public class XMLSettingsTests {
-
-        private String outputfilePath = Path.GetFullPath(@"..\..\..\uRADMonitorX.Tests.Files\configs\Settings.xml");
+    public class XMLSettingsTests
+    {
+        private readonly string outputfilePath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\uRADMonitorX.Tests.Files\configs\Settings.xml"));
 
         [SetUp]
-        public void SetUp() {
+        public void SetUp()
+        {
             Assert.IsFalse(File.Exists(outputfilePath));
         }
 
         [TearDown]
-        public void TearDown() {
+        public void TearDown()
+        {
             Assert.IsTrue(File.Exists(outputfilePath));
+
             File.Delete(outputfilePath);
+
             Assert.IsFalse(File.Exists(outputfilePath));
         }
 
         [Test]
-        public void CreateFileWithDefaults() {
+        public void CreateFileWithDefaults()
+        {
             XMLSettings.CreateFile(outputfilePath);
+
             Assert.IsTrue(File.Exists(outputfilePath));
+
             XMLSettings settings = XMLSettings.LoadFromFile(outputfilePath);
+
             Assert.AreEqual(outputfilePath, settings.FilePath);
             Assert.AreEqual(DefaultSettings.StartWithWindows, settings.StartWithWindows);
             Assert.AreEqual(DefaultSettings.AutomaticallyCheckForUpdates, settings.AutomaticallyCheckForUpdates);

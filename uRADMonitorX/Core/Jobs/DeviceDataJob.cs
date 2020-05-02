@@ -1,0 +1,146 @@
+﻿using System;
+using System.Timers;
+using uRADMonitorX.Core.Device;
+using uRADMonitorX.Extensions;
+
+namespace uRADMonitorX.Core.Jobs
+{
+    public delegate void DeviceDataJobEventHandler(object sender, DeviceDataJobEventArgs e);
+
+    public delegate void DeviceDataJobErrorEventHandler(object sender, DeviceDataJobErrorEventArgs e);
+
+    public class DeviceDataJob : IDeviceDataJob
+    {
+        private readonly IDeviceDataReader deviceDataReader;
+        private readonly IPollingStrategy pollingStrategy;
+
+        private volatile bool _isRunning;
+        public bool IsRunning
+        {
+            get
+            {
+                return this._isRunning;
+            }
+            private set
+            {
+                this._isRunning = value;
+            }
+        }
+
+        private Timer timer;
+        private volatile bool stopped;
+
+        private int _defaultPollingInterval = 5;
+        /// <summary>
+        /// Sets the default polling interval in seconds on which 
+        /// next polling occurs after <c>deviceDataReader</c> fails.
+        /// <para> </para>
+        /// <para>By default, this value is set to 5 seconds.</para>
+        /// <para> </para>
+        /// <para>Throws <c>System.ArgumentException</c> if the default 
+        /// polling interval is less than one second.</para>
+        /// </summary>
+        public int DefaultPollingInterval
+        {
+            get
+            {
+                return _defaultPollingInterval;
+            }
+            private set
+            {
+                if (value < 1)
+                {
+                    throw new ArgumentException();
+                }
+
+                this._defaultPollingInterval = value;
+            }
+        }
+
+        public event DeviceDataJobEventHandler DeviceDataJobEventHandler;
+
+        public event DeviceDataJobErrorEventHandler DeviceDataJobErrorEventHandler;
+
+        public DeviceDataJob(IDeviceDataReader deviceDataReader, IPollingStrategy pollingStrategy)
+        {
+            this.deviceDataReader = deviceDataReader;
+            this.pollingStrategy = pollingStrategy;
+        }
+
+        public void Start()
+        {
+            this.stopped = false;
+
+            if (this.timer.IsNull())
+            {
+                this.timer = new Timer
+                {
+                    Interval = 1000, // Execute immediately.
+                    Enabled = true
+                };
+
+                this.timer.Elapsed += new ElapsedEventHandler(Run);
+                this.timer.Start();
+            }
+            else
+            {
+                this.timer.Interval = 1000; // Execute immediately.
+                this.timer.Start();
+            }
+        }
+
+        public void Stop()
+        {
+            this.stopped = true;
+
+            if (this.timer.IsNotNull())
+            {
+                this.timer.Stop();
+            }
+        }
+
+        private void Run(object o, EventArgs e)
+        {
+            this.IsRunning = true;
+
+            try
+            {
+                this.timer.Stop();
+
+                // Set timer interval to the default polling interval in case that deviceDataReader fails.
+                this.timer.Interval = this.DefaultPollingInterval;
+
+                // Read device data.
+                var deviceData = this.deviceDataReader.Read();
+
+                // Update timer interval according with polling strategy.
+                this.timer.Interval = this.pollingStrategy.GetNextInterval(deviceData.WDT) * 1000;
+
+                this.OnSuccess(deviceData);
+            }
+            catch (Exception ex)
+            {
+                this.OnError(ex);
+            }
+            finally
+            {
+                this.IsRunning = false;
+
+                if (!this.stopped)
+                {
+                    this.timer.Start();
+                }
+            }
+        }
+
+        protected virtual void OnSuccess(DeviceData deviceData)
+        {
+            DeviceDataJobEventHandler?.Invoke(this, new DeviceDataJobEventArgs(deviceData));
+        }
+
+        protected virtual void OnError(Exception exception)
+        {
+            DeviceDataJobErrorEventHandler?.Invoke(this, new DeviceDataJobErrorEventArgs(exception));
+        }
+    }
+}

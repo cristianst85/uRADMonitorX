@@ -2,22 +2,27 @@
 using System.Diagnostics;
 using uRADMonitorX.Core.Device;
 
-namespace uRADMonitorX.GuiTest {
+namespace uRADMonitorX.GuiTest
+{
+    public class DeviceDataVirtualReader : IDeviceDataReader
+    {
+        private readonly VirtualDevice device;
 
-    public class DeviceDataVirtualReader : IDeviceDataReader {
-
-        private VirtualDevice device;
-
-        public DeviceDataVirtualReader(VirtualDevice device) {
+        public DeviceDataVirtualReader(VirtualDevice device)
+        {
             this.device = device;
         }
 
-        public DeviceData Read() {
-            try {
+        public DeviceData Read()
+        {
+            try
+            {
                 return this.device.ReadData();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Debug.WriteLine(ex.ToString());
+
                 throw;
             }
         }

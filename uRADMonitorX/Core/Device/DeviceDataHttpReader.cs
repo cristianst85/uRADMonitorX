@@ -1,47 +1,37 @@
 ﻿using System;
-using System.IO;
-using System.Net;
+using uRADMonitorX.Commons;
+using uRADMonitorX.Commons.Networking;
+using uRADMonitorX.Extensions;
 
-namespace uRADMonitorX.Core.Device {
+namespace uRADMonitorX.Core.Device
+{
+    public class DeviceDataHttpReader : DeviceDataReader
+    {
+        public string DeviceUrl { get; private set; }
 
-    public class DeviceDataHttpReader : DeviceDataReader, IDeviceDataReader {
+        public IHttpClient HttpClient { get; private set; }
 
-        public String IPAddress { get; private set; }
-        public int Timeout { get; set; }
-
-        public DeviceDataHttpReader(String ipAddress) {
-
-            if (String.IsNullOrEmpty(ipAddress)) {
+        public DeviceDataHttpReader(IHttpClient httpClient, string ipAddress)
+        {
+            if (ipAddress.IsNullOrEmpty())
+            {
                 throw new ArgumentNullException("ipAddress");
             }
 
-            if (!uRADMonitorX.Commons.Networking.IPAddress.IsValidFormat(ipAddress) &&
-                !uRADMonitorX.Commons.Networking.IPEndPoint.IsValidFormat(ipAddress)) {
+            if (!Commons.Networking.IPAddress.IsValidFormat(ipAddress) && !IPEndPoint.IsValidFormat(ipAddress))
+            {
                 throw new ArgumentException("Invalid IP address.");
             }
 
-            this.IPAddress = ipAddress;
+            this.HttpClient = httpClient;
+            this.DeviceUrl = string.Format("http://{0}/", ipAddress);
         }
 
-        public DeviceData Read() {
-            String htmlContent = this.retrieveContentFromUrl(String.Format("http://{0}/", this.IPAddress));
-            return this.internalParse(htmlContent);
-        }
+        public override DeviceData Read()
+        {
+            string htmlContent = this.HttpClient.Get(this.DeviceUrl);
 
-        private String retrieveContentFromUrl(String url) {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.UserAgent = Program.UserAgent;
-            if (this.Timeout > 0) {
-                request.Timeout = this.Timeout; // TODO: HttpWebRequest seems to have a default timeout of approx. 20 sec.
-            }
-            String htmlContent = String.Empty;
-            using (WebResponse response = request.GetResponse()) {
-                Stream data = response.GetResponseStream();
-                using (StreamReader sr = new StreamReader(data)) {
-                    htmlContent = sr.ReadToEnd();
-                }
-            }
-            return htmlContent;
+            return this.Parse(htmlContent);
         }
     }
 }

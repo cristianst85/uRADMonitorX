@@ -16,9 +16,8 @@ using uRADMonitorX.Commons.Networking;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
 using uRADMonitorX.Core.Device;
-using uRADMonitorX.Core.Fetchers;
+using uRADMonitorX.Core.Jobs;
 using uRADMonitorX.Extensions;
-using uRADMonitorX.Updater;
 using uRADMonitorX.Windows;
 
 namespace uRADMonitorX {
@@ -27,11 +26,12 @@ namespace uRADMonitorX {
 
         public event SettingsChangedEventHandler SettingsChangedEventHandler;
 
-        private IDeviceDataFetcher deviceDataFetcher = null;
+        private IDeviceDataJob deviceDataJob = null;
         private ITimeSpanFormatter timeSpanFormatter = new TimeSpanFormatter();
         private ILogger logger = null;
         private ISettings settings = null;
         private IDeviceDataReaderFactory deviceDataReaderFactory = null;
+        private IDeviceDataJobFactory deviceDataJobFactory = null;
 
         private volatile bool _isClosing;
         public bool IsClosing {
@@ -60,11 +60,12 @@ namespace uRADMonitorX {
         private DateTime? notifyIconBalloonLastShownAt = null;
         private DateTime? lastDataReadingTimestamp = null;
 
-        public FormMain(IDeviceDataReaderFactory deviceDataReaderFactory, ISettings settings, ILogger logger) {
+        public FormMain(IDeviceDataReaderFactory deviceDataReaderFactory, IDeviceDataJobFactory deviceDataJobFactory, ISettings settings, ILogger logger) {
             try {
                 InitializeComponent();
 
                 this.deviceDataReaderFactory = deviceDataReaderFactory;
+                this.deviceDataJobFactory = deviceDataJobFactory;
                 this.settings = settings;
                 this.logger = logger;
 
@@ -190,26 +191,18 @@ namespace uRADMonitorX {
             }
 
             if (!IsClosing) {
-                if (this.deviceDataFetcher != null) {
-                    this.deviceDataFetcher.Stop();
-                    this.deviceDataFetcher.DeviceDataFetcherEventHandler -= deviceDataFetcher_DeviceDataFetcherEventHandler;
-                    this.deviceDataFetcher.DeviceDataFetcherErrorEventHandler -= deviceDataFetcher_DeviceDataFetcherErrorEventHandler;
+                if (this.deviceDataJob != null) {
+                    this.deviceDataJob.Stop();
+                    this.deviceDataJob.DeviceDataJobEventHandler -= deviceDataJob_DeviceDataJobEventHandler;
+                    this.deviceDataJob.DeviceDataJobErrorEventHandler -= deviceDataJob_DeviceDataJobErrorEventHandler;
                 }
 
                 if (!String.IsNullOrEmpty(this.settings.DeviceIPAddress)) {
-                    IDeviceDataReader deviceDataReader = deviceDataReaderFactory.Create();
-                    IPollingStrategy pollingStrategy = null;
-                    if (this.settings.PollingType == Core.PollingType.WDTSync) {
-                        pollingStrategy = new WDTSyncPollingStrategy(60);
-                    }
-                    else {
-                        pollingStrategy = new FixedIntervalPollingStrategy(this.settings.PollingInterval);
-                    }
-                    deviceDataFetcher = new DeviceDataFetcher(deviceDataReader, pollingStrategy);
-                    deviceDataFetcher.DeviceDataFetcherEventHandler += new DeviceDataFetcherEventHandler(deviceDataFetcher_DeviceDataFetcherEventHandler);
-                    deviceDataFetcher.DeviceDataFetcherErrorEventHandler += new DeviceDataFetcherErrorEventHandler(deviceDataFetcher_DeviceDataFetcherErrorEventHandler);
+                    deviceDataJob = deviceDataJobFactory.Create();
+                    deviceDataJob.DeviceDataJobEventHandler += new DeviceDataJobEventHandler(deviceDataJob_DeviceDataJobEventHandler);
+                    deviceDataJob.DeviceDataJobErrorEventHandler += new DeviceDataJobErrorEventHandler(deviceDataJob_DeviceDataJobErrorEventHandler);
                     if (this.enablePollingToolStripMenuItem.Checked) {
-                        deviceDataFetcher.Start();
+                        deviceDataJob.Start();
                         if (!isRestart) {
                             this.updateDeviceStatus(String.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
                         }
@@ -256,7 +249,7 @@ namespace uRADMonitorX {
             }
         }
 
-        private void deviceDataFetcher_DeviceDataFetcherErrorEventHandler(object sender, DeviceDataFetcherErrorEventArgs e) {
+        private void deviceDataJob_DeviceDataJobErrorEventHandler(object sender, DeviceDataJobErrorEventArgs e) {
             if (!this.IsClosing) {
                 this.Invoke(new updateDeviceStatusOnErrorCallback(updateDeviceStatusOnError), new object[] { e.Exception });
             }
@@ -294,7 +287,7 @@ namespace uRADMonitorX {
             NotifyIconUtils.SetText(this.notifyIcon, notifyIconText.ToString());
         }
 
-        private void deviceDataFetcher_DeviceDataFetcherEventHandler(object sender, DeviceDataFetcherEventArgs e) {
+        private void deviceDataJob_DeviceDataJobEventHandler(object sender, DeviceDataJobEventArgs e) {
             if (!this.IsClosing) {
                 this.Invoke(new updateDeviceDataCallback(updateDeviceData), new object[] { e.DeviceData });
             }
@@ -340,12 +333,12 @@ namespace uRADMonitorX {
                 if (RadiationDetector.IsKnown(radiationDetectorName)) {
                     RadiationDetector radiationDetector = RadiationDetector.GetByName(radiationDetectorName);
                     if (this.settings.RadiationUnitType == Core.RadiationUnitType.uSvH) {
-                        this.viewOnlyTextBoxRadiation.Text = String.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour(deviceData.Radiation, radiationDetector.Factor), 4));
-                        this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? String.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour((double)deviceData.RadiationAverage, radiationDetector.Factor), 4)) : String.Empty;
+                        this.viewOnlyTextBoxRadiation.Text = String.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour(deviceData.Radiation, radiationDetector.ConversionFactor), 4));
+                        this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? String.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour((double)deviceData.RadiationAverage, radiationDetector.ConversionFactor), 4)) : String.Empty;
                     }
                     else if (this.settings.RadiationUnitType == Core.RadiationUnitType.uRemH) {
-                        this.viewOnlyTextBoxRadiation.Text = String.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour(deviceData.Radiation, radiationDetector.Factor), 2));
-                        this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? String.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour((double)deviceData.RadiationAverage, radiationDetector.Factor), 2)) : String.Empty;
+                        this.viewOnlyTextBoxRadiation.Text = String.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour(deviceData.Radiation, radiationDetector.ConversionFactor), 2));
+                        this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? String.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour((double)deviceData.RadiationAverage, radiationDetector.ConversionFactor), 2)) : String.Empty;
                     }
                     else {
                         // If conversion to other radiation unit type is not implemented fallback silently to cpm.
@@ -469,10 +462,10 @@ namespace uRADMonitorX {
                 if (RadiationDetector.IsKnown(radiationDetectorName)) {
                     RadiationDetector radiationDetector = RadiationDetector.GetByName(radiationDetectorName);
                     if (this.settings.RadiationNotificationUnitType == RadiationUnitType.uSvH) {
-                        currentRadiation = Radiation.CpmToMicroSvPerHour(currentRadiation, radiationDetector.Factor);
+                        currentRadiation = Radiation.CpmToMicroSvPerHour(currentRadiation, radiationDetector.ConversionFactor);
                     }
                     else if (this.settings.RadiationNotificationUnitType == RadiationUnitType.uRemH) {
-                        currentRadiation = Radiation.CpmToMicroRemPerHour(currentRadiation, radiationDetector.Factor);
+                        currentRadiation = Radiation.CpmToMicroRemPerHour(currentRadiation, radiationDetector.ConversionFactor);
                     }
                     currentRadiationUnit = EnumHelper.GetEnumDescription<RadiationUnitType>(this.settings.RadiationNotificationUnitType);
                 }
@@ -520,12 +513,12 @@ namespace uRADMonitorX {
 
         private void enablePollingToolStripMenuItem_CheckedChanged(object sender, EventArgs e) {
             if (this.enablePollingToolStripMenuItem.Checked) {
-                deviceDataFetcher.Start();
+                deviceDataJob.Start();
                 this.updateDeviceStatus(String.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
                 this.updateNotifyIconText(String.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
             }
             else {
-                deviceDataFetcher.Stop();
+                deviceDataJob.Stop();
                 this.updateDeviceStatus("Polling is disabled.");
                 this.updateNotifyIconText("Polling is disabled.");
             }

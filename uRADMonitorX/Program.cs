@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -11,6 +12,7 @@ using uRADMonitorX.Commons.Logging.Appenders;
 using uRADMonitorX.Commons.Logging.Formatters;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
+using uRADMonitorX.Helpers;
 using uRADMonitorX.Updater;
 using uRADMonitorX.Windows;
 
@@ -18,12 +20,14 @@ namespace uRADMonitorX {
 
     internal static class Program {
 
+        public static readonly string ApplicationName = "uRADMonitorX";
         public static readonly String LoggerName = "fileLogger";
         public static readonly String DataLoggerName = "dataLogger";
         public static readonly String LoggerFileName = "uRADMonitorX.log";
         public static readonly String DataLoggerFileName = "data.log";
         public static readonly String SettingsFileName = "config.xml";
         public static readonly String UserAgent = "uRADMonitorX/1.0";
+
         /// <summary>
         /// Specifies the URL application uses to check 
         /// for updates. Only use secure URLs (HTTPS).
@@ -75,9 +79,9 @@ namespace uRADMonitorX {
                 var assembly = typeof(Program).Assembly;
                 GuidAttribute guidAttribute = (GuidAttribute)assembly.GetCustomAttributes(typeof(GuidAttribute), true)[0];
                 bool applicationInstanceIsNotRunning;
-                mutex = new Mutex(false, String.Format("{0}{1}", Application.ProductName, guidAttribute.Value), out applicationInstanceIsNotRunning);
+                mutex = new Mutex(false, String.Format("{0}{1}", Program.ApplicationName, guidAttribute.Value), out applicationInstanceIsNotRunning);
                 if (!applicationInstanceIsNotRunning) {
-                    MessageBox.Show(String.Format("An instance of this program is already running."), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(String.Format("An instance of this program is already running."), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
@@ -90,7 +94,7 @@ namespace uRADMonitorX {
                         XMLSettings.CreateFile(settingsFilePath);
                     }
                     catch (Exception createSettingsFileException) {
-                        MessageBox.Show(String.Format("Cannot create settings file {0}.\n\nError details: {1}", settingsFilePath, createSettingsFileException.Message), "uRADMonitorX", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(String.Format("Cannot create settings file {0}.\n\nError details: {1}", settingsFilePath, createSettingsFileException.Message), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }
@@ -100,7 +104,7 @@ namespace uRADMonitorX {
                 settings.Commit();
             }
             catch (Exception loadSettingsFileException) {
-                MessageBox.Show(String.Format("Cannot load settings from file {0}.\n\nError details: {1}", settingsFilePath, loadSettingsFileException.Message), "uRADMonitorX", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(String.Format("Cannot load settings from file {0}.\n\nError details: {1}", settingsFilePath, loadSettingsFileException.Message), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -130,6 +134,7 @@ namespace uRADMonitorX {
             logger = LoggerManager.GetInstance().GetLogger(Program.LoggerName);
 
             IDeviceDataReaderFactory deviceDataReaderFactory = new DeviceDataHttpReaderFactory(settings);
+            IDeviceDataJobFactory deviceDataJobFactory = new DeviceDataJobFactory(settings, deviceDataReaderFactory);
 
             if (!arguments.IgnoreRegisteringAtWindowsStartup && !EnvironmentUtils.IsUnix()) {
                 registerAtWindowsStartup();
@@ -138,7 +143,7 @@ namespace uRADMonitorX {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            FormMain formMain = new FormMain(deviceDataReaderFactory, settings, logger);
+            FormMain formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, settings, logger);
             formMain.SettingsChangedEventHandler += new SettingsChangedEventHandler(formMain_SettingsChangedEventHandler);
 
             Application.Run(formMain);

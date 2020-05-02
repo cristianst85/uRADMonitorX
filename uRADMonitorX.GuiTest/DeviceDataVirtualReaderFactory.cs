@@ -1,17 +1,19 @@
 ﻿using uRADMonitorX.Core;
 using uRADMonitorX.Core.Device;
 
-namespace uRADMonitorX.GuiTest {
+namespace uRADMonitorX.GuiTest
+{
+    public class DeviceDataVirtualReaderFactory : IDeviceDataReaderFactory
+    {
+        private readonly VirtualDevice device;
 
-    public class DeviceDataVirtualReaderFactory : IDeviceDataReaderFactory {
-
-        private VirtualDevice device;
-
-        public DeviceDataVirtualReaderFactory(VirtualDevice device) {
+        public DeviceDataVirtualReaderFactory(VirtualDevice device)
+        {
             this.device = device;
         }
 
-        public IDeviceDataReader Create() {
+        public IDeviceDataReader Create()
+        {
             return new DeviceDataVirtualReader(device);
         }
     }

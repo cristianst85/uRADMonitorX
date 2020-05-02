@@ -1,7 +1,7 @@
-﻿namespace uRADMonitorX.Core.Device {
-
-    public interface IDeviceDataReader {
-
+﻿namespace uRADMonitorX.Core.Device
+{
+    public interface IDeviceDataReader
+    {
         DeviceData Read();
     }
 }
