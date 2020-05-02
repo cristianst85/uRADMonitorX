@@ -76,7 +76,7 @@ namespace uRADMonitorX
                 this.UpdateStatus(string.Format("An error occurred while checking for updates: {0}.", TextStyleFormatter.LowercaseFirst(ex.Message).TrimEnd('.')));
                 this.logger.Write(string.Format("An error occurred while checking for updates. Exception: {0}", ex.ToString()));
 
-                Debug.WriteLine(string.Format("[FormUpdate] Exception: {0}", ex.ToString()));
+                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormUpdate)}] Exception: {ex.ToString()}");
 
                 if (ex.Message.Equals("Unable to connect to the remote server", StringComparison.OrdinalIgnoreCase))
                 {
@@ -226,7 +226,7 @@ namespace uRADMonitorX
                 this.UpdateStatus(string.Format("An error occurred while downloading application update: {0}.", TextStyleFormatter.LowercaseFirst(ex.Message).Trim().TrimEnd('.')));
                 this.logger.Write(string.Format("An error occurred while downloading application update. Exception: {0}", ex.ToString()));
 
-                Debug.WriteLine(string.Format("[FormUpdate] Exception: {0}", ex.ToString()));
+                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormUpdate)}] Exception: {ex.ToString()}");
             }
         }
     }

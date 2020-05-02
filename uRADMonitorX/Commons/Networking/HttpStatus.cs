@@ -1,61 +1,77 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace uRADMonitorX.Commons.Networking {
-
-    public class HttpStatus {
-
+namespace uRADMonitorX.Commons.Networking
+{
+    public class HttpStatus
+    {
         private readonly static IList<HttpStatus> statuses = new List<HttpStatus>() {
             HttpStatus.OK
         };
 
         public int Code { get; private set; }
-        public String Reason { get; private set; }
+        public string Reason { get; private set; }
 
-        private HttpStatus(int code, String reason) {
+        private HttpStatus(int code, string reason)
+        {
             this.Code = code;
             this.Reason = reason;
         }
 
-        public static HttpStatus Unreachable {
-            get {
+        public static HttpStatus Unreachable
+        {
+            get
+            {
                 return new HttpStatus(0, "Unreachable");
             }
         }
 
-        public static HttpStatus OK {
-            get {
+        public static HttpStatus OK
+        {
+            get
+            {
                 return new HttpStatus(200, "OK");
             }
         }
 
-        public static HttpStatus InternalServerError {
-            get {
+        public static HttpStatus InternalServerError
+        {
+            get
+            {
                 return new HttpStatus(500, "Internal Server Error");
             }
         }
 
-        public static HttpStatus ServiceUnavailable {
-            get {
+        public static HttpStatus ServiceUnavailable
+        {
+            get
+            {
                 return new HttpStatus(503, "Service Unavailable");
             }
         }
 
-        public static HttpStatus FromCode(int code) {
-            foreach (HttpStatus status in statuses) {
-                if (status.Code == code) {
+        public static HttpStatus FromCode(int code)
+        {
+            foreach (HttpStatus status in statuses)
+            {
+                if (status.Code == code)
+                {
                     return status;
                 }
             }
-            throw new Exception(String.Format("Http status code {0} was not found.", code));
+            throw new Exception(string.Format("HTTP status code {0} was not found.", code));
         }
 
-        public static String GetReason(int code) {
-            foreach (HttpStatus status in statuses) {
-                if (status.Code == code) {
+        public static string GetReason(int code)
+        {
+            foreach (var status in statuses)
+            {
+                if (status.Code == code)
+                {
                     return status.Reason;
                 }
             }
+
             return null;
         }
     }

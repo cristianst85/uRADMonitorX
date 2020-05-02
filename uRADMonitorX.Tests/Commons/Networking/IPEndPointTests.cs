@@ -1,12 +1,12 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System;
 using uRADMonitorX.Commons.Networking;
 
-namespace uRADMonitorX.Tests.Commons.Networking {
-
+namespace uRADMonitorX.Tests.Commons.Networking
+{
     [TestFixture]
-    public class IPEndPointTests {
-
+    public class IPEndPointTests
+    {
         [TestCase("", false)]
         [TestCase("abcdef", false)]
         [TestCase("127.0.0.1:80", true)]
@@ -21,7 +21,8 @@ namespace uRADMonitorX.Tests.Commons.Networking {
         [TestCase("127.0.0:", false)]
         [TestCase("127.0.0.1:abc", false, Description = "Valid IP address but with invalid port (non integer).")]
         [TestCase("127.0.0.1:1a", false, Description = "Valid IP address but with invalid port (starts with a digit but contains non digits).")]
-        public void IsValid(String ipAddressWithPort, bool expectedResult) {
+        public void IsValid(string ipAddressWithPort, bool expectedResult)
+        {
             Assert.AreEqual(expectedResult, IPEndPoint.IsValidFormat(ipAddressWithPort));
         }
     }

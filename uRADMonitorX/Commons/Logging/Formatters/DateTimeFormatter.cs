@@ -1,19 +1,21 @@
 ﻿using System;
 
-namespace uRADMonitorX.Commons.Logging.Formatters {
-
-    public class DateTimeFormatter : ILoggerFormatter {
-
+namespace uRADMonitorX.Commons.Logging.Formatters
+{
+    public class DateTimeFormatter : ILoggerFormatter
+    {
         public const string DefaultDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
-        private String dateTimeFormat = null;
+        private readonly string dateTimeFormat = null;
 
-        public DateTimeFormatter() {
+        public DateTimeFormatter()
+        {
             this.dateTimeFormat = DefaultDateTimeFormat;
         }
 
-        public String Format(String message) {
-            return String.Format("[{0}] {1}", DateTime.Now.ToString(dateTimeFormat), message);
+        public string Format(string message)
+        {
+            return string.Format("[{0}] {1}", DateTime.Now.ToString(dateTimeFormat), message);
         }
     }
 }

@@ -135,8 +135,6 @@ namespace uRADMonitorX.Core.Jobs
 
         public void Dispose()
         {
-            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(DeviceDataJob)}] Dispose()");
-
             Dispose(true);
             GC.SuppressFinalize(this);
         }

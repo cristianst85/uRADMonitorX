@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace uRADMonitorX
 {
+    [SuppressMessage(category: "Style", checkId: "IDE1006")]
     public static class uRADMonitorHelper
     {
         public static void OpenDashboardUrl(string deviceId)

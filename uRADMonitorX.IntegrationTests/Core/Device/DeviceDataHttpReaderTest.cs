@@ -16,4 +16,3 @@ namespace uRADMonitorX.IntegrationTests.Core.Device
         }
     }
 }
-

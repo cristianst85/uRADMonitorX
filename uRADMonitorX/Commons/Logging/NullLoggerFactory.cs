@@ -1,11 +1,13 @@
-﻿namespace uRADMonitorX.Commons.Logging {
-
-    public class NullLoggerFactory : ILoggerFactory {
-
-        public NullLoggerFactory() {
+﻿namespace uRADMonitorX.Commons.Logging
+{
+    public class NullLoggerFactory : ILoggerFactory
+    {
+        public NullLoggerFactory()
+        {
         }
 
-        public ILogger Create() {
+        public ILogger Create()
+        {
             return new NullLogger();
         }
     }

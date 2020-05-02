@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace uRADMonitorX.Commons.Logging.Formatters {
-
+﻿namespace uRADMonitorX.Commons.Logging.Formatters
+{
     public interface ILoggerFormatter {
 
-        String Format(String message);
+        string Format(string message);
     }
 }

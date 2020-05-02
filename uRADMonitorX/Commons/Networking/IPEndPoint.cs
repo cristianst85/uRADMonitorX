@@ -1,49 +1,58 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace uRADMonitorX.Commons.Networking {
+namespace uRADMonitorX.Commons.Networking
+{
+    public class IPEndPoint
+    {
+        private static readonly string IpEndPointPattern = @"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}:[0-9]+$";
 
-    public class IPEndPoint {
+        public string IPAddress { get; private set; }
 
-        private static String ipEndPointPattern = @"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}:[0-9]+$";
-
-        public String IPAddress { get; private set; }
         public int Port { get; private set; }
 
-        private IPEndPoint(String ipAddress, int port) {
+        private IPEndPoint(string ipAddress, int port)
+        {
             this.IPAddress = ipAddress;
             this.Port = port;
         }
 
-        public IPEndPoint Parse(String ipEndPoint) {
+        public IPEndPoint Parse(string ipEndPoint)
+        {
             throw new NotImplementedException();
         }
 
-        public bool TryParse(String ipEndPoint, out IPEndPoint ipEndPointObj) {
+        public bool TryParse(string ipEndPoint, out IPEndPoint ipEndPointObj)
+        {
             throw new NotImplementedException();
         }
 
-        public static bool IsValidFormat(String ipEndPoint) {
-            if (ipEndPoint == null) {
+        public static bool IsValidFormat(string ipEndPoint)
+        {
+            if (ipEndPoint == null)
+            {
                 throw new ArgumentNullException("ipEndPoint");
             }
 
-            bool isRegexMatch = createRegex(ipEndPointPattern).IsMatch(ipEndPoint);
+            bool isRegexMatch = CreateRegex(IpEndPointPattern).IsMatch(ipEndPoint);
 
-            if (!isRegexMatch) {
+            if (!isRegexMatch)
+            {
                 return false;
             }
-            else {
-                int port = int.Parse(ipEndPoint.Substring(ipEndPoint.IndexOf(':') + 1));
-                return isRegexMatch && isValidPortNumber(port);
-            }
+
+            int port = int.Parse(ipEndPoint.Substring(ipEndPoint.IndexOf(':') + 1));
+
+            return isRegexMatch && IsValidPortNumber(port);
         }
 
-        private static bool isValidPortNumber(int portNumber) {
+        private static bool IsValidPortNumber(int portNumber)
+        {
             return (portNumber > 0 && portNumber <= 65535);
         }
 
-        private static Regex createRegex(String pattern) {
+        private static Regex CreateRegex(string pattern)
+        {
             return new Regex(pattern, RegexOptions.IgnoreCase);
         }
     }

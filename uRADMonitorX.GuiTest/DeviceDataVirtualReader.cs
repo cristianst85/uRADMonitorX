@@ -21,7 +21,7 @@ namespace uRADMonitorX.GuiTest
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.ToString());
+                Debug.WriteLine($"[uRADMonitorX.GuiTest] [{nameof(Program)}] {ex.ToString()}");
 
                 throw;
             }

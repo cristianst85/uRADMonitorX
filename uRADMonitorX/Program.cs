@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -12,179 +10,220 @@ using uRADMonitorX.Commons.Logging.Appenders;
 using uRADMonitorX.Commons.Logging.Formatters;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
-using uRADMonitorX.Helpers;
+using uRADMonitorX.Extensions;
 using uRADMonitorX.Updater;
 using uRADMonitorX.Windows;
 
-namespace uRADMonitorX {
-
-    internal static class Program {
-
-        public static readonly string ApplicationName = "uRADMonitorX";
-        public static readonly String LoggerName = "fileLogger";
-        public static readonly String DataLoggerName = "dataLogger";
-        public static readonly String LoggerFileName = "uRADMonitorX.log";
-        public static readonly String DataLoggerFileName = "data.log";
-        public static readonly String SettingsFileName = "config.xml";
-        public static readonly String UserAgent = "uRADMonitorX/1.0";
+namespace uRADMonitorX
+{
+    internal static class Program
+    {
+        internal static readonly string ApplicationName = "uRADMonitorX";
+        internal static readonly string LoggerName = "fileLogger";
+        internal static readonly string DataLoggerName = "dataLogger";
+        internal static readonly string LoggerFileName = "uRADMonitorX.log";
+        internal static readonly string DataLoggerFileName = "data.log";
+        internal static readonly string SettingsFileName = "config.xml";
+        internal static readonly string UserAgent = "uRADMonitorX/1.0";
 
         /// <summary>
         /// Specifies the URL application uses to check 
         /// for updates. Only use secure URLs (HTTPS).
         /// </summary>
-        public static readonly String UpdateUrl = "https://api.github.com/repos/cristianst85/uRADMonitorX/releases/latest";
+        internal static readonly string UpdateUrl = "https://api.github.com/repos/cristianst85/uRADMonitorX/releases/latest";
+
         /// <summary>
         /// Specifies the interval in minutes at which the
         /// application automatically checks for updates.
         /// </summary>
-        public static readonly int UpdaterInterval = 720; // 12 hours.
-
-        private static ProgramArguments arguments = null;
-        private static ISettings settings = null;
-        private static ILogger logger = null;
-
-        private static Mutex mutex;
+        internal static readonly int UpdaterInterval = 720; // 12 hours.
 
         internal static readonly IWebUpdater ApplicationUpdater = new GitHubUpdater();
+
+        private static ProgramArguments programArguments = null;
+        private static ISettings settings = null;
+        private static ILogger logger = null;
+        private static Mutex mutex = null;
 
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(string[] args) {
+        static void Main(string[] args)
+        {
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyUtils.AssemblyResolver);
-            internalMain(args);
+            InternalMain(args);
         }
 
-        static void internalMain(string[] args) {
-
-            bool success = ProgramArguments.TryParse(args, out arguments);
-
-            if (!success) {
-                arguments = new ProgramArguments(); // Get a new instance with default values.
+        static void InternalMain(string[] args)
+        {
+            if (!ProgramArguments.TryParse(args, out programArguments))
+            {
+                // Get a new instance with default values.
+                programArguments = new ProgramArguments();
             }
 
-            if (arguments.CleanupUpdate || EnvironmentUtils.IsMonoRuntime()) {
-                if (!EnvironmentUtils.IsMonoRuntime()) {
+            if (programArguments.CleanupUpdate || EnvironmentUtils.IsMonoRuntime())
+            {
+                if (!EnvironmentUtils.IsMonoRuntime())
+                {
                     // Wait one second to allow the other instance to exit.
                     Thread.Sleep(1000);
                 }
+
+                var applicationTemporaryFilePath = string.Format("{0}.tmp", AssemblyUtils.GetApplicationPath());
+
                 // Remove the old executable file.
-                if (File.Exists(String.Format("{0}.tmp", AssemblyUtils.GetApplicationPath()))) {
-                    File.Delete(String.Format("{0}.tmp", AssemblyUtils.GetApplicationPath()));
+                if (File.Exists(applicationTemporaryFilePath))
+                {
+                    File.Delete(applicationTemporaryFilePath);
                 }
             }
 
-            if (!arguments.AllowMultipleInstances) {
-                var assembly = typeof(Program).Assembly;
-                GuidAttribute guidAttribute = (GuidAttribute)assembly.GetCustomAttributes(typeof(GuidAttribute), true)[0];
-                bool applicationInstanceIsNotRunning;
-                mutex = new Mutex(false, String.Format("{0}{1}", Program.ApplicationName, guidAttribute.Value), out applicationInstanceIsNotRunning);
-                if (!applicationInstanceIsNotRunning) {
-                    MessageBox.Show(String.Format("An instance of this program is already running."), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (!programArguments.AllowMultipleInstances)
+            {
+                var guidAttribute = (GuidAttribute)(typeof(Program).Assembly).GetCustomAttributes(typeof(GuidAttribute), true)[0];
+                mutex = new Mutex(false, string.Format("{0}{1}", Program.ApplicationName, guidAttribute.Value), out bool applicationInstanceIsNotRunning);
+
+                if (!applicationInstanceIsNotRunning)
+                {
+                    MessageBox.Show(string.Format("An instance of this program is already running."), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                     return;
                 }
             }
 
             // Load settings.
-            String settingsFilePath = String.Format("{0}{1}{2}", Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath), Path.DirectorySeparatorChar, Program.SettingsFileName);
-            try {
-                if (!File.Exists(settingsFilePath)) {
-                    try {
+            var settingsFilePath = string.Format("{0}{1}{2}", Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath), Path.DirectorySeparatorChar, Program.SettingsFileName);
+
+            try
+            {
+                if (!File.Exists(settingsFilePath))
+                {
+                    try
+                    {
                         XMLSettings.CreateFile(settingsFilePath);
                     }
-                    catch (Exception createSettingsFileException) {
-                        MessageBox.Show(String.Format("Cannot create settings file {0}.\n\nError details: {1}", settingsFilePath, createSettingsFileException.Message), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    catch (Exception createSettingsFileException)
+                    {
+                        MessageBox.Show(string.Format("Cannot create settings file {0}.\n\nError details: {1}", settingsFilePath, createSettingsFileException.Message), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                         return;
                     }
                 }
+
                 settings = XMLSettings.LoadFromFile(settingsFilePath);
+
                 // Fixes an issue with data log directory name on Linux due to trailing slash.
-                settings.DataLogDirectoryPath = settings.DataLogDirectoryPath.TrimEnd('\\');
-                settings.Commit();
+                if (settings.DataLogDirectoryPath.IsNotNull() && settings.DataLogDirectoryPath.EndsWith("\\"))
+                {
+                    settings.DataLogDirectoryPath = settings.DataLogDirectoryPath.TrimEnd('\\');
+                    settings.Commit();
+                }
             }
-            catch (Exception loadSettingsFileException) {
-                MessageBox.Show(String.Format("Cannot load settings from file {0}.\n\nError details: {1}", settingsFilePath, loadSettingsFileException.Message), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            catch (Exception loadSettingsFileException)
+            {
+                MessageBox.Show(string.Format("Cannot load settings from file {0}.\n\nError details: {1}", settingsFilePath, loadSettingsFileException.Message), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 return;
             }
 
-            var loggerFilePath = getLoggerPath(settings.LogDirectoryPath, Program.LoggerFileName, false);
-            var dataLoggerFilePath = getLoggerPath(settings.DataLoggingToSeparateFile ? settings.DataLogDirectoryPath : settings.LogDirectoryPath, Program.DataLoggerFileName, settings.IsLoggingEnabled && settings.IsDataLoggingEnabled && settings.DataLoggingToSeparateFile);
+            var loggerFilePath = GetLoggerPath(settings.LogDirectoryPath, Program.LoggerFileName, false);
+            var dataLoggerFilePath = GetLoggerPath(settings.DataLoggingToSeparateFile ? settings.DataLogDirectoryPath : settings.LogDirectoryPath, Program.DataLoggerFileName, settings.IsLoggingEnabled && settings.IsDataLoggingEnabled && settings.DataLoggingToSeparateFile);
 
             LoggerManager.GetInstance().Add(Program.LoggerName,
                                             new ThreadSafeLogger(
                                                 new Logger(
                                                     new ReconfigurableFileAppender(loggerFilePath),
                                                     new DateTimeFormatter()
-                                                ) {
+                                                )
+                                                {
                                                     Enabled = settings.IsLoggingEnabled
                                                 }
                                             ));
+
             LoggerManager.GetInstance().Add(Program.DataLoggerName,
                                           new ThreadSafeLogger(
                                                 new Logger(
                                                     new NLogDailyFileAppender(dataLoggerFilePath),
                                                     new DateTimeFormatter()
-                                                ) {
+                                                )
+                                                {
                                                     Enabled = settings.IsLoggingEnabled &&
                                                     settings.IsDataLoggingEnabled &&
                                                     settings.DataLoggingToSeparateFile
                                                 }
                                             ));
+
             logger = LoggerManager.GetInstance().GetLogger(Program.LoggerName);
 
-            IDeviceDataReaderFactory deviceDataReaderFactory = new DeviceDataHttpReaderFactory(settings);
-            IDeviceDataJobFactory deviceDataJobFactory = new DeviceDataJobFactory(settings, deviceDataReaderFactory);
+            var deviceDataReaderFactory = new DeviceDataHttpReaderFactory(settings);
+            var deviceDataJobFactory = new DeviceDataJobFactory(settings, deviceDataReaderFactory);
 
-            if (!arguments.IgnoreRegisteringAtWindowsStartup && !EnvironmentUtils.IsUnix()) {
-                registerAtWindowsStartup();
+            if (!programArguments.IgnoreRegisteringAtWindowsStartup && !EnvironmentUtils.IsUnix())
+            {
+                RegisterAtWindowsStartup();
             }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            FormMain formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, settings, logger);
-            formMain.SettingsChangedEventHandler += new SettingsChangedEventHandler(formMain_SettingsChangedEventHandler);
+            var formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, settings, logger);
+            formMain.SettingsChangedEventHandler += new SettingsChangedEventHandler(FormMain_SettingsChangedEventHandler);
 
             Application.Run(formMain);
         }
 
-        private static void formMain_SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e) {
-            if (logger != null) {
-                configLogger(
+        private static void FormMain_SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e)
+        {
+            if (logger != null)
+            {
+                ConfigLogger(
                     LoggerManager.GetInstance().GetLogger(Program.LoggerName),
-                    getLoggerPath(settings.LogDirectoryPath, Program.LoggerFileName, false),
+                    GetLoggerPath(settings.LogDirectoryPath, Program.LoggerFileName, false),
                     settings.IsLoggingEnabled
                 );
-                configLogger(
+
+                ConfigLogger(
                     LoggerManager.GetInstance().GetLogger(Program.DataLoggerName),
-                    getLoggerPath(settings.DataLoggingToSeparateFile ? settings.DataLogDirectoryPath : settings.LogDirectoryPath, Program.DataLoggerFileName, true),
+                    GetLoggerPath(settings.DataLoggingToSeparateFile ? settings.DataLogDirectoryPath : settings.LogDirectoryPath, Program.DataLoggerFileName, true),
                     settings.IsLoggingEnabled && settings.IsDataLoggingEnabled && settings.DataLoggingToSeparateFile
                 );
             }
-            if (!arguments.IgnoreRegisteringAtWindowsStartup && !EnvironmentUtils.IsUnix()) {
-                registerAtWindowsStartup();
+
+            if (!programArguments.IgnoreRegisteringAtWindowsStartup && !EnvironmentUtils.IsUnix())
+            {
+                RegisterAtWindowsStartup();
             }
         }
 
-        private static String getLoggerPath(String loggerDirectoryPath, String loggerFileName, bool createIfNotExists) {
+        private static string GetLoggerPath(string loggerDirectoryPath, string loggerFileName, bool createIfNotExists)
+        {
             loggerDirectoryPath = loggerDirectoryPath.TrimStart('\\').TrimEnd('\\');
-            String loggerFilePath = null;
-            if (Path.IsPathRooted(loggerDirectoryPath)) {
+            string loggerFilePath = null;
+
+            if (Path.IsPathRooted(loggerDirectoryPath))
+            {
                 loggerFilePath = Path.Combine(loggerDirectoryPath, loggerFileName);
             }
-            else {
-                if (loggerDirectoryPath.Length > 0) {
+            else
+            {
+                if (loggerDirectoryPath.Length > 0)
+                {
                     loggerFilePath = Path.Combine(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()), loggerDirectoryPath, loggerFileName);
                 }
-                else {
+                else
+                {
                     loggerFilePath = Path.Combine(Path.GetDirectoryName(AssemblyUtils.GetApplicationPath()), loggerFileName);
                 }
             }
 
-            if (createIfNotExists) {
+            if (createIfNotExists)
+            {
                 var dirPath = Path.GetDirectoryName(loggerFilePath);
-                if (!Directory.Exists(dirPath)) {
+
+                if (!Directory.Exists(dirPath))
+                {
                     Directory.CreateDirectory(dirPath);
                 }
             }
@@ -192,32 +231,41 @@ namespace uRADMonitorX {
             return loggerFilePath;
         }
 
-        private static void configLogger(ILogger logger, String loggerNewFilePath, bool enable) {
+        private static void ConfigLogger(ILogger logger, string loggerNewFilePath, bool enable)
+        {
             logger.Enabled = enable;
-            Debug.WriteLine(loggerNewFilePath);
-            try {
-                ILoggerAppender appender = logger.Appender;
-                if (appender is IReconfigurableFileAppender) {
-                    ((IReconfigurableFileAppender)appender).Reconfigure(loggerNewFilePath);
+
+            try
+            {
+                if (logger.Appender is IReconfigurableFileAppender)
+                {
+                    ((IReconfigurableFileAppender)logger.Appender).Reconfigure(loggerNewFilePath);
                 }
             }
-            catch (UnauthorizedAccessException ex) {
-                logger.Write(String.Format("Cannot reconfigure logger appender. Exception: {0}", ex.ToString()));
+            catch (UnauthorizedAccessException ex)
+            {
+                logger.Write(string.Format("Cannot reconfigure logger appender. Exception: {0}", ex.ToString()));
             }
         }
 
-        private static void registerAtWindowsStartup() {
-            try {
-                if (settings.StartWithWindows) {
-                    RegistryUtils.RegisterAtWindowsStartup(Application.ProductName, String.Format("\"{0}\"", new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
+        private static void RegisterAtWindowsStartup()
+        {
+            try
+            {
+                if (settings.StartWithWindows)
+                {
+                    RegistryUtils.RegisterAtWindowsStartup(Application.ProductName, string.Format("\"{0}\"", new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
                 }
-                else {
+                else
+                {
                     RegistryUtils.UnRegisterAtWindowsStartup(Application.ProductName);
                 }
             }
-            catch (Exception e) {
-                if (logger != null) {
-                    logger.Write(String.Format("Error registering application to start at Windows startup. Exception: {0}", e.ToString()));
+            catch (Exception e)
+            {
+                if (logger != null)
+                {
+                    logger.Write(string.Format("Error registering application to run at Windows Startup. Exception: {0}", e.ToString()));
                 }
             }
         }

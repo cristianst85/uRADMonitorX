@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace uRADMonitorX.Commons.Logging.Appenders {
+namespace uRADMonitorX.Commons.Logging.Appenders
+{
+    public class MemoryAppender : ILoggerAppender
+    {
+        public ICollection<string> Messages { get; private set; }
 
-    public class MemoryAppender : ILoggerAppender {
-
-        public ICollection<String> Messages { get; private set; }
-
-        public MemoryAppender() {
-            this.Messages = new Collection<String>();
+        public MemoryAppender()
+        {
+            this.Messages = new Collection<string>();
         }
 
-        public void Append(string message) {
+        public void Append(string message)
+        {
             this.Messages.Add(message);
         }
     }

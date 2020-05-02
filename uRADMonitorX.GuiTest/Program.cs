@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -10,19 +9,21 @@ using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
 using uRADMonitorX.Core.Device;
 
-namespace uRADMonitorX.GuiTest {
-
-    static class Program {
-
+namespace uRADMonitorX.GuiTest
+{
+    static class Program
+    {
         [STAThread]
-        static void Main(string[] args) {
+        static void Main(string[] args)
+        {
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(AssemblyUtils.AssemblyResolver);
-            internalMain(args);
+            InternalMain(args);
         }
 
-        static void internalMain(string[] args) {
-
-            ISettings settings = new InMemorySettings() {
+        static void InternalMain(string[] args)
+        {
+            var settings = new InMemorySettings()
+            {
                 CloseToSystemTray = true,
                 HasPressureSensor = true,
                 TemperatureUnitType = TemperatureUnitType.Celsius,
@@ -39,37 +40,42 @@ namespace uRADMonitorX.GuiTest {
                 TemperatureNotificationUnitType = TemperatureUnitType.Celsius,
                 RadiationNotificationValue = 0,
                 RadiationNotificationUnitType = RadiationUnitType.Cpm
-
             };
 
-            ILogger logger = new NullLogger();
+            var readings = new Collection<DeviceReadings>
+            {
+                new DeviceReadings() { Radiation = 19, RadiationAverage = 15, Temperature = 26, Pressure = 100040, Voltage = 375, VoltagePercent = 50 },
+                new DeviceReadings() { Radiation = 20, RadiationAverage = 15, Temperature = 25, Pressure = 100000, Voltage = 375, VoltagePercent = 50 },
+                new DeviceReadings() { Radiation = 25, RadiationAverage = 15, Temperature = 24, Pressure = 100020, Voltage = 375, VoltagePercent = 50 },
+                new DeviceReadings() { Radiation = 17, RadiationAverage = 15, Temperature = 25, Pressure = 100025, Voltage = 375, VoltagePercent = 50 },
+                new DeviceReadings() { Radiation = 18, RadiationAverage = 15, Temperature = 26, Pressure = 100030, Voltage = 375, VoltagePercent = 50 },
+                new DeviceReadings() { Radiation = 19, RadiationAverage = 15, Temperature = 25, Pressure = 100040, Voltage = 375, VoltagePercent = 50 }
+            };
 
-            ICollection<DeviceReadings> readings = new Collection<DeviceReadings>();
-            readings.Add(new DeviceReadings() { Radiation = 19, RadiationAverage = 15, Temperature = 26, Pressure = 100040, Voltage = 375, VoltagePercent = 50 });
-            readings.Add(new DeviceReadings() { Radiation = 20, RadiationAverage = 15, Temperature = 25, Pressure = 100000, Voltage = 375, VoltagePercent = 50 });
-            readings.Add(new DeviceReadings() { Radiation = 25, RadiationAverage = 15, Temperature = 24, Pressure = 100020, Voltage = 375, VoltagePercent = 50 });
-            readings.Add(new DeviceReadings() { Radiation = 17, RadiationAverage = 15, Temperature = 25, Pressure = 100025, Voltage = 375, VoltagePercent = 50 });
-            readings.Add(new DeviceReadings() { Radiation = 18, RadiationAverage = 15, Temperature = 26, Pressure = 100030, Voltage = 375, VoltagePercent = 50 });
-            readings.Add(new DeviceReadings() { Radiation = 19, RadiationAverage = 15, Temperature = 25, Pressure = 100040, Voltage = 375, VoltagePercent = 50 });
+            var virtualDevice = new VirtualDevice("10000000", RadiationDetector.SBM20, 112, 108, DeviceModelType.A2, settings.DeviceIPAddress, "0.0.0.0", readings)
+            {
+                ServerResponseCode = HttpStatus.OK
+            };
 
-            VirtualDevice virtualDevice = new VirtualDevice("10000000", RadiationDetector.SBM20, 112, 108, DeviceModelType.A2, settings.DeviceIPAddress, "0.0.0.0", readings);
-            virtualDevice.ServerResponseCode = HttpStatus.OK;
             virtualDevice.Start();
 
-            IDeviceDataReaderFactory deviceDataReaderFactory = new DeviceDataVirtualReaderFactory(virtualDevice);
-            IDeviceDataJobFactory deviceDataJobFactory = new DeviceDataJobFactory(settings, deviceDataReaderFactory);
+            var deviceDataReaderFactory = new DeviceDataVirtualReaderFactory(virtualDevice);
+            var deviceDataJobFactory = new DeviceDataJobFactory(settings, deviceDataReaderFactory);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            FormMain formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, settings, logger);
-            formMain.SettingsChangedEventHandler += new SettingsChangedEventHandler(formMain_SettingsChangedEventHandler);
+            var logger = new NullLogger();
+
+            var formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, settings, logger);
+            formMain.SettingsChangedEventHandler += new SettingsChangedEventHandler(FormMain_SettingsChangedEventHandler);
 
             Application.Run(formMain);
         }
 
-        private static void formMain_SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e) {
-            Debug.WriteLine("Settings changed.");
+        private static void FormMain_SettingsChangedEventHandler(object sender, SettingsChangedEventArgs e)
+        {
+            Debug.WriteLine($"[uRADMonitorX.GuiTest] [{nameof(Program)}] FormMain_SettingsChangedEventHandler()");
         }
     }
 }

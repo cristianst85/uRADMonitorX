@@ -1,13 +1,17 @@
 ﻿using System;
 
-namespace uRADMonitorX.Commons.Logging.Appenders {
+namespace uRADMonitorX.Commons.Logging.Appenders
+{
 
-    public class NullAppender : ILoggerAppender {
+    public class NullAppender : ILoggerAppender
+    {
 
-        public NullAppender() {
+        public NullAppender()
+        {
         }
 
-        public void Append(String message) {
+        public void Append(String message)
+        {
             ; // Do nothing. All messages are discarded.
         }
     }

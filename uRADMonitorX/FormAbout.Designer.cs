@@ -74,7 +74,7 @@
             this.linkLabelContact.TabIndex = 1;
             this.linkLabelContact.TabStop = true;
             this.linkLabelContact.Text = "cristianstoica85@gmail.com";
-            this.linkLabelContact.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelContact_LinkClicked);
+            this.linkLabelContact.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelContact_LinkClicked);
             // 
             // label3
             // 
@@ -94,7 +94,7 @@
             this.linkLabel3.TabIndex = 0;
             this.linkLabel3.TabStop = true;
             this.linkLabel3.Text = "Released under GNU GPLv2.";
-            this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
+            this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel3_LinkClicked);
             // 
             // richTextBoxCopyright
             // 

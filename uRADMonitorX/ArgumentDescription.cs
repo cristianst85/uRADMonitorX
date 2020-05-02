@@ -1,13 +1,15 @@
 ﻿using System;
 
-namespace uRADMonitorX {
+namespace uRADMonitorX
+{
+    public class ArgumentDescriptionAttribute : Attribute
+    {
+        public string Parameter { get; private set; }
 
-    public class ArgumentDescriptionAttribute : Attribute {
+        public string HelpText { get; private set; }
 
-        public String Parameter { get; private set; }
-        public String HelpText { get; private set; }
-
-        public ArgumentDescriptionAttribute(String parameter, String helpText) {
+        public ArgumentDescriptionAttribute(string parameter, string helpText)
+        {
             this.Parameter = parameter;
             this.HelpText = helpText;
         }

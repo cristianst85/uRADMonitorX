@@ -89,7 +89,7 @@
             this.buttonApply.TabIndex = 1;
             this.buttonApply.Text = "Apply";
             this.buttonApply.UseVisualStyleBackColor = true;
-            this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
+            this.buttonApply.Click += new System.EventHandler(this.ButtonApply_Click);
             // 
             // buttonCancel
             // 
@@ -110,7 +110,7 @@
             this.buttonOK.TabIndex = 3;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
-            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
+            this.buttonOK.Click += new System.EventHandler(this.ButtonOK_Click);
             // 
             // tabPageDisplay
             // 
@@ -373,7 +373,7 @@
             this.buttonConfigureDataLogDirectoryPath.TabIndex = 10;
             this.buttonConfigureDataLogDirectoryPath.Text = "...";
             this.buttonConfigureDataLogDirectoryPath.UseVisualStyleBackColor = true;
-            this.buttonConfigureDataLogDirectoryPath.Click += new System.EventHandler(this.buttonConfigureDataLogDirectoryPath_Click);
+            this.buttonConfigureDataLogDirectoryPath.Click += new System.EventHandler(this.ButtonConfigureDataLogDirectoryPath_Click);
             // 
             // textBoxDataLogDirectoryPath
             // 

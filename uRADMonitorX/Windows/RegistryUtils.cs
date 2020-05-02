@@ -1,21 +1,24 @@
-﻿using System;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 
-namespace uRADMonitorX.Windows {
-
-    public static class RegistryUtils {
-
-        public static void RegisterAtWindowsStartup(String applicationName, String applicationPath) {
-            using (RegistryKey regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true)) {
-                regKey.SetValue(applicationName, applicationPath);
-                regKey.Flush();
+namespace uRADMonitorX.Windows
+{
+    public static class RegistryUtils
+    {
+        public static void RegisterAtWindowsStartup(string applicationName, string applicationPath)
+        {
+            using (var registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+            {
+                registryKey.SetValue(applicationName, applicationPath);
+                registryKey.Flush();
             }
         }
 
-        public static void UnRegisterAtWindowsStartup(String applicationName) {
-            using (RegistryKey regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true)) {
-                regKey.DeleteValue(applicationName, false);
-                regKey.Flush();
+        public static void UnRegisterAtWindowsStartup(string applicationName)
+        {
+            using (var registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+            {
+                registryKey.DeleteValue(applicationName, false);
+                registryKey.Flush();
             }
         }
     }

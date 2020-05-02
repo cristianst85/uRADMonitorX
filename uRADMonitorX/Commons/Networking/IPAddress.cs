@@ -1,47 +1,57 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace uRADMonitorX.Commons.Networking {
+namespace uRADMonitorX.Commons.Networking
+{
+    public class IPAddress
+    {
+        private static readonly string IpAddressPattern = @"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$";
 
-    public class IPAddress {
+        public string Value { get; private set; }
 
-        private static String ipAddressPattern = @"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$";
-
-        public String Value { get; private set; }
-
-        private IPAddress(String ipAddress) {
+        private IPAddress(string ipAddress)
+        {
             this.Value = ipAddress;
         }
 
-        public static IPAddress Parse(String ipAddress) {
-            if (IsValidFormat(ipAddress)) {
+        public static IPAddress Parse(string ipAddress)
+        {
+            if (IsValidFormat(ipAddress))
+            {
                 return new IPAddress(ipAddress);
             }
-            else {
-                throw new FormatException("Invalid IP address format.");
-            }
+
+            throw new FormatException("Invalid IP address format.");
         }
 
-        public static bool TryParse(String ipAddress, out IPAddress ipAddressObj) {
-            if (IsValidFormat(ipAddress)) {
+        public static bool TryParse(string ipAddress, out IPAddress ipAddressObj)
+        {
+            if (IsValidFormat(ipAddress))
+            {
                 ipAddressObj = new IPAddress(ipAddress);
+
                 return true;
             }
-            else {
-                ipAddressObj = null;
-                return false;
-            }
+
+            ipAddressObj = null;
+
+            return false;
         }
 
-        public static bool IsValidFormat(String ipAddress) {
-            if (ipAddress == null) {
+        public static bool IsValidFormat(string ipAddress)
+        {
+            if (ipAddress == null)
+            {
                 throw new ArgumentNullException("ipAddress");
             }
-            return createRegex(ipAddressPattern).IsMatch(ipAddress);
+
+            return CreateRegex(IpAddressPattern).IsMatch(ipAddress);
         }
 
-        private static Regex createRegex(String pattern) {
+        private static Regex CreateRegex(String pattern)
+        {
             return new Regex(pattern, RegexOptions.IgnoreCase);
         }
     }
 }
+

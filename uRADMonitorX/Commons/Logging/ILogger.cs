@@ -2,8 +2,8 @@
 using uRADMonitorX.Commons.Logging.Appenders;
 using uRADMonitorX.Commons.Logging.Formatters;
 
-namespace uRADMonitorX.Commons.Logging {
-
+namespace uRADMonitorX.Commons.Logging
+{
     public interface ILogger {
 
         ILoggerAppender Appender { get; }
@@ -12,6 +12,6 @@ namespace uRADMonitorX.Commons.Logging {
 
         bool Enabled { get; set; }
 
-        void Write(String message);
+        void Write(string message);
     }
 }

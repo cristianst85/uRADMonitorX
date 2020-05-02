@@ -1,32 +1,38 @@
 ﻿using System;
 using System.Reflection;
 
-namespace uRADMonitorX.Commons {
-
-    public static class EnvironmentUtils {
-
-        public static Boolean IsMonoRuntime() {
+namespace uRADMonitorX.Commons
+{
+    public static class EnvironmentUtils
+    {
+        public static bool IsMonoRuntime()
+        {
             return Type.GetType("Mono.Runtime") != null;
         }
 
-        public static String GetMonoRuntimeVersion() {
-            Type type = Type.GetType("Mono.Runtime");
-            if (type != null) {
-                MethodInfo displayName = type.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
-                if (displayName != null) {
-                    return String.Format("{0}", displayName.Invoke(null, null));
-                }
-                else {
-                    return null;
-                }
-            }
-            else {
+        public static string GetMonoRuntimeVersion()
+        {
+            var type = Type.GetType("Mono.Runtime");
+
+            if (type == null)
+            {
                 return null;
             }
+
+            var displayName = type.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+
+            if (displayName == null)
+            {
+                return null;
+            }
+
+            return string.Format("{0}", displayName.Invoke(null, null));
         }
 
-        public static bool IsUnix() {
-            int pId = (int)Environment.OSVersion.Platform;
+        public static bool IsUnix()
+        {
+            var pId = (int)Environment.OSVersion.Platform;
+
             return ((pId == 4) || (pId == 6) || (pId == 128));
         }
     }

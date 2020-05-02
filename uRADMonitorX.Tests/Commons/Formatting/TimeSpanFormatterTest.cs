@@ -1,12 +1,12 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System;
 using uRADMonitorX.Commons.Formatting;
 
-namespace uRADMonitorX.Tests.Commons.Formatting {
-    
+namespace uRADMonitorX.Tests.Commons.Formatting
+{
     [TestFixture]
-    public class TimeSpanFormatterTest {
-
+    public class TimeSpanFormatterTest
+    {
         [TestCase(0, "0s")]
         [TestCase(25, "25s")]
         [TestCase(59, "59s")]
@@ -18,8 +18,9 @@ namespace uRADMonitorX.Tests.Commons.Formatting {
         [TestCase(86399, "23h 59m 59s")]
         [TestCase(86400, "1d 0h 0m 0s")]
         [TestCase(90061, "1d 1h 1m 1s")]
-        public void Format(int seconds, String expectedString) {
-            ITimeSpanFormatter timeSpanFormatter = new TimeSpanFormatter();
+        public void Format(int seconds, string expectedString)
+        {
+            var timeSpanFormatter = new TimeSpanFormatter();
             Assert.AreEqual(expectedString, timeSpanFormatter.Format(TimeSpan.FromSeconds(seconds)));
         }
     }

@@ -1,16 +1,15 @@
-﻿using System;
-
-namespace uRADMonitorX.Commons {
-
-    public static class Radiation {
-
+﻿namespace uRADMonitorX.Commons
+{
+    public static class Radiation
+    {
         /// <summary>
         /// Converts from counts per minute (cpm) to microsieverts per hour (µSv/h).
         /// </summary>
         /// <param name="cpm"></param>
         /// <param name="conversionFactor"></param>
         /// <returns></returns>
-        public static double CpmToMicroSvPerHour(double cpm, double conversionFactor) {
+        public static double CpmToMicroSvPerHour(double cpm, double conversionFactor)
+        {
             return cpm * conversionFactor;
         }
 
@@ -20,23 +19,28 @@ namespace uRADMonitorX.Commons {
         /// <param name="cpm"></param>
         /// <param name="conversionFactor"></param>
         /// <returns></returns>
-        public static double CpmToMicroRemPerHour(double cpm, double conversionFactor) {
+        public static double CpmToMicroRemPerHour(double cpm, double conversionFactor)
+        {
             return cpm * conversionFactor * 100;
         }
 
-        public static double MicroSvPerHourToCpm(double uSvH, double conversionFactor) {
+        public static double MicroSvPerHourToCpm(double uSvH, double conversionFactor)
+        {
             return uSvH / conversionFactor;
         }
 
-        public static double MicroRemPerHourToCpm(double uRemH, double conversionFactor) {
+        public static double MicroRemPerHourToCpm(double uRemH, double conversionFactor)
+        {
             return uRemH / (conversionFactor * 100);
         }
 
-        public static double MicroRemPerHourToMicroSvPerHour(double uRemH) {
+        public static double MicroRemPerHourToMicroSvPerHour(double uRemH)
+        {
             return uRemH / 100;
         }
 
-        public static double MicroSvPerHourToMicroRemPerHour(double uSvH) {
+        public static double MicroSvPerHourToMicroRemPerHour(double uSvH)
+        {
             return uSvH * 100;
         }
     }
