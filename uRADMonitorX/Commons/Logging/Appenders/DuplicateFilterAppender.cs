@@ -27,7 +27,7 @@ using System.Timers;
 
 namespace uRADMonitorX.Commons.Logging.Appenders {
 
-    public class DuplicateFilterAppender : ILoggerAppender {
+    public class DuplicateFilterAppender : ILoggerAppender, IDisposable {
 
         private object _locker = new object();
 
@@ -126,6 +126,34 @@ namespace uRADMonitorX.Commons.Logging.Appenders {
                 }
                 else {
                     this.appender.Append(String.Format("Last message repeated {0} times", this.lastMessageCount));
+                }
+            }
+        }
+
+        private bool disposed;
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    if (this.timer != null)
+                    {
+                        this.timer.Stop();
+                        this.timer.Elapsed -= appendLastMessage;
+                        this.timer.Dispose();
+
+                        this.timer = null;
+                    }
+
+                    this.disposed = true;
                 }
             }
         }

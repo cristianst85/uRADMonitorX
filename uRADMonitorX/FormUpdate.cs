@@ -62,7 +62,7 @@ namespace uRADMonitorX
                 }
                 else if (this.updateInfo.IsCurrentVersionNewer(currentVersion))
                 {
-                    this.UpdateStatus(string.Format("You are using a newer version of uRADMonitorX.", updateInfo.Version));
+                    this.UpdateStatus("You are using a newer version of uRADMonitorX.");
                 }
                 else
                 {

@@ -1,6 +1,8 @@
-﻿namespace uRADMonitorX.Core.Jobs
+﻿using System;
+
+namespace uRADMonitorX.Core.Jobs
 {
-    public interface IDeviceDataJob
+    public interface IDeviceDataJob : IDisposable
     {
         event DeviceDataJobEventHandler DeviceDataJobEventHandler;
 

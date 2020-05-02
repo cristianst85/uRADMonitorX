@@ -195,6 +195,7 @@ namespace uRADMonitorX {
                     this.deviceDataJob.Stop();
                     this.deviceDataJob.DeviceDataJobEventHandler -= deviceDataJob_DeviceDataJobEventHandler;
                     this.deviceDataJob.DeviceDataJobErrorEventHandler -= deviceDataJob_DeviceDataJobErrorEventHandler;
+                    this.deviceDataJob.Dispose();
                 }
 
                 if (!String.IsNullOrEmpty(this.settings.DeviceIPAddress)) {

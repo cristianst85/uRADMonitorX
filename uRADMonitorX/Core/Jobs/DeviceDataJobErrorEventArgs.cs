@@ -2,7 +2,7 @@
 
 namespace uRADMonitorX.Core.Jobs
 {
-    public class DeviceDataJobErrorEventArgs
+    public class DeviceDataJobErrorEventArgs : EventArgs
     {
         public Exception Exception { get; private set; }
 

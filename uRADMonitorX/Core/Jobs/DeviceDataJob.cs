@@ -10,7 +10,7 @@ namespace uRADMonitorX.Core.Jobs
 
     public delegate void DeviceDataJobErrorEventHandler(object sender, DeviceDataJobErrorEventArgs e);
 
-    public class DeviceDataJob : IDeviceDataJob
+    public class DeviceDataJob : IDeviceDataJob, IDisposable
     {
         /// <summary>
         /// The default polling interval (10 seconds) on which the next 
@@ -120,13 +120,45 @@ namespace uRADMonitorX.Core.Jobs
         protected virtual void OnSuccess(DeviceData deviceData)
         {
             Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(DeviceDataJob)}] OnSuccess()");
+
             DeviceDataJobEventHandler?.Invoke(this, new DeviceDataJobEventArgs(deviceData));
         }
 
         protected virtual void OnError(Exception exception)
         {
             Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(DeviceDataJob)}] OnError()");
+
             DeviceDataJobErrorEventHandler?.Invoke(this, new DeviceDataJobErrorEventArgs(exception));
+        }
+
+        private bool disposed;
+
+        public void Dispose()
+        {
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(DeviceDataJob)}] Dispose()");
+
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    if (this.timer != null)
+                    {
+                        this.timer.Stop();
+                        this.timer.Elapsed -= Run;
+                        this.timer.Dispose();
+
+                        this.timer = null;
+                    }
+
+                    this.disposed = true;
+                }
+            }
         }
     }
 }
