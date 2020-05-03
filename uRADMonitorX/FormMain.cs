@@ -243,7 +243,7 @@ namespace uRADMonitorX
                     {
                         deviceDataJob.Start();
 
-                        if (!isRestart)
+                        if (!isRestart || this.toolStripStatusLabelDeviceStatus.Text.Equals(Properties.Resources.DeviceIsNotConfigured))
                         {
                             this.UpdateDeviceStatus(string.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
                         }
