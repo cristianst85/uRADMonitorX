@@ -69,7 +69,7 @@ namespace uRADMonitorX
 
         private void TextBoxPollingInterval_TextChanged(object sender, EventArgs e)
         {
-            if (!this.pollingIntervalIsValid(this.textBoxPollingInterval.Text))
+            if (!this.PollingIntervalIsValid(this.textBoxPollingInterval.Text))
             {
                 var toolTip = new ToolTip
                 {
@@ -94,7 +94,7 @@ namespace uRADMonitorX
             return this.IpAddressIsValid(this.textBoxIPAddress.Text) && (
                     this.radioButtonPollingTypeWDTSync.Checked ||
                     (this.radioButtonPollingTypeInterval.Checked &&
-                    this.pollingIntervalIsValid(this.textBoxPollingInterval.Text))
+                    this.PollingIntervalIsValid(this.textBoxPollingInterval.Text))
                 );
         }
 
@@ -103,11 +103,11 @@ namespace uRADMonitorX
             return IPAddress.IsValidFormat(ipAddress) || IPEndPoint.IsValidFormat(ipAddress);
         }
 
-        private bool pollingIntervalIsValid(string pollingInterval)
+        private bool PollingIntervalIsValid(string pollingInterval)
         {
             bool isInteger = int.TryParse(pollingInterval, out int value);
 
-            return (isInteger && (value > 0 && value < 1000));
+            return isInteger && (value > 0 && value < 1000);
         }
 
         private void ButtonSave_Click(object sender, EventArgs e)
