@@ -169,4 +169,10 @@
   <data name="RadiationWithError" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Systray\RadiationWithError.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DeviceIsNotConfigured" xml:space="preserve">
+    <value>Device is not configured.</value>
+  </data>
+  <data name="PollingIsDisabled" xml:space="preserve">
+    <value>Polling is disabled.</value>
+  </data>
 </root>

@@ -81,6 +81,15 @@ namespace uRADMonitorX.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Device is not configured..
+        /// </summary>
+        internal static string DeviceIsNotConfigured {
+            get {
+                return ResourceManager.GetString("DeviceIsNotConfigured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap door_out {
@@ -157,6 +166,15 @@ namespace uRADMonitorX.Properties {
             get {
                 object obj = ResourceManager.GetObject("page_white_link", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Polling is disabled..
+        /// </summary>
+        internal static string PollingIsDisabled {
+            get {
+                return ResourceManager.GetString("PollingIsDisabled", resourceCulture);
             }
         }
         

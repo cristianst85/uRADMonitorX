@@ -252,15 +252,15 @@ namespace uRADMonitorX
                     }
                     else
                     {
-                        this.UpdateDeviceStatus("Polling is disabled.");
-                        this.UpdateNotifyIconText("Polling is disabled.");
+                        this.UpdateDeviceStatus(Properties.Resources.PollingIsDisabled);
+                        this.UpdateNotifyIconText(Properties.Resources.PollingIsDisabled);
                         this.notifyIcon.Icon = Properties.Resources.RadiationDisabled;
                     }
                 }
                 else
                 {
-                    this.UpdateDeviceStatus("Device is not configured.");
-                    this.UpdateNotifyIconText("Device is not configured.");
+                    this.UpdateDeviceStatus(Properties.Resources.DeviceIsNotConfigured);
+                    this.UpdateNotifyIconText(Properties.Resources.DeviceIsNotConfigured);
                     this.notifyIcon.Icon = Properties.Resources.RadiationDisabled;
                 }
             }
@@ -667,8 +667,8 @@ namespace uRADMonitorX
             {
                 deviceDataJob.Stop();
 
-                this.UpdateDeviceStatus("Polling is disabled.");
-                this.UpdateNotifyIconText("Polling is disabled.");
+                this.UpdateDeviceStatus(Properties.Resources.PollingIsDisabled);
+                this.UpdateNotifyIconText(Properties.Resources.PollingIsDisabled);
             }
         }
 
