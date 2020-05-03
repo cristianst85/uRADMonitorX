@@ -21,6 +21,11 @@ See [CHANGELOG](https://github.com/cristianst85/uRADMonitorX/blob/master/CHANGEL
 
 You can download compiled binaries from [here](https://github.com/cristianst85/uRADMonitorX/releases).
 
+## Development
+
+* Any edition of [Visual Studio 2017](https://visualstudio.microsoft.com/vs/older-downloads/), C# 7.0 language features.
+* [Vitevic Assembly Embedder](https://marketplace.visualstudio.com/items?itemName=Vitevic.VitevicAssemblyEmbedder) v1.0.3.
+
 ## License
 
 * The source code in this repository is released under the GNU GPLv2 license. See the [bundled LICENSE](https://github.com/cristianst85/uRADMonitorX/blob/master/LICENSE) file for details.
