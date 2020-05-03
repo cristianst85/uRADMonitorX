@@ -87,6 +87,7 @@
     <None Include="packages.config" />
     <Compile Include="Commons\Logging\Appenders\NLogDailyFileAppender.cs" />
     <Compile Include="Helpers\ServicePointManagerHelper.cs" />
+    <Compile Include="Properties\GeneratedAssemblyInfo.cs" />
     <Compile Include="Updater\GitHubUpdater.cs" />
     <Compile Include="Updater\GitHubApi\Release.cs" />
     <Compile Include="FormUpdate.cs">
@@ -248,6 +249,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\GitAssemblyVersion.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

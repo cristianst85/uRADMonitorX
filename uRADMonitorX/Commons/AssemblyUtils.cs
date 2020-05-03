@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -24,6 +25,11 @@ namespace uRADMonitorX.Commons
         public static Version GetVersion(string assemblyName)
         {
             return Assembly.Load(assemblyName).GetName().Version;
+        }
+
+        public static string GetProductVersion()
+        {
+            return FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
         }
 
         public static Assembly AssemblyResolver(object sender, ResolveEventArgs args)

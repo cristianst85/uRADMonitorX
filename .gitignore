@@ -10,3 +10,4 @@ uRADMonitorX.IntegrationTests/obj/
 uRADMonitorX.suo
 packages/
 /.vs/
+/uRADMonitorX/Properties/GeneratedAssemblyInfo.cs

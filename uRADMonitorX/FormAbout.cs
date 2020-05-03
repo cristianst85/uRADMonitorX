@@ -11,13 +11,9 @@ namespace uRADMonitorX
         {
             InitializeComponent();
 
-            var version = AssemblyUtils.GetVersion();
+            var version = AssemblyUtils.GetProductVersion();
 
-            bool isDebug = false;
-            Debug.Assert(isDebug = true);
-
-            var strVersion = isDebug ? version.ToString() : version.ToString(3);
-            this.label2.Text = this.label2.Text.Replace("{version}", strVersion);
+            this.label2.Text = this.label2.Text.Replace("{version}", version);
 
             this.richTextBoxCopyright.Text = this.richTextBoxCopyright.Text.Replace("{fluentSchedulerLibVersion}", AssemblyUtils.GetVersion("FluentScheduler").ToString());
             this.richTextBoxCopyright.Text = this.richTextBoxCopyright.Text.Replace("{newtonsoftJsonLibVersion}", AssemblyUtils.GetVersion("Newtonsoft.Json").ToString());

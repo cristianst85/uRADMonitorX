@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		CHANGELOG.md = CHANGELOG.md
 		COPYING = COPYING
+		GitAssemblyVersion.targets = GitAssemblyVersion.targets
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -26,6 +27,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uRADMonitorX.IntegrationTests", "uRADMonitorX.IntegrationTests\uRADMonitorX.IntegrationTests.csproj", "{2F471AF1-793B-4FB7-B733-85433804AE31}"
 	ProjectSection(ProjectDependencies) = postProject
 		{955E6A4C-7543-41DF-9303-B351C888835A} = {955E6A4C-7543-41DF-9303-B351C888835A}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{46EAB94C-3856-4729-8980-E090DD5AD797}"
+	ProjectSection(SolutionItems) = preProject
+		.build\MSBuild.Community.Tasks.dll = .build\MSBuild.Community.Tasks.dll
+		.build\MSBuild.Community.Tasks.Targets = .build\MSBuild.Community.Tasks.Targets
+		.build\MSBuild.Community.Tasks.xml = .build\MSBuild.Community.Tasks.xml
+		.build\MSBuild.Community.Tasks.xsd = .build\MSBuild.Community.Tasks.xsd
 	EndProjectSection
 EndProject
 Global
@@ -53,5 +62,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B3F26B47-31D6-46B1-AAEA-AFB6E788CD0C}
 	EndGlobalSection
 EndGlobal
