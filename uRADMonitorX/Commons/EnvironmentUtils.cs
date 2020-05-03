@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using uRADMonitorX.Windows;
 
 namespace uRADMonitorX.Commons
 {
@@ -34,6 +35,21 @@ namespace uRADMonitorX.Commons
             var pId = (int)Environment.OSVersion.Platform;
 
             return ((pId == 4) || (pId == 6) || (pId == 128));
+        }
+
+        public static bool IsAtLeastWindowsVista()
+        {
+            return Environment.OSVersion.Version.Major >= 6;
+        }
+
+        public static bool IsAtLeastWindows10()
+        {
+            if (int.TryParse(RegistryUtils.GetCurrentMajorVersionNumber(), out int majorVersionNumber))
+            {
+                return majorVersionNumber >= 10;
+            }
+
+            return false;
         }
     }
 }

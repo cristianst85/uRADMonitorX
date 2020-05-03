@@ -57,6 +57,21 @@ namespace uRADMonitorX
 
         static void InternalMain(string[] args)
         {
+            if (!EnvironmentUtils.IsUnix())
+            {
+                if (EnvironmentUtils.IsAtLeastWindows10())
+                {
+                    NativeMethods.SetProcessDpiAwareness(NativeMethods.ProcessDpiAwareness.ProcessSystemDpiAware);
+                }
+                else if (EnvironmentUtils.IsAtLeastWindowsVista())
+                {
+                    NativeMethods.SetProcessDPIAware();
+                }
+            }
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             if (!ProgramArguments.TryParse(args, out programArguments))
             {
                 // Get a new instance with default values.
@@ -164,9 +179,6 @@ namespace uRADMonitorX
             {
                 RegisterAtWindowsStartup();
             }
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
 
             var formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, settings, logger);
             formMain.SettingsChangedEventHandler += new SettingsChangedEventHandler(FormMain_SettingsChangedEventHandler);
