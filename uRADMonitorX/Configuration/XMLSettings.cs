@@ -189,7 +189,7 @@ namespace uRADMonitorX.Configuration
 
             if (value == null)
             {
-                xmlWriter.WriteValue(String.Empty);
+                xmlWriter.WriteValue(string.Empty);
             }
             else
             {
@@ -227,7 +227,7 @@ namespace uRADMonitorX.Configuration
             xmlNode["display"].SelectSingleNode("last_window_y_pos").InnerText = this.LastWindowYPos.ToString();
 
             xmlNode["logging"].SelectSingleNode("enabled").InnerText = this.IsLoggingEnabled.ToString().ToLower();
-            xmlNode["logging"].SelectSingleNode("path").InnerText = this.LogDirectoryPath ?? String.Empty;
+            xmlNode["logging"].SelectSingleNode("path").InnerText = this.LogDirectoryPath ?? string.Empty;
 
             // Introduced with version 1.1.0.
             CreateNodeIfNotExists(xmlDocument, xmlNode, "logging", "is_data_logging_enabled", "path",
@@ -235,7 +235,7 @@ namespace uRADMonitorX.Configuration
             CreateNodeIfNotExists(xmlDocument, xmlNode, "logging", "data_logging_to_separate_file", "is_data_logging_enabled",
                 this.DataLoggingToSeparateFile.ToString().ToLower());
             CreateNodeIfNotExists(xmlDocument, xmlNode, "logging", "data_log_path", "data_logging_to_separate_file",
-                this.DataLogDirectoryPath ?? String.Empty);
+                this.DataLogDirectoryPath ?? string.Empty);
 
             // Introduced with version 0.39.0. 
             if (xmlNode["device"].SelectSingleNode("detector_name") == null)
@@ -243,9 +243,9 @@ namespace uRADMonitorX.Configuration
                 xmlNode["device"].InsertBefore(xmlDocument.CreateNode(XmlNodeType.Element, "detector_name", null), xmlNode["device"].SelectSingleNode("has_pressure_sensor"));
             }
 
-            xmlNode["device"].SelectSingleNode("detector_name").InnerText = this.DetectorName ?? String.Empty;
+            xmlNode["device"].SelectSingleNode("detector_name").InnerText = this.DetectorName ?? string.Empty;
             xmlNode["device"].SelectSingleNode("has_pressure_sensor").InnerText = this.HasPressureSensor.ToString().ToLower();
-            xmlNode["device"].SelectSingleNode("ip_address").InnerText = this.DeviceIPAddress ?? String.Empty;
+            xmlNode["device"].SelectSingleNode("ip_address").InnerText = this.DeviceIPAddress ?? string.Empty;
             xmlNode["device"].SelectSingleNode("temperature_unit_type").InnerText = this.TemperatureUnitType.ToString();
             xmlNode["device"].SelectSingleNode("pressure_unit_type").InnerText = this.PressureUnitType.ToString();
             xmlNode["device"].SelectSingleNode("radiation_unit_type").InnerText = this.RadiationUnitType.ToString();

@@ -630,7 +630,7 @@ namespace uRADMonitorX
                     }
 
                     balloonTitle += "Radiation";
-                    balloonMessage += String.Format("Radiation: {0} {1}", currentRadiation, currentRadiationUnit);
+                    balloonMessage += string.Format("Radiation: {0} {1}", currentRadiation, currentRadiationUnit);
 
                     showBalloon = true;
                 }
@@ -642,7 +642,7 @@ namespace uRADMonitorX
                     // Add the date and time when the event occurs to notification message. This is useful because
                     // Windows queues notifications when user is away from computer (e.g.: screen is locked).
                     // LINK: https://msdn.microsoft.com/en-us/library/windows/desktop/ee330740%28v=vs.85%29.aspx
-                    balloonMessage += String.Format("\nEvent occurred at {0}.", now.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.CurrentCulture));
+                    balloonMessage += string.Format("\nEvent occurred at {0}.", now.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.CurrentCulture));
 
                     // Do not show multiple notifications for the same readings. Usually when polling interval is lower than the device refresh period (60 seconds).
                     if (!notifyIconBalloonLastShownAt.HasValue || (this.notifyIconBalloonLastShownAt.HasValue && now.Subtract(this.notifyIconBalloonLastShownAt.Value).TotalSeconds >= 60))

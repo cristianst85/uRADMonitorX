@@ -175,7 +175,7 @@ namespace uRADMonitorX
                             throw new Exception("Downloaded file checksum does not match.");
                         }
 
-                        this.UpdateStatus(String.Format("Application needs to be restarted to complete the update process."));
+                        this.UpdateStatus(string.Format("Application needs to be restarted to complete the update process."));
 
                         if (!EnvironmentUtils.IsMonoRuntime())
                         {

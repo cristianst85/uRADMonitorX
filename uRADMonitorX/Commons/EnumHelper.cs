@@ -102,7 +102,7 @@ namespace uRADMonitorX.Commons
                 }
             }
 
-            throw new Exception(String.Format("Could not find enum type {0} with description attribute value {1}.", type.Name, description));
+            throw new Exception(string.Format("Could not find enum type {0} with description attribute value {1}.", type.Name, description));
         }
     }
 }

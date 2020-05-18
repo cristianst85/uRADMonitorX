@@ -75,7 +75,7 @@ namespace uRADMonitorX
                     }
                     else
                     {
-                        exception = new Exception(String.Format("Unknown argument '{0}' found.", arg));
+                        exception = new Exception(string.Format("Unknown argument '{0}' found.", arg));
 
                         // Unknown argument.
                         return false;

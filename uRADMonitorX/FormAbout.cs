@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows.Forms;
 using uRADMonitorX.Commons;
 
@@ -25,7 +24,7 @@ namespace uRADMonitorX
 
         private void LinkLabelContact_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(String.Format("mailto:{0}?subject=About {1} v{2}", this.linkLabelContact.Text, Application.ProductName, Application.ProductVersion));
+            Process.Start(string.Format("mailto:{0}?subject=About {1} v{2}", this.linkLabelContact.Text, Application.ProductName, Application.ProductVersion));
         }
 
         private void RichTextBoxCopyright_LinkClicked(object sender, LinkClickedEventArgs e)

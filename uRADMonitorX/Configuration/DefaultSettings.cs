@@ -1,9 +1,8 @@
 ﻿using System;
 using uRADMonitorX.Core;
-using uRADMonitorX.Core.Device;
 
-namespace uRADMonitorX.Configuration {
-
+namespace uRADMonitorX.Configuration
+{
     public static class DefaultSettings {
 
         /// <summary>
@@ -79,11 +78,11 @@ namespace uRADMonitorX.Configuration {
         }
 
         /// <summary>
-        /// Value: <c>String.Empty</c>.
+        /// Value: <c>string.Empty</c>.
         /// </summary>
-        public static String LogDirectoryPath {
+        public static string LogDirectoryPath {
             get {
-                return String.Empty;
+                return string.Empty;
             }
         }
 
@@ -115,11 +114,11 @@ namespace uRADMonitorX.Configuration {
         }
 
         /// <summary>
-        /// Value: <c>String.Empty</c>.
+        /// Value: <c>string.Empty</c>.
         /// </summary>
         public static String DetectorName {
             get {
-                return String.Empty;
+                return string.Empty;
             }
         }
 
@@ -133,11 +132,11 @@ namespace uRADMonitorX.Configuration {
         }
 
         /// <summary>
-        /// Value: <c>String.Empty</c>.
+        /// Value: <c>string.Empty</c>.
         /// </summary>
-        public static String DeviceIPAddress {
+        public static string DeviceIPAddress {
             get {
-                return String.Empty;
+                return string.Empty;
             }
         }
 
