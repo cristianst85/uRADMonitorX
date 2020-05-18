@@ -24,7 +24,7 @@ namespace uRADMonitorX.Commons.Logging
             return _instance;
         }
 
-        protected object locker = new object();
+        private readonly object _locker = new object();
         protected IDictionary<string, ILogger> loggers = new Dictionary<string, ILogger>();
 
         protected LoggerManager()
@@ -54,7 +54,7 @@ namespace uRADMonitorX.Commons.Logging
         /// <param name="logger"></param>
         public virtual void Add(String name, ILogger logger)
         {
-            lock (locker)
+            lock (_locker)
             {
                 if (!this.loggers.ContainsKey(name))
                 {
@@ -85,7 +85,7 @@ namespace uRADMonitorX.Commons.Logging
         /// <returns></returns>
         public virtual ILogger GetLogger(string name)
         {
-            lock (locker)
+            lock (_locker)
             {
                 if (this.loggers.ContainsKey(name))
                 {

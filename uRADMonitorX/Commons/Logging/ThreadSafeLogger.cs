@@ -15,7 +15,7 @@ namespace uRADMonitorX.Commons.Logging
             this.logger = logger;
         }
 
-        public void Write(String message)
+        public void Write(string message)
         {
             lock (_locker)
             {
