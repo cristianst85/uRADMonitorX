@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HashCheck;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -163,7 +164,13 @@ namespace uRADMonitorX
 
                         File.WriteAllBytes(updateFileTempPath, fileContent);
 
-                        if (!updateInfo.Checksum.Verify(updateFileTempPath))
+                        // Retrieve the checksum file.
+                        var checksumFileContent = Program.ApplicationUpdater.Download(this.updateInfo.ChecksumUrl);
+                        var md5File = ReadOnlyMD5File.Load(System.Text.Encoding.UTF8.GetString(checksumFileContent));
+
+                        var checksum = md5File.Entries[0].Checksum;
+
+                        if (!checksum.Verify(updateFileTempPath))
                         {
                             throw new Exception("Downloaded file checksum does not match.");
                         }

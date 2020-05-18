@@ -11,7 +11,7 @@ namespace uRADMonitorX.Updater
 
         public string DownloadUrl { get; set; }
 
-        public IChecksum Checksum { get; set; }
+        public string ChecksumUrl { get; set; }
 
         public UpdateInfo()
         {

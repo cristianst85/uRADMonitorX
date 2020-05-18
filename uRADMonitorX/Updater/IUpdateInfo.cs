@@ -11,7 +11,7 @@ namespace uRADMonitorX.Updater
 
         string DownloadUrl { get; set; }
 
-        IChecksum Checksum { get; set; }
+        string ChecksumUrl { get; set; }
 
         bool IsNewVersionAvailable(Version currentVersion);
 

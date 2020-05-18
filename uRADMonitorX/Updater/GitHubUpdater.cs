@@ -1,5 +1,4 @@
-﻿using HashCheck;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.IO;
 using uRADMonitorX.Helpers;
@@ -38,14 +37,16 @@ namespace uRADMonitorX.Updater
                 }
                 else if (Path.GetExtension(asset.Name).Equals(".md5", StringComparison.OrdinalIgnoreCase))
                 {
-                    var md5FileContent = this.RetrieveContentFromUrl(asset.BrowserDownloadUrl);
-                    var md5File = ReadOnlyMD5File.Load(md5FileContent);
-
-                    updateInfo.Checksum = md5File.Entries[0].Checksum;
+                    updateInfo.ChecksumUrl = asset.BrowserDownloadUrl;
                 }
             }
 
-            if (updateInfo.Checksum == null)
+            if (updateInfo.DownloadUrl == null)
+            {
+                throw new Exception("Application file was not found.");
+            }
+
+            if (updateInfo.ChecksumUrl == null)
             {
                 throw new Exception("Checksum file was not found.");
             }
