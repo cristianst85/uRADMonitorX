@@ -88,7 +88,7 @@
 - Added command line parameter for advanced usage (not documented).
 - Code refactoring and optimization.
 
-## 0.35.0(2015-07-30)
+## 0.35.0 (2015-07-30)
 
 - Fixed a bug when 'Start uRADMonitorX with Windows' option was unchecked, startup registry key was not deleted from Windows registry.
 - Fixed radiation unit cpm (counts per minute) to be showed in lower case instead of upper case.
