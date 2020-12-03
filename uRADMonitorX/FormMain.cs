@@ -4,7 +4,9 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading;
@@ -770,7 +772,25 @@ namespace uRADMonitorX
 
         private void RestoreWindowPosition()
         {
+            if (!IsOnScreen(new Point(MLastWindowXPos, MLastWindowYPos), atLeast: 10))
+            {
+                var screenWorkingArea = Screen.PrimaryScreen?.WorkingArea;
+
+                if (screenWorkingArea.HasValue)
+                {
+                    var x = screenWorkingArea.Value.Width - this.Size.Width - 10;
+                    var y = screenWorkingArea.Value.Height - this.Size.Height - 10;
+
+                    this.RestoreWindowPosition(x, y);
+                }
+            }
+
             this.RestoreWindowPosition(MLastWindowXPos, MLastWindowYPos);
+        }
+
+        private bool IsOnScreen(Point topLeft, int atLeast = 0)
+        {
+            return Screen.AllScreens.Any(s => s.WorkingArea.Contains(new Point(topLeft.X + atLeast, topLeft.Y + atLeast)));
         }
 
         private void RestoreWindowPosition(int x, int y)
