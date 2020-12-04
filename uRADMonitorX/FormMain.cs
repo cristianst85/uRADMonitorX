@@ -109,7 +109,7 @@ namespace uRADMonitorX
                 {
                     this.enablePollingToolStripMenuItem.Enabled = false;
                     this.viewDeviceWebpageToolStripMenuItem.Enabled = false;
-                    this.viewDeviceWebpageToolStripMenuItem1.Enabled = false;
+                    this.viewDeviceWebpageContextMenuToolStripMenuItem.Enabled = false;
                 }
 
                 this.enablePollingToolStripMenuItem.Checked = this.settings.IsPollingEnabled;
@@ -697,7 +697,7 @@ namespace uRADMonitorX
                     {
                         this.enablePollingToolStripMenuItem.Enabled = true;
                         this.viewDeviceWebpageToolStripMenuItem.Enabled = true;
-                        this.viewDeviceWebpageToolStripMenuItem1.Enabled = true;
+                        this.viewDeviceWebpageContextMenuToolStripMenuItem.Enabled = true;
 
                         this.InitDevice(true);
                     }
@@ -879,12 +879,12 @@ namespace uRADMonitorX
             }
         }
 
-        private void ShowHideToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ShowHideContextMenuToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToogleWindow();
         }
 
-        private void ShowHideToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void ShowHideToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToogleWindow();
         }
