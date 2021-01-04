@@ -32,6 +32,11 @@ namespace uRADMonitorX.Core.Device
             this.ConversionFactor = conversionFactor;
         }
 
+        public static RadiationDetector Unknown(string detectorName)
+        {
+            return new RadiationDetector(detectorName, 0.0);
+        }
+
         public static RadiationDetector SBM19
         {
             get

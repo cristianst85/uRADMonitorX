@@ -1,4 +1,5 @@
-﻿using uRADMonitorX.Core;
+﻿using System.Diagnostics.CodeAnalysis;
+using uRADMonitorX.Core;
 
 namespace uRADMonitorX.Configuration
 {
@@ -60,6 +61,13 @@ namespace uRADMonitorX.Configuration
         TemperatureUnitType TemperatureNotificationUnitType { get; set; }
 
         RadiationUnitType RadiationNotificationUnitType { get; set; }
+
+        // uRADMonitor API Authentication
+        [SuppressMessage(category: "Style", checkId: "IDE1006")]
+        string uRADMonitorAPIUserId { get; set; }
+
+        [SuppressMessage(category: "Style", checkId: "IDE1006")]
+        string uRADMonitorAPIUserKey { get; set; }
 
         // Commit
         void Commit();

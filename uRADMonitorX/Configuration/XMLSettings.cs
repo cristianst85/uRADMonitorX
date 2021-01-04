@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Xml;
 using uRADMonitorX.Core;
+using uRADMonitorX.Commons.Cryptography;
 
 namespace uRADMonitorX.Configuration
 {
@@ -9,7 +10,7 @@ namespace uRADMonitorX.Configuration
 
     public class XMLSettings : Settings
     {
-        private static NumberFormatInfo numberFormatInfo = CultureInfo.CurrentCulture.NumberFormat;
+        private readonly static NumberFormatInfo numberFormatInfo = CultureInfo.CurrentCulture.NumberFormat;
 
         public string FilePath { get; private set; }
 
@@ -135,6 +136,15 @@ namespace uRADMonitorX.Configuration
                 xmlSettings.RadiationNotificationUnitType = DefaultSettings.RadiationNotificationUnitType;
             }
 
+            // uRADMonitor API credentials were introduced with version 1.4.0.
+            if (xmlNode["api_credentials"] != null)
+            {
+                var userId = xmlNode["api_credentials"].SelectSingleNode("user_id").InnerText;
+                xmlSettings.uRADMonitorAPIUserId = string.IsNullOrEmpty(userId) ? null : DataProtectionApiWrapper.Decrypt(userId);
+                var userKey = xmlNode["api_credentials"].SelectSingleNode("user_key").InnerText;
+                xmlSettings.uRADMonitorAPIUserKey = string.IsNullOrEmpty(userKey) ? null : DataProtectionApiWrapper.Decrypt(userKey);
+            }
+
             return xmlSettings;
         }
 
@@ -144,46 +154,50 @@ namespace uRADMonitorX.Configuration
             {
                 xmlWriter.WriteStartElement("settings");
                 xmlWriter.WriteStartElement("general");
-                writeFullElement(xmlWriter, "start_with_windows", DefaultSettings.StartWithWindows);
-                writeFullElement(xmlWriter, "automatically_check_for_updates", DefaultSettings.AutomaticallyCheckForUpdates);
+                WriteFullElement(xmlWriter, "start_with_windows", DefaultSettings.StartWithWindows);
+                WriteFullElement(xmlWriter, "automatically_check_for_updates", DefaultSettings.AutomaticallyCheckForUpdates);
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("display");
-                writeFullElement(xmlWriter, "start_minimized", DefaultSettings.StartMinimized);
-                writeFullElement(xmlWriter, "show_in_taskbar", DefaultSettings.ShowInTaskbar);
-                writeFullElement(xmlWriter, "close_to_system_tray", DefaultSettings.CloseToSystemTray);
-                writeFullElement(xmlWriter, "last_window_x_pos", DefaultSettings.LastWindowXPos);
-                writeFullElement(xmlWriter, "last_window_y_pos", DefaultSettings.LastWindowYPos);
+                WriteFullElement(xmlWriter, "start_minimized", DefaultSettings.StartMinimized);
+                WriteFullElement(xmlWriter, "show_in_taskbar", DefaultSettings.ShowInTaskbar);
+                WriteFullElement(xmlWriter, "close_to_system_tray", DefaultSettings.CloseToSystemTray);
+                WriteFullElement(xmlWriter, "last_window_x_pos", DefaultSettings.LastWindowXPos);
+                WriteFullElement(xmlWriter, "last_window_y_pos", DefaultSettings.LastWindowYPos);
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("logging");
-                writeFullElement(xmlWriter, "enabled", DefaultSettings.IsLoggingEnabled);
-                writeFullElement(xmlWriter, "path", DefaultSettings.LogDirectoryPath);
-                writeFullElement(xmlWriter, "is_data_logging_enabled", DefaultSettings.IsDataLoggingEnabled);
-                writeFullElement(xmlWriter, "data_logging_to_separate_file", DefaultSettings.DataLoggingToSeparateFile);
-                writeFullElement(xmlWriter, "data_log_path", DefaultSettings.DataLogDirectoryPath);
+                WriteFullElement(xmlWriter, "enabled", DefaultSettings.IsLoggingEnabled);
+                WriteFullElement(xmlWriter, "path", DefaultSettings.LogDirectoryPath);
+                WriteFullElement(xmlWriter, "is_data_logging_enabled", DefaultSettings.IsDataLoggingEnabled);
+                WriteFullElement(xmlWriter, "data_logging_to_separate_file", DefaultSettings.DataLoggingToSeparateFile);
+                WriteFullElement(xmlWriter, "data_log_path", DefaultSettings.DataLogDirectoryPath);
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("device");
-                writeFullElement(xmlWriter, "detector_name", DefaultSettings.DetectorName);
-                writeFullElement(xmlWriter, "has_pressure_sensor", DefaultSettings.HasPressureSensor);
-                writeFullElement(xmlWriter, "ip_address", DefaultSettings.DeviceIPAddress);
-                writeFullElement(xmlWriter, "temperature_unit_type", DefaultSettings.TemperatureUnitType.ToString());
-                writeFullElement(xmlWriter, "pressure_unit_type", DefaultSettings.PressureUnitType.ToString());
-                writeFullElement(xmlWriter, "radiation_unit_type", DefaultSettings.RadiationUnitType.ToString());
-                writeFullElement(xmlWriter, "polling_type", DefaultSettings.PollingType.ToString());
-                writeFullElement(xmlWriter, "polling_interval", DefaultSettings.PollingInterval);
-                writeFullElement(xmlWriter, "is_polling_enabled", DefaultSettings.IsPollingEnabled);
+                WriteFullElement(xmlWriter, "detector_name", DefaultSettings.DetectorName);
+                WriteFullElement(xmlWriter, "has_pressure_sensor", DefaultSettings.HasPressureSensor);
+                WriteFullElement(xmlWriter, "ip_address", DefaultSettings.DeviceIPAddress);
+                WriteFullElement(xmlWriter, "temperature_unit_type", DefaultSettings.TemperatureUnitType.ToString());
+                WriteFullElement(xmlWriter, "pressure_unit_type", DefaultSettings.PressureUnitType.ToString());
+                WriteFullElement(xmlWriter, "radiation_unit_type", DefaultSettings.RadiationUnitType.ToString());
+                WriteFullElement(xmlWriter, "polling_type", DefaultSettings.PollingType.ToString());
+                WriteFullElement(xmlWriter, "polling_interval", DefaultSettings.PollingInterval);
+                WriteFullElement(xmlWriter, "is_polling_enabled", DefaultSettings.IsPollingEnabled);
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("notifications");
-                writeFullElement(xmlWriter, "enabled", DefaultSettings.AreNotificationsEnabled);
-                writeFullElement(xmlWriter, "high_temperature_value", DefaultSettings.HighTemperatureNotificationValue);
-                writeFullElement(xmlWriter, "radiation_value", DefaultSettings.RadiationNotificationValue.ToString(numberFormatInfo));
-                writeFullElement(xmlWriter, "temperature_unit_type", DefaultSettings.TemperatureNotificationUnitType.ToString());
-                writeFullElement(xmlWriter, "radiation_unit_type", DefaultSettings.RadiationNotificationUnitType.ToString());
+                WriteFullElement(xmlWriter, "enabled", DefaultSettings.AreNotificationsEnabled);
+                WriteFullElement(xmlWriter, "high_temperature_value", DefaultSettings.HighTemperatureNotificationValue);
+                WriteFullElement(xmlWriter, "radiation_value", DefaultSettings.RadiationNotificationValue.ToString(numberFormatInfo));
+                WriteFullElement(xmlWriter, "temperature_unit_type", DefaultSettings.TemperatureNotificationUnitType.ToString());
+                WriteFullElement(xmlWriter, "radiation_unit_type", DefaultSettings.RadiationNotificationUnitType.ToString());
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteStartElement("api_credentials");
+                WriteFullElement(xmlWriter, "user_id", String.Empty);
+                WriteFullElement(xmlWriter, "user_key", String.Empty);
                 xmlWriter.WriteEndElement();
                 xmlWriter.Flush();
             }
         }
 
-        private static void writeFullElement(XmlWriter xmlWriter, String name, object value)
+        private static void WriteFullElement(XmlWriter xmlWriter, String name, object value)
         {
             xmlWriter.WriteStartElement(name);
 
@@ -271,6 +285,18 @@ namespace uRADMonitorX.Configuration
             xmlNode["notifications"].SelectSingleNode("temperature_unit_type").InnerText = this.TemperatureNotificationUnitType.ToString();
             xmlNode["notifications"].SelectSingleNode("radiation_value").InnerText = this.RadiationNotificationValue.ToString();
             xmlNode["notifications"].SelectSingleNode("radiation_unit_type").InnerText = this.RadiationNotificationUnitType.ToString();
+
+            // uRADMonitor API credentials were introduced with version 1.4.0.
+            if (xmlNode["api_credentials"] == null)
+            {
+                XmlNode apiCredentialsXmlNode = xmlDocument.CreateNode(XmlNodeType.Element, "api_credentials", null);
+                apiCredentialsXmlNode.AppendChild(xmlDocument.CreateNode(XmlNodeType.Element, "user_id", null));
+                apiCredentialsXmlNode.AppendChild(xmlDocument.CreateNode(XmlNodeType.Element, "user_key", null));
+                xmlNode.InsertAfter(apiCredentialsXmlNode, xmlNode["notifications"]);
+            }
+
+            xmlNode["api_credentials"].SelectSingleNode("user_id").InnerText = string.IsNullOrEmpty(uRADMonitorAPIUserId) ? null : DataProtectionApiWrapper.Encrypt(uRADMonitorAPIUserId);
+            xmlNode["api_credentials"].SelectSingleNode("user_key").InnerText = string.IsNullOrEmpty(uRADMonitorAPIUserKey) ? null : DataProtectionApiWrapper.Encrypt(uRADMonitorAPIUserKey);
 
             using (XmlWriter xmlWriter = XmlWriter.Create(filePath, XmlWriterSettings))
             {

@@ -21,7 +21,7 @@ namespace uRADMonitorX.Commons
         {
             var request = (HttpWebRequest)WebRequest.Create(url);
 
-            request.UserAgent = userAgent ?? Program.UserAgent;
+            request.UserAgent = userAgent ?? Program.Settings.UserAgent;
 
             using (var response = request.GetResponse())
             {

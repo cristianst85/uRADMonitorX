@@ -11,12 +11,16 @@ using uRADMonitorX.Commons.Logging.Formatters;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
 using uRADMonitorX.Extensions;
+using uRADMonitorX.Helpers;
 using uRADMonitorX.Updater;
+using uRADMonitorX.uRADMonitor.Domain;
+using uRADMonitorX.uRADMonitor.Infrastructure;
+using uRADMonitorX.uRADMonitor.Services;
 using uRADMonitorX.Windows;
 
 namespace uRADMonitorX
 {
-    internal static class Program
+    internal static partial class Program
     {
         internal static readonly string ApplicationName = "uRADMonitorX";
         internal static readonly string LoggerName = "fileLogger";
@@ -24,7 +28,6 @@ namespace uRADMonitorX
         internal static readonly string LoggerFileName = "uRADMonitorX.log";
         internal static readonly string DataLoggerFileName = "data.log";
         internal static readonly string SettingsFileName = "config.xml";
-        internal static readonly string UserAgent = "uRADMonitorX/1.0";
 
         /// <summary>
         /// Specifies the URL application uses to check 
@@ -175,13 +178,24 @@ namespace uRADMonitorX
             var deviceDataReaderFactory = new DeviceDataHttpReaderFactory(settings);
             var deviceDataJobFactory = new DeviceDataJobFactory(settings, deviceDataReaderFactory);
 
+            var deviceDataClientConfiguration = new DeviceDataClientConfiguration();
+            var httpClientConfiguration = new HttpClientConfiguration();
+
+            var httpClientFactory = new uRADMonitorHttpClientFactory(httpClientConfiguration);
+            var deviceDataClientFactory = new DeviceDataHttpClientFactory(deviceDataClientConfiguration, httpClientFactory);
+            var deviceServiceFactory = new DeviceServiceFactory(new DeviceFactory(), deviceDataClientFactory);
+
             if (!programArguments.IgnoreRegisteringAtWindowsStartup && !EnvironmentUtils.IsUnix())
             {
                 RegisterAtWindowsStartup();
             }
 
-            var formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, settings, logger);
+            var formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, deviceServiceFactory, settings, logger);
             formMain.SettingsChangedEventHandler += new SettingsChangedEventHandler(FormMain_SettingsChangedEventHandler);
+
+
+            // Both uRADMonitor API and GitHub API requires TLS v1.2.
+            ServicePointManagerHelper.SetSecurityProtocolToTls12();
 
             Application.Run(formMain);
         }

@@ -61,6 +61,11 @@ namespace uRADMonitorX.Configuration
 
         public RadiationUnitType RadiationNotificationUnitType { get; set; }
 
+        // uRADMonitor API Authentication
+        public string uRADMonitorAPIUserId { get; set; }
+
+        public string uRADMonitorAPIUserKey { get; set; }
+
         // Commit
         public abstract void Commit();
     }

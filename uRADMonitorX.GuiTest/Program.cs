@@ -8,6 +8,9 @@ using uRADMonitorX.Commons.Networking;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
 using uRADMonitorX.Core.Device;
+using uRADMonitorX.uRADMonitor.Domain;
+using uRADMonitorX.uRADMonitor.Infrastructure;
+using uRADMonitorX.uRADMonitor.Services;
 
 namespace uRADMonitorX.GuiTest
 {
@@ -67,7 +70,14 @@ namespace uRADMonitorX.GuiTest
 
             var logger = new NullLogger();
 
-            var formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, settings, logger);
+            var deviceDataClientConfiguration = new DeviceDataClientConfiguration();
+            var httpClientConfiguration = new HttpClientConfiguration();
+
+            var httpClientFactory = new uRADMonitorHttpClientFactory(httpClientConfiguration);
+            var deviceDataClientFactory = new DeviceDataHttpClientFactory(deviceDataClientConfiguration, httpClientFactory);
+            var deviceServiceFactory = new DeviceServiceFactory(new DeviceFactory(), deviceDataClientFactory);
+
+            var formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, deviceServiceFactory, settings, logger);
             formMain.SettingsChangedEventHandler += new SettingsChangedEventHandler(FormMain_SettingsChangedEventHandler);
 
             Application.Run(formMain);

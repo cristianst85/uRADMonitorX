@@ -3,6 +3,7 @@ using uRADMonitorX.Updater;
 
 namespace uRADMonitorX.IntegrationTests.Updater
 {
+    [Ignore("IntegrationTest")]
     [TestFixture]
     public class GitHubUpdaterTests
     {

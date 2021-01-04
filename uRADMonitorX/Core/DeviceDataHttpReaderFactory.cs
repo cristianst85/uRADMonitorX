@@ -22,7 +22,7 @@ namespace uRADMonitorX.Core
 
         public IDeviceDataReader Create()
         {
-            return new DeviceDataHttpReader(new HttpClient(Program.UserAgent), this.settings.DeviceIPAddress);
+            return new DeviceDataHttpReader(new HttpClient(Program.Settings.UserAgent), this.settings.DeviceIPAddress);
         }
     }
 }

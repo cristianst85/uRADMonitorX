@@ -56,8 +56,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
@@ -66,9 +68,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commons\CharUtils.cs" />
+    <Compile Include="Commons\Controls\ControlState.cs" />
+    <Compile Include="Commons\Controls\Extensions\ControlStateExtensions.cs" />
     <Compile Include="Commons\Formatting\TextStyleFormatter.cs" />
     <Compile Include="Commons\HttpClient.cs" />
+    <Compile Include="Commons\IHttpClientConfiguration.cs" />
+    <Compile Include="Commons\uRADMonitorHttpClientFactory.cs" />
     <Compile Include="Commons\IHttpClient.cs" />
+    <Compile Include="Commons\IHttpClientFactory.cs" />
+    <Compile Include="Configuration\DeviceDataClientConfiguration.cs" />
+    <Compile Include="Configuration\HttpClientConfiguration.cs" />
+    <Compile Include="Program.Settings.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Helpers\ServicePointManagerHelper.cs" />
+    <Compile Include="uRADMonitorHelper.cs" />
+    <Compile Include="Commons\Cryptography\DataProtectionApiWrapper.cs" />
     <Compile Include="Commons\Logging\Appenders\MemoryAppender.cs" />
     <Compile Include="Commons\Logging\Appenders\DuplicateFilterAppender.cs" />
     <Compile Include="Commons\Logging\Formatters\DateTimeFormatter.cs" />
@@ -79,7 +93,15 @@
     <Compile Include="Extensions\ControlExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Commons\uRADMonitorHttpClient.cs" />
     <Compile Include="Configuration\Settings.cs" />
+    <Compile Include="Forms\DeviceListViewItem.cs" />
+    <Compile Include="FormNetworkAuthentication.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormNetworkAuthentication.Designer.cs">
+      <DependentUpon>FormNetworkAuthentication.cs</DependentUpon>
+    </Compile>
     <Compile Include="HashCheck\ChecksumEntry.cs" />
     <Compile Include="HashCheck\IChecksum.cs" />
     <Compile Include="HashCheck\IReadOnlyChecksumFile.cs" />
@@ -87,9 +109,14 @@
     <Compile Include="HashCheck\ReadOnlyMD5File.cs" />
     <None Include="packages.config" />
     <Compile Include="Commons\Logging\Appenders\NLogDailyFileAppender.cs" />
-    <Compile Include="Helpers\ServicePointManagerHelper.cs" />
     <Compile Include="Properties\GeneratedAssemblyInfo.cs" />
     <Compile Include="Updater\GitHubUpdater.cs" />
+    <Compile Include="FormNetwork.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormNetwork.Designer.cs">
+      <DependentUpon>FormNetwork.cs</DependentUpon>
+    </Compile>
     <Compile Include="Updater\GitHubApi\Release.cs" />
     <Compile Include="FormUpdate.cs">
       <SubType>Form</SubType>
@@ -148,7 +175,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="uRADMonitorHelper.cs" />
+    <Compile Include="uRADMonitor\API\V1\DeviceDto.cs" />
+    <Compile Include="uRADMonitor\Configuration\IDeviceDataClientConfiguration.cs" />
+    <Compile Include="uRADMonitor\Domain\DevicePlacement.cs" />
+    <Compile Include="uRADMonitor\Domain\DeviceStatus.cs" />
+    <Compile Include="uRADMonitor\Domain\DeviceFactory.cs" />
+    <Compile Include="uRADMonitor\Domain\Device.cs" />
+    <Compile Include="uRADMonitor\Domain\IDeviceFactory.cs" />
+    <Compile Include="uRADMonitor\Infrastructure\DeviceDataHttpClient.cs" />
+    <Compile Include="uRADMonitor\Infrastructure\IDeviceDataClient.cs" />
+    <Compile Include="uRADMonitor\Infrastructure\DeviceDataHttpClientFactory.cs" />
+    <Compile Include="uRADMonitor\Services\DeviceServiceResponse.cs" />
+    <Compile Include="uRADMonitor\Services\IDeviceService.cs" />
+    <Compile Include="uRADMonitor\Services\DeviceService.cs" />
+    <Compile Include="uRADMonitor\Infrastructure\IDeviceDataClientFactory.cs" />
+    <Compile Include="uRADMonitor\Services\DeviceServiceFactory.cs" />
+    <Compile Include="uRADMonitor\Services\IDeviceServiceFactory.cs" />
+    <Compile Include="uRADMonitor\UnixDateTimeConverter.cs" />
     <Compile Include="Windows\NativeMethods.cs" />
     <Compile Include="Commons\Formatting\ITimeSpanFormatter.cs" />
     <Compile Include="Commons\Formatting\TimeSpanFormatter.cs" />
@@ -210,8 +253,14 @@
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormNetworkAuthentication.resx">
+      <DependentUpon>FormNetworkAuthentication.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormOptions.resx">
       <DependentUpon>FormOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormNetwork.resx">
+      <DependentUpon>FormNetwork.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

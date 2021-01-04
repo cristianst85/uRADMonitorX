@@ -21,6 +21,7 @@ using uRADMonitorX.Core;
 using uRADMonitorX.Core.Device;
 using uRADMonitorX.Core.Jobs;
 using uRADMonitorX.Extensions;
+using uRADMonitorX.uRADMonitor.Services;
 using uRADMonitorX.Windows;
 
 namespace uRADMonitorX
@@ -37,6 +38,8 @@ namespace uRADMonitorX
         private IDeviceDataReaderFactory deviceDataReaderFactory = null;
         private IDeviceDataJobFactory deviceDataJobFactory = null;
         private IDeviceDataJob deviceDataJob = null;
+
+        private IDeviceServiceFactory deviceServiceFactory = null;
 
         private volatile bool _isClosing;
         public bool IsClosing
@@ -72,7 +75,11 @@ namespace uRADMonitorX
         private DateTime? notifyIconBalloonLastShownAt = null;
         private DateTime? lastDataReadingTimestamp = null;
 
-        public FormMain(IDeviceDataReaderFactory deviceDataReaderFactory, IDeviceDataJobFactory deviceDataJobFactory, ISettings settings, ILogger logger)
+        public FormMain(IDeviceDataReaderFactory deviceDataReaderFactory,
+            IDeviceDataJobFactory deviceDataJobFactory,
+            IDeviceServiceFactory deviceServiceFactory,
+            ISettings settings,
+            ILogger logger)
         {
             try
             {
@@ -80,6 +87,7 @@ namespace uRADMonitorX
 
                 this.deviceDataReaderFactory = deviceDataReaderFactory;
                 this.deviceDataJobFactory = deviceDataJobFactory;
+                this.deviceServiceFactory = deviceServiceFactory;
                 this.settings = settings;
                 this.logger = logger;
 
@@ -961,7 +969,7 @@ namespace uRADMonitorX
         {
             if (this.viewOnlyTextBoxId.HasText())
             {
-                uRADMonitorHelper.OpenGraphUrl(this.viewOnlyTextBoxId.Text, ((ToolStripMenuItem)sender).Name.ToLower());
+                uRADMonitorHelper.OpenGraphUrl(this.viewOnlyTextBoxId.Text, ((ToolStripMenuItem)sender).Tag.ToString().ToLower());
             }
         }
 
@@ -971,6 +979,14 @@ namespace uRADMonitorX
             {
                 form.Update();
                 form.ShowDialog(this);
+            }
+        }
+
+        private void NetworkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var form = new FormNetwork(settings, deviceServiceFactory))
+            {
+                var result = form.ShowDialog(this);
             }
         }
     }

@@ -51,6 +51,7 @@
     <Compile Include="Core\Device\DeviceDataHttpReaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Updater\GitHubUpdaterTests.cs" />
+    <Compile Include="Commons\uRADMonitorHttpClientTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\uRADMonitorX\uRADMonitorX.csproj">

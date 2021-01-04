@@ -18,7 +18,7 @@ namespace uRADMonitorX.Core.Device
                 throw new ArgumentNullException("ipAddress");
             }
 
-            if (!Commons.Networking.IPAddress.IsValidFormat(ipAddress) && !IPEndPoint.IsValidFormat(ipAddress))
+            if (!IPAddress.IsValidFormat(ipAddress) && !IPEndPoint.IsValidFormat(ipAddress))
             {
                 throw new ArgumentException("Invalid IP address.");
             }

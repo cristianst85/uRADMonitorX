@@ -16,11 +16,11 @@ namespace uRADMonitorX.Tests.Core.Device
         [TestCase(@"..\..\..\uRADMonitorX.Tests.Files\samples\fw138a.html", "110000E7", 1, 109, 138, DeviceModelType.A, "SBM20", 6, null, "19,50", null, 381, 44, 6407, 48, "192.168.4.155", "45.79.179.145", "200")]
         public void Read(string filePath, string deviceId, int deviceType, int hwVersion, int fwVersion, DeviceModelType deviceModelType, string detector, int radiation, string radiationAverage, string temperature, string pressure, int voltage, int voltagePercent, int uptime, int wdt, string ip, string serverIp, string serverResponseCode)
         {
-            var testFilePath = Path.Combine(TestContext.CurrentContext.TestDirectory, filePath);
+            var fullFilePath = Path.Combine(TestContext.CurrentContext.TestDirectory, filePath);
 
-            Assert.IsTrue(File.Exists(testFilePath));
+            Assert.That(File.Exists(fullFilePath));
 
-            IDeviceDataReader deviceDataReader = new DeviceDataFileReader(testFilePath);
+            IDeviceDataReader deviceDataReader = new DeviceDataFileReader(fullFilePath);
             DeviceData deviceData = deviceDataReader.Read();
             Assert.AreEqual(deviceId, deviceData.DeviceInformation.DeviceID);
             Assert.AreEqual(hwVersion, deviceData.DeviceInformation.HardwareVersion);

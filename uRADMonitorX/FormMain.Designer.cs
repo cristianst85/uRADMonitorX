@@ -32,7 +32,7 @@ namespace uRADMonitorX {
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showHideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enablePollingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,18 +40,20 @@ namespace uRADMonitorX {
             this.viewDeviceWebpageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewDeviceOnlineDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dashboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
             this.temperatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pressureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cpmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.networkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uRADMonitorWebsiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uRADMonitorForumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -84,9 +86,9 @@ namespace uRADMonitorX {
             this.viewOnlyTextBoxRadiation = new uRADMonitorX.Commons.Controls.ViewOnlyTextBox();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.viewDeviceWebpageContextMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
             this.showHideContextMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripSeparator();
             this.exitContextMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.menuStrip.SuspendLayout();
@@ -112,7 +114,7 @@ namespace uRADMonitorX {
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showHideToolStripMenuItem,
-            this.toolStripMenuItem5,
+            this.toolStripMenuItem1,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -124,20 +126,20 @@ namespace uRADMonitorX {
             this.showHideToolStripMenuItem.Name = "showHideToolStripMenuItem";
             this.showHideToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.showHideToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F9;
-            this.showHideToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.showHideToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.showHideToolStripMenuItem.Text = "Show/Hide";
             this.showHideToolStripMenuItem.Click += new System.EventHandler(this.ShowHideToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem5
+            // toolStripMenuItem1
             // 
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Image = global::uRADMonitorX.Properties.Resources.door_out;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.CloseApplication);
             // 
@@ -149,8 +151,10 @@ namespace uRADMonitorX {
             this.viewDeviceWebpageToolStripMenuItem,
             this.viewDeviceOnlineDataToolStripMenuItem,
             this.toolStripMenuItem3,
+            this.networkToolStripMenuItem,
+            this.toolStripMenuItem4,
             this.configurationToolStripMenuItem,
-            this.toolStripMenuItem1,
+            this.toolStripMenuItem5,
             this.optionsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
@@ -159,20 +163,20 @@ namespace uRADMonitorX {
             // enablePollingToolStripMenuItem
             // 
             this.enablePollingToolStripMenuItem.Name = "enablePollingToolStripMenuItem";
-            this.enablePollingToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.enablePollingToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.enablePollingToolStripMenuItem.Text = "Enable polling";
             this.enablePollingToolStripMenuItem.Click += new System.EventHandler(this.EnablePollingToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(195, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(201, 6);
             // 
             // viewDeviceWebpageToolStripMenuItem
             // 
             this.viewDeviceWebpageToolStripMenuItem.Image = global::uRADMonitorX.Properties.Resources.page_white_go;
             this.viewDeviceWebpageToolStripMenuItem.Name = "viewDeviceWebpageToolStripMenuItem";
-            this.viewDeviceWebpageToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.viewDeviceWebpageToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.viewDeviceWebpageToolStripMenuItem.Text = "View device &webpage";
             this.viewDeviceWebpageToolStripMenuItem.Click += new System.EventHandler(this.ViewDeviceWebpageToolStripMenuItem_Click);
             // 
@@ -180,13 +184,13 @@ namespace uRADMonitorX {
             // 
             this.viewDeviceOnlineDataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.dashboardToolStripMenuItem,
-            this.toolStripMenuItem7,
+            this.toolStripMenuItem6,
             this.temperatureToolStripMenuItem,
             this.pressureToolStripMenuItem,
             this.cpmToolStripMenuItem});
             this.viewDeviceOnlineDataToolStripMenuItem.Image = global::uRADMonitorX.Properties.Resources.chart_curve_go;
             this.viewDeviceOnlineDataToolStripMenuItem.Name = "viewDeviceOnlineDataToolStripMenuItem";
-            this.viewDeviceOnlineDataToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.viewDeviceOnlineDataToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.viewDeviceOnlineDataToolStripMenuItem.Text = "View device online data";
             // 
             // dashboardToolStripMenuItem
@@ -196,15 +200,16 @@ namespace uRADMonitorX {
             this.dashboardToolStripMenuItem.Text = "Dashboard";
             this.dashboardToolStripMenuItem.Click += new System.EventHandler(this.ViewDeviceDashboardToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem7
+            // toolStripMenuItem6
             // 
-            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-            this.toolStripMenuItem7.Size = new System.Drawing.Size(139, 6);
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(139, 6);
             // 
             // temperatureToolStripMenuItem
             // 
             this.temperatureToolStripMenuItem.Name = "temperatureToolStripMenuItem";
             this.temperatureToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.temperatureToolStripMenuItem.Tag = "temperature";
             this.temperatureToolStripMenuItem.Text = "Temperature";
             this.temperatureToolStripMenuItem.Click += new System.EventHandler(this.ViewDeviceGraphDataToolStripMenuItem_Click);
             // 
@@ -212,6 +217,7 @@ namespace uRADMonitorX {
             // 
             this.pressureToolStripMenuItem.Name = "pressureToolStripMenuItem";
             this.pressureToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.pressureToolStripMenuItem.Tag = "pressure";
             this.pressureToolStripMenuItem.Text = "Pressure";
             this.pressureToolStripMenuItem.Click += new System.EventHandler(this.ViewDeviceGraphDataToolStripMenuItem_Click);
             // 
@@ -219,32 +225,45 @@ namespace uRADMonitorX {
             // 
             this.cpmToolStripMenuItem.Name = "cpmToolStripMenuItem";
             this.cpmToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.cpmToolStripMenuItem.Tag = "cpm";
             this.cpmToolStripMenuItem.Text = "Radiation";
             this.cpmToolStripMenuItem.Click += new System.EventHandler(this.ViewDeviceGraphDataToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(195, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(201, 6);
+            // 
+            // networkToolStripMenuItem
+            // 
+            this.networkToolStripMenuItem.Name = "networkToolStripMenuItem";
+            this.networkToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.networkToolStripMenuItem.Text = "uRADMonitor Network...";
+            this.networkToolStripMenuItem.Click += new System.EventHandler(this.NetworkToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(201, 6);
             // 
             // configurationToolStripMenuItem
             // 
             this.configurationToolStripMenuItem.Image = global::uRADMonitorX.Properties.Resources.cog;
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
-            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.configurationToolStripMenuItem.Text = "Device &configuration...";
             this.configurationToolStripMenuItem.Click += new System.EventHandler(this.ConfigurationToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem1
+            // toolStripMenuItem5
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(195, 6);
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(201, 6);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Image = global::uRADMonitorX.Properties.Resources.wrench;
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.optionsToolStripMenuItem.Text = "&Options...";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.OptionsToolStripMenuItem_Click);
             // 
@@ -253,7 +272,7 @@ namespace uRADMonitorX {
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.uRADMonitorWebsiteToolStripMenuItem,
             this.uRADMonitorForumToolStripMenuItem,
-            this.toolStripMenuItem8,
+            this.toolStripMenuItem7,
             this.checkForUpdatesToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
@@ -276,10 +295,10 @@ namespace uRADMonitorX {
             this.uRADMonitorForumToolStripMenuItem.Text = "uRADMonitor Forum";
             this.uRADMonitorForumToolStripMenuItem.Click += new System.EventHandler(this.uRADMonitorForumToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem8
+            // toolStripMenuItem7
             // 
-            this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-            this.toolStripMenuItem8.Size = new System.Drawing.Size(189, 6);
+            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(189, 6);
             // 
             // checkForUpdatesToolStripMenuItem
             // 
@@ -539,7 +558,7 @@ namespace uRADMonitorX {
             this.viewOnlyTextBoxRadiationAverage.Name = "viewOnlyTextBoxRadiationAverage";
             this.viewOnlyTextBoxRadiationAverage.ReadOnly = true;
             this.viewOnlyTextBoxRadiationAverage.ShortcutsEnabled = false;
-            this.viewOnlyTextBoxRadiationAverage.Size = new System.Drawing.Size(85, 20);
+            this.viewOnlyTextBoxRadiationAverage.Size = new System.Drawing.Size(84, 20);
             this.viewOnlyTextBoxRadiationAverage.TabIndex = 14;
             // 
             // labelRadiationAverage
@@ -573,12 +592,12 @@ namespace uRADMonitorX {
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.viewDeviceWebpageContextMenuToolStripMenuItem,
-            this.toolStripMenuItem6,
+            this.toolStripMenuItem8,
             this.showHideContextMenuToolStripMenuItem,
-            this.toolStripMenuItem4,
+            this.toolStripMenuItem9,
             this.exitContextMenuToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(188, 104);
+            this.contextMenuStrip.Size = new System.Drawing.Size(188, 82);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStrip_Opening);
             // 
             // viewDeviceWebpageContextMenuToolStripMenuItem
@@ -589,10 +608,10 @@ namespace uRADMonitorX {
             this.viewDeviceWebpageContextMenuToolStripMenuItem.Text = "View device webpage";
             this.viewDeviceWebpageContextMenuToolStripMenuItem.Click += new System.EventHandler(this.ViewDeviceWebpageToolStripMenuItem1_Click);
             // 
-            // toolStripMenuItem6
+            // toolStripMenuItem8
             // 
-            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(184, 6);
+            this.toolStripMenuItem8.Name = "toolStripMenuItem8";
+            this.toolStripMenuItem8.Size = new System.Drawing.Size(184, 6);
             // 
             // showHideContextMenuToolStripMenuItem
             // 
@@ -604,10 +623,10 @@ namespace uRADMonitorX {
             this.showHideContextMenuToolStripMenuItem.Text = "Show/Hide";
             this.showHideContextMenuToolStripMenuItem.Click += new System.EventHandler(this.ShowHideContextMenuToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem4
+            // toolStripMenuItem9
             // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(184, 6);
+            this.toolStripMenuItem9.Name = "toolStripMenuItem9";
+            this.toolStripMenuItem9.Size = new System.Drawing.Size(184, 6);
             // 
             // exitContextMenuToolStripMenuItem
             // 
@@ -661,7 +680,7 @@ namespace uRADMonitorX {
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem configurationToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
@@ -699,23 +718,25 @@ namespace uRADMonitorX {
         private ToolStripSeparator toolStripMenuItem3;
         private ContextMenuStrip contextMenuStrip;
         private ToolStripMenuItem showHideContextMenuToolStripMenuItem;
-        private ToolStripSeparator toolStripMenuItem4;
+        private ToolStripSeparator toolStripMenuItem9;
         private ToolStripMenuItem exitContextMenuToolStripMenuItem;
         private NotifyIcon notifyIcon;
         private ToolStripMenuItem showHideToolStripMenuItem;
-        private ToolStripSeparator toolStripMenuItem5;
+        private ToolStripSeparator toolStripMenuItem1;
         private ToolStripMenuItem viewDeviceWebpageContextMenuToolStripMenuItem;
-        private ToolStripSeparator toolStripMenuItem6;
+        private ToolStripSeparator toolStripMenuItem8;
         private ToolStripMenuItem uRADMonitorWebsiteToolStripMenuItem;
         private ToolStripMenuItem uRADMonitorForumToolStripMenuItem;
-        private ToolStripSeparator toolStripMenuItem8;
+        private ToolStripSeparator toolStripMenuItem7;
         private ToolStripMenuItem viewDeviceOnlineDataToolStripMenuItem;
         private ToolStripMenuItem temperatureToolStripMenuItem;
         private ToolStripMenuItem pressureToolStripMenuItem;
         private ToolStripMenuItem cpmToolStripMenuItem;
         private ToolStripMenuItem dashboardToolStripMenuItem;
-        private ToolStripSeparator toolStripMenuItem7;
+        private ToolStripSeparator toolStripMenuItem6;
         private ToolStripMenuItem checkForUpdatesToolStripMenuItem;
+        private ToolStripMenuItem networkToolStripMenuItem;
+        private ToolStripSeparator toolStripMenuItem4;
     }
 }
 

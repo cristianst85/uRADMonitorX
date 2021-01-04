@@ -29,7 +29,7 @@ namespace uRADMonitorX.Updater
         public byte[] Download(string downloadUrl)
         {
             var request = (HttpWebRequest)WebRequest.Create(downloadUrl);
-            request.UserAgent = Program.UserAgent;
+            request.UserAgent = Program.Settings.UserAgent;
 
             using (var ms = new MemoryStream())
             {
@@ -55,7 +55,7 @@ namespace uRADMonitorX.Updater
         protected virtual string RetrieveContentFromUrl(string url)
         {
             var request = (HttpWebRequest)WebRequest.Create(url);
-            request.UserAgent = Program.UserAgent;
+            request.UserAgent = Program.Settings.UserAgent;
 
             string content = string.Empty;
 
