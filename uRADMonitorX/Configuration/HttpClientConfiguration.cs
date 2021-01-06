@@ -4,9 +4,16 @@ namespace uRADMonitorX.Configuration
 {
     public class HttpClientConfiguration : IHttpClientConfiguration
     {
-        public string GetUserAgent()
+        public string UserAgent { get; set; }
+
+        public HttpClientConfiguration()
         {
-            return Program.Settings.UserAgent;
+            this.UserAgent = Program.Settings.UserAgent;
+        }
+
+        public virtual string GetUserAgent()
+        {
+            return this.UserAgent;
         }
     }
 }

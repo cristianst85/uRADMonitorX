@@ -2,16 +2,18 @@
 
 namespace uRADMonitorX.Configuration
 {
-    public class DeviceDataClientConfiguration : IDeviceDataClientConfiguration
+    public class DeviceDataClientConfiguration : HttpClientConfiguration, IDeviceDataClientConfiguration
     {
-        public string GetEndpointUrl()
+        public string EndpointUrl { get; set; } 
+
+        public DeviceDataClientConfiguration() : base()
         {
-            return Program.Settings.uRADMonitorEndpointUrl;
+            this.EndpointUrl = Program.Settings.uRADMonitorEndpointUrl;
         }
 
-        public string GetUserAgent()
+        public virtual string GetEndpointUrl()
         {
-            return Program.Settings.UserAgent;
+            return this.EndpointUrl;
         }
     }
 }
