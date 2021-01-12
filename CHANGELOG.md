@@ -2,11 +2,11 @@
 
 ## 1.3.3 (2020-08-01)
 
- - Improved Check for Updates functionality.
- - Fixed blurred UI issue on high-DPI displays.
- - Fixed a bug that was causing a high rate data polling when data fetch was unsuccessful immediately after the application was started.
- - Added Git commit hash and branch name to the assembly info / About dialog.
- - Code refactoring and optimization.
+- Improved Check for Updates functionality.
+- Fixed blurred UI issue on high-DPI displays.
+- Fixed a bug that was causing a high rate data polling when data fetch was unsuccessful immediately after the application was started.
+- Added Git commit hash and branch name to the assembly info / About dialog.
+- Code refactoring and optimization.
 
 ## 1.3.2 (2020-04-30)
 
