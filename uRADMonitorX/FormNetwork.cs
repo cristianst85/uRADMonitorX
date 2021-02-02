@@ -112,7 +112,7 @@ namespace uRADMonitorX
 
         private void ToogleControls(ControlState state)
         {
-            buttonRefresh.Enabled = state.ToBoolean() && settings.uRADMonitorAPIUserId.IsNotNullOrEmpty();
+            buttonRefresh.Enabled = state.ToBoolean() && settings.uRADMonitorNetwork.UserId.IsNotNullOrEmpty();
             checkBoxShowOnlineDevicesOnly.Enabled = state.ToBoolean();
             configToolStripMenuItem.Enabled = state.ToBoolean();
         }
@@ -187,7 +187,7 @@ namespace uRADMonitorX
             {
                 devices.Clear();
 
-                var deviceService = deviceServiceFactory.Create(settings.uRADMonitorAPIUserId, settings.uRADMonitorAPIUserKey);
+                var deviceService = deviceServiceFactory.Create(settings.uRADMonitorNetwork.UserId, settings.uRADMonitorNetwork.UserKey);
 
                 devices.AddRange(deviceService.GetAll().Devices.OrderBy(x => x.Id));
             });

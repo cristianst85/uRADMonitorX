@@ -48,12 +48,13 @@
       <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commons\Formatting\TimeSpanFormatterTest.cs" />
     <Compile Include="Configuration\JsonSettingsTests.cs" />
-    <Compile Include="Configuration\XMLSettingsCommitTests.cs" />
+    <Compile Include="Configuration\XMLSettingsSaveTests.cs" />
     <Compile Include="Core\Device\DeviceDataFileReader.cs" />
     <Compile Include="Core\Device\DeviceDataFileReaderTest.cs" />
     <Compile Include="Commons\Networking\IPEndPointTests.cs" />

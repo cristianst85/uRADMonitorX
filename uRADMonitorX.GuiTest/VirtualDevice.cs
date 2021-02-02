@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using uRADMonitorX.Commons;
 using uRADMonitorX.Commons.Networking;
 using uRADMonitorX.Core.Device;
 
@@ -20,15 +19,13 @@ namespace uRADMonitorX.GuiTest
 
         public string IPAddress { get; private set; }
 
-        public string ServerIPAddress { get; private set; }
-
         public HttpStatus ServerResponseCode { get; set; }
 
         private DateTime? startTime;
         private volatile bool started = false;
         private readonly IList<DeviceReadings> readings;
 
-        public VirtualDevice(string deviceId, RadiationDetector detector, int fwVersion, int hwVersion, DeviceModelType model, string ipAddress, string serverIpAddres, ICollection<DeviceReadings> readings)
+        public VirtualDevice(string deviceId, RadiationDetector detector, int fwVersion, int hwVersion, DeviceModelType model, string ipAddress, ICollection<DeviceReadings> readings)
         {
             this.DeviceId = deviceId;
             this.DetectorName = detector.Name;
@@ -36,7 +33,6 @@ namespace uRADMonitorX.GuiTest
             this.HardwareVersion = hwVersion;
             this.Model = model;
             this.IPAddress = ipAddress;
-            this.ServerIPAddress = serverIpAddres;
             this.ServerResponseCode = HttpStatus.OK;
             this.readings = new List<DeviceReadings>(readings);
         }
@@ -98,7 +94,6 @@ namespace uRADMonitorX.GuiTest
             deviceData.WDT = secondsElapsedFromStartTime % 60;
             deviceData.ServerResponseCode = this.ServerResponseCode.Code.ToString();
             deviceData.IPAddress = this.IPAddress;
-            deviceData.ServerIPAddress = this.ServerIPAddress;
 
             return deviceData;
         }

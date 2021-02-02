@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using uRADMonitorX.Commons;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core.Device;
@@ -22,7 +23,7 @@ namespace uRADMonitorX.Core
 
         public IDeviceDataReader Create()
         {
-            return new DeviceDataHttpReader(new HttpClient(Program.Settings.UserAgent), this.settings.DeviceIPAddress);
+            return new DeviceDataHttpReader(new HttpClient(Program.Settings.UserAgent), this.settings.Devices.First().EndpointUrl);
         }
     }
 }

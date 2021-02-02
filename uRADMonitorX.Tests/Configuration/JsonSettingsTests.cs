@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.IO;
+using System.Linq;
 using uRADMonitorX.Configuration;
 
 namespace uRADMonitorX.Tests.Configuration
@@ -46,41 +47,40 @@ namespace uRADMonitorX.Tests.Configuration
 
             Assert.AreEqual(".json", Path.GetExtension(jsonSettings.FilePath));
 
-            Assert.AreEqual(xmlSettings.StartWithWindows, jsonSettings.StartWithWindows);
-            Assert.AreEqual(xmlSettings.AutomaticallyCheckForUpdates, jsonSettings.AutomaticallyCheckForUpdates);
-
-            Assert.AreEqual(xmlSettings.StartMinimized, jsonSettings.StartMinimized);
-            Assert.AreEqual(xmlSettings.ShowInTaskbar, jsonSettings.ShowInTaskbar);
-            Assert.AreEqual(xmlSettings.CloseToSystemTray, jsonSettings.CloseToSystemTray);
-            Assert.AreEqual(xmlSettings.LastWindowXPos, jsonSettings.LastWindowXPos);
-            Assert.AreEqual(xmlSettings.LastWindowYPos, jsonSettings.LastWindowYPos);
-
-            Assert.AreEqual(xmlSettings.IsLoggingEnabled, jsonSettings.IsLoggingEnabled);
-            Assert.AreEqual(xmlSettings.LogDirectoryPath, jsonSettings.LogDirectoryPath);
-            Assert.AreEqual(xmlSettings.IsDataLoggingEnabled, jsonSettings.IsDataLoggingEnabled);
-            Assert.AreEqual(xmlSettings.DataLoggingToSeparateFile, jsonSettings.DataLoggingToSeparateFile);
-            Assert.AreEqual(xmlSettings.DataLogDirectoryPath, jsonSettings.DataLogDirectoryPath);
-
-            Assert.AreEqual(xmlSettings.DetectorName, jsonSettings.DetectorName);
-            Assert.AreEqual(xmlSettings.HasPressureSensor, jsonSettings.HasPressureSensor);
-            Assert.AreEqual(xmlSettings.DeviceIPAddress, jsonSettings.DeviceIPAddress);
-
-            Assert.AreEqual(xmlSettings.TemperatureUnitType, jsonSettings.TemperatureUnitType);
-            Assert.AreEqual(xmlSettings.PressureUnitType, jsonSettings.PressureUnitType);
-            Assert.AreEqual(xmlSettings.RadiationUnitType, jsonSettings.RadiationUnitType);
-
-            Assert.AreEqual(xmlSettings.PollingType, jsonSettings.PollingType);
-            Assert.AreEqual(xmlSettings.PollingInterval, jsonSettings.PollingInterval);
             Assert.AreEqual(xmlSettings.IsPollingEnabled, jsonSettings.IsPollingEnabled);
 
-            Assert.AreEqual(xmlSettings.AreNotificationsEnabled, jsonSettings.AreNotificationsEnabled);
-            Assert.AreEqual(xmlSettings.HighTemperatureNotificationValue, jsonSettings.HighTemperatureNotificationValue);
-            Assert.AreEqual(xmlSettings.RadiationNotificationValue, jsonSettings.RadiationNotificationValue);
-            Assert.AreEqual(xmlSettings.TemperatureNotificationUnitType, jsonSettings.TemperatureNotificationUnitType);
-            Assert.AreEqual(xmlSettings.RadiationNotificationUnitType, jsonSettings.RadiationNotificationUnitType);
+            Assert.AreEqual(xmlSettings.General.StartWithWindows, jsonSettings.General.StartWithWindows);
+            Assert.AreEqual(xmlSettings.General.AutomaticallyCheckForUpdates, jsonSettings.General.AutomaticallyCheckForUpdates);
 
-            Assert.AreEqual(xmlSettings.uRADMonitorAPIUserId, jsonSettings.uRADMonitorAPIUserId);
-            Assert.AreEqual(xmlSettings.uRADMonitorAPIUserKey, jsonSettings.uRADMonitorAPIUserKey);
+            Assert.AreEqual(xmlSettings.Display.StartMinimized, jsonSettings.Display.StartMinimized);
+            Assert.AreEqual(xmlSettings.Display.ShowInTaskbar, jsonSettings.Display.ShowInTaskbar);
+            Assert.AreEqual(xmlSettings.Display.CloseToSystemTray, jsonSettings.Display.CloseToSystemTray);
+            Assert.AreEqual(xmlSettings.Display.WindowPosition, jsonSettings.Display.WindowPosition);
+
+            Assert.AreEqual(xmlSettings.Logging.IsEnabled, jsonSettings.Logging.IsEnabled);
+            Assert.AreEqual(xmlSettings.Logging.DirectoryPath, jsonSettings.Logging.DirectoryPath);
+            Assert.AreEqual(xmlSettings.Logging.DataLogging.IsEnabled, jsonSettings.Logging.DataLogging.IsEnabled);
+            Assert.AreEqual(xmlSettings.Logging.DataLogging.UseSeparateFile, jsonSettings.Logging.DataLogging.UseSeparateFile);
+            Assert.AreEqual(xmlSettings.Logging.DataLogging.DirectoryPath, jsonSettings.Logging.DataLogging.DirectoryPath);
+
+            Assert.AreEqual(xmlSettings.Device.EndpointUrl, jsonSettings.Devices.Single().EndpointUrl);
+            Assert.AreEqual(xmlSettings.Device.GetDeviceCapabilities().HasFlag(DeviceCapability.Pressure), jsonSettings.Devices.Single().GetDeviceCapabilities().HasFlag(DeviceCapability.Pressure));
+            Assert.AreEqual(xmlSettings.Device.GetRadiationDetectorName(), jsonSettings.Devices.Single().GetRadiationDetectorName());
+
+            Assert.AreEqual(xmlSettings.Device.Polling.IsEnabled, jsonSettings.Devices.Single().Polling.IsEnabled);
+            Assert.AreEqual(xmlSettings.Device.Polling.Type, jsonSettings.Devices.Single().Polling.Type);
+            Assert.AreEqual(xmlSettings.Device.Polling.Interval, jsonSettings.Devices.Single().Polling.Interval);
+
+            Assert.AreEqual(xmlSettings.Misc.TemperatureUnitType, jsonSettings.Misc.TemperatureUnitType);
+            Assert.AreEqual(xmlSettings.Misc.PressureUnitType, jsonSettings.Misc.PressureUnitType);
+            Assert.AreEqual(xmlSettings.Misc.RadiationUnitType, jsonSettings.Misc.RadiationUnitType);
+
+            Assert.AreEqual(xmlSettings.Notifications.IsEnabled, jsonSettings.Notifications.IsEnabled);
+            Assert.AreEqual(xmlSettings.Notifications.TemperatureThreshold, jsonSettings.Notifications.TemperatureThreshold);
+            Assert.AreEqual(xmlSettings.Notifications.RadiationThreshold, jsonSettings.Notifications.RadiationThreshold);
+
+            Assert.AreEqual(xmlSettings.uRADMonitorNetwork.UserId, jsonSettings.uRADMonitorNetwork.UserId);
+            Assert.AreEqual(xmlSettings.uRADMonitorNetwork.UserKey, jsonSettings.uRADMonitorNetwork.UserKey);
         }
 
         [Test]
@@ -94,17 +94,18 @@ namespace uRADMonitorX.Tests.Configuration
 
             Assert.AreEqual(xmlSettingsFilePath, xmlSettings.FilePath);
 
-            xmlSettings.TemperatureUnitType = uRADMonitorX.Core.TemperatureUnitType.Fahrenheit;
-            xmlSettings.RadiationUnitType = uRADMonitorX.Core.RadiationUnitType.uSvH;
-            xmlSettings.Commit();
+            xmlSettings.Notifications.TemperatureThreshold.MeasurementUnit = uRADMonitorX.Core.TemperatureUnitType.Fahrenheit;
+            xmlSettings.Notifications.RadiationThreshold.MeasurementUnit = uRADMonitorX.Core.RadiationUnitType.uSvH;
+
+            xmlSettings.Save();
 
             var jsonSettings = JsonSettings.LoadFromXmlFile(xmlSettingsFilePath);
 
             Assert.AreNotEqual(xmlSettings.FilePath, jsonSettings.FilePath);
             Assert.AreEqual(".json", Path.GetExtension(jsonSettings.FilePath));
 
-            Assert.AreEqual(xmlSettings.TemperatureNotificationUnitType, jsonSettings.TemperatureNotificationUnitType);
-            Assert.AreEqual(xmlSettings.RadiationUnitType, jsonSettings.RadiationUnitType);
+            Assert.AreEqual(xmlSettings.Notifications.TemperatureThreshold.MeasurementUnit, jsonSettings.Notifications.TemperatureThreshold.MeasurementUnit);
+            Assert.AreEqual(xmlSettings.Notifications.RadiationThreshold.MeasurementUnit, jsonSettings.Notifications.RadiationThreshold.MeasurementUnit);
         }
 
         [Test]
@@ -118,57 +119,58 @@ namespace uRADMonitorX.Tests.Configuration
 
             Assert.AreEqual(jsonSettingsFilePath, settings.FilePath);
 
-            Assert.AreEqual(DefaultSettings.StartWithWindows, settings.StartWithWindows);
-            Assert.AreEqual(DefaultSettings.AutomaticallyCheckForUpdates, settings.AutomaticallyCheckForUpdates);
+            Assert.AreEqual(DefaultSettings.Polling.IsEnabled, settings.IsPollingEnabled);
 
-            Assert.AreEqual(DefaultSettings.StartMinimized, settings.StartMinimized);
-            Assert.AreEqual(DefaultSettings.ShowInTaskbar, settings.ShowInTaskbar);
-            Assert.AreEqual(DefaultSettings.CloseToSystemTray, settings.CloseToSystemTray);
-            Assert.AreEqual(DefaultSettings.LastWindowXPos, settings.LastWindowXPos);
-            Assert.AreEqual(DefaultSettings.LastWindowYPos, settings.LastWindowYPos);
+            Assert.AreEqual(DefaultSettings.General.StartWithWindows, settings.General.StartWithWindows);
+            Assert.AreEqual(DefaultSettings.General.AutomaticallyCheckForUpdates, settings.General.AutomaticallyCheckForUpdates);
 
-            Assert.AreEqual(DefaultSettings.IsLoggingEnabled, settings.IsLoggingEnabled);
-            Assert.AreEqual(DefaultSettings.LogDirectoryPath, settings.LogDirectoryPath);
-            Assert.AreEqual(DefaultSettings.IsDataLoggingEnabled, settings.IsDataLoggingEnabled);
-            Assert.AreEqual(DefaultSettings.DataLoggingToSeparateFile, settings.DataLoggingToSeparateFile);
-            Assert.AreEqual(DefaultSettings.DataLogDirectoryPath, settings.DataLogDirectoryPath);
+            Assert.AreEqual(DefaultSettings.Display.StartMinimized, settings.Display.StartMinimized);
+            Assert.AreEqual(DefaultSettings.Display.ShowInTaskbar, settings.Display.ShowInTaskbar);
+            Assert.AreEqual(DefaultSettings.Display.CloseToSystemTray, settings.Display.CloseToSystemTray);
 
-            Assert.AreEqual(DefaultSettings.DetectorName, settings.DetectorName);
-            Assert.AreEqual(DefaultSettings.HasPressureSensor, settings.HasPressureSensor);
-            Assert.AreEqual(DefaultSettings.DeviceIPAddress, settings.DeviceIPAddress);
+            Assert.AreEqual(DefaultSettings.Display.WindowPosition, settings.Display.WindowPosition);
 
-            Assert.AreEqual(DefaultSettings.TemperatureUnitType, settings.TemperatureUnitType);
-            Assert.AreEqual(DefaultSettings.PressureUnitType, settings.PressureUnitType);
-            Assert.AreEqual(DefaultSettings.RadiationUnitType, settings.RadiationUnitType);
+            Assert.AreEqual(DefaultSettings.Notifications.IsEnabled, settings.Notifications.IsEnabled);
+            Assert.AreEqual(DefaultSettings.Notifications.TemperatureThreshold, settings.Notifications.TemperatureThreshold);
+            Assert.AreEqual(DefaultSettings.Notifications.RadiationThreshold, settings.Notifications.RadiationThreshold);
 
-            Assert.AreEqual(DefaultSettings.PollingType, settings.PollingType);
-            Assert.AreEqual(DefaultSettings.PollingInterval, settings.PollingInterval);
-            Assert.AreEqual(DefaultSettings.IsPollingEnabled, settings.IsPollingEnabled);
+            Assert.AreEqual(DefaultSettings.Logging.IsEnabled, settings.Logging.IsEnabled);
+            Assert.AreEqual(DefaultSettings.Logging.DirectoryPath, settings.Logging.DirectoryPath);
+            Assert.AreEqual(DefaultSettings.Logging.DataLogging.IsEnabled, settings.Logging.DataLogging.IsEnabled);
+            Assert.AreEqual(DefaultSettings.Logging.DataLogging.UseSeparateFile, settings.Logging.DataLogging.UseSeparateFile);
+            Assert.AreEqual(DefaultSettings.Logging.DataLogging.DirectoryPath, settings.Logging.DataLogging.DirectoryPath);
 
-            Assert.AreEqual(DefaultSettings.AreNotificationsEnabled, settings.AreNotificationsEnabled);
-            Assert.AreEqual(DefaultSettings.HighTemperatureNotificationValue, settings.HighTemperatureNotificationValue);
-            Assert.AreEqual(DefaultSettings.RadiationNotificationValue, settings.RadiationNotificationValue);
-            Assert.AreEqual(DefaultSettings.TemperatureNotificationUnitType, settings.TemperatureNotificationUnitType);
-            Assert.AreEqual(DefaultSettings.RadiationNotificationUnitType, settings.RadiationNotificationUnitType);
+            Assert.AreEqual(DefaultSettings.Misc.TemperatureUnitType, settings.Misc.TemperatureUnitType);
+            Assert.AreEqual(DefaultSettings.Misc.PressureUnitType, settings.Misc.PressureUnitType);
+            Assert.AreEqual(DefaultSettings.Misc.RadiationUnitType, settings.Misc.RadiationUnitType);
 
-            Assert.IsNull(settings.uRADMonitorAPIUserId);
-            Assert.IsNull(settings.uRADMonitorAPIUserId);
+            Assert.AreEqual(DefaultSettings.Polling.IsEnabled, settings.Devices.Single().Polling.IsEnabled);
+            Assert.AreEqual(DefaultSettings.Polling.Type, settings.Devices.Single().Polling.Type);
+            Assert.AreEqual(DefaultSettings.Polling.Interval, settings.Devices.Single().Polling.Interval);
+
+            Assert.IsNull(settings.Devices.Single().GetRadiationDetectorName());
+            Assert.IsNull(settings.Devices.Single().EndpointUrl);
+
+            Assert.AreEqual(DeviceCapability.Unknown, settings.Devices.Single().GetDeviceCapabilities());
+
+            Assert.IsNull(settings.uRADMonitorNetwork.UserId);
+            Assert.IsNull(settings.uRADMonitorNetwork.UserKey);
         }
 
         [Test]
-        public void Commit()
+        public void Save()
         {
             JsonSettings.CreateFile(jsonSettingsFilePath);
 
             var jsonSettings = JsonSettings.LoadFromFile(jsonSettingsFilePath);
 
-            Assert.IsFalse(JsonSettings.LoadFromFile(jsonSettingsFilePath).IsLoggingEnabled);
+            Assert.IsFalse(JsonSettings.LoadFromFile(jsonSettingsFilePath).Logging.IsEnabled);
 
-            jsonSettings.IsLoggingEnabled = true;
+            jsonSettings.Logging.IsEnabled = true;
 
-            jsonSettings.Commit();
+            jsonSettings.Save();
 
-            Assert.IsTrue(JsonSettings.LoadFromFile(jsonSettingsFilePath).IsLoggingEnabled);
+            Assert.IsTrue(JsonSettings.LoadFromFile(jsonSettingsFilePath).Logging.IsEnabled);
         }
 
         [Test]

@@ -20,8 +20,8 @@ namespace uRADMonitorX
             this.settings = settings;
             this.deviceServiceFactory = deviceServiceFactory;
 
-            this.textBoxUserId.Text = settings.uRADMonitorAPIUserId;
-            this.textBoxUserKey.Text = settings.uRADMonitorAPIUserKey;
+            this.textBoxUserId.Text = settings.uRADMonitorNetwork.UserId;
+            this.textBoxUserKey.Text = settings.uRADMonitorNetwork.UserKey;
 
             this.textBoxUserId.TextChanged += ToogleButtons;
             this.textBoxUserKey.TextChanged += ToogleButtons;
@@ -45,9 +45,9 @@ namespace uRADMonitorX
 
         private void ButtonOK_Click(object sender, EventArgs e)
         {
-            settings.uRADMonitorAPIUserId = textBoxUserId.Text;
-            settings.uRADMonitorAPIUserKey = textBoxUserKey.Text;
-            settings.Commit();
+            settings.uRADMonitorNetwork.UserId = textBoxUserId.Text;
+            settings.uRADMonitorNetwork.UserKey = textBoxUserKey.Text;
+            settings.Save();
 
             buttonOK.Enabled = false;
 

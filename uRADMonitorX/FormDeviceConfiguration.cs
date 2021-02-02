@@ -1,28 +1,33 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
+using uRADMonitorX.Commons;
 using uRADMonitorX.Commons.Networking;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
+using uRADMonitorX.Extensions;
 
 namespace uRADMonitorX
 {
     public partial class FormDeviceConfiguration : Form
     {
         private readonly ISettings settings;
+        private readonly DeviceSettings deviceSettings;
 
         public FormDeviceConfiguration(ISettings settings)
         {
             InitializeComponent();
 
             this.settings = settings;
+            this.deviceSettings = this.settings.Devices.FirstOrDefault();
 
             // Initialization.
             this.buttonSave.Enabled = false;
 
-            this.textBoxIPAddress.Text = settings.DeviceIPAddress;
+            this.textBoxIPAddress.Text = this.deviceSettings?.EndpointUrl;
             this.textBoxIPAddress.SelectionStart = this.textBoxIPAddress.Text.Length; // Don't select text content.
 
-            if (settings.PollingType == Core.PollingType.WDTSync)
+            if (this.deviceSettings?.Polling.Type == PollingType.WDTSync)
             {
                 this.radioButtonPollingTypeWDTSync.Checked = true;
                 this.textBoxPollingInterval.Enabled = false;
@@ -33,7 +38,7 @@ namespace uRADMonitorX
                 this.radioButtonPollingTypeInterval.Checked = true;
             }
 
-            this.textBoxPollingInterval.Text = string.Format("{0}", settings.PollingInterval);
+            this.textBoxPollingInterval.Text = string.Format("{0}", this.deviceSettings?.Polling.Interval);
 
             // Handlers.
             this.textBoxIPAddress.TextChanged += new EventHandler(TextBoxIPAddress_TextChanged);
@@ -112,15 +117,20 @@ namespace uRADMonitorX
 
         private void ButtonSave_Click(object sender, EventArgs e)
         {
-            this.settings.DeviceIPAddress = this.textBoxIPAddress.Text;
-            this.settings.PollingType = (this.radioButtonPollingTypeWDTSync.Checked) ? PollingType.WDTSync : PollingType.FixedInterval;
-
-            if (this.radioButtonPollingTypeInterval.Checked)
+            if (this.deviceSettings.IsNull())
             {
-                this.settings.PollingInterval = int.Parse(this.textBoxPollingInterval.Text);
+                this.settings.Devices.Add(new DeviceSettings());
             }
 
-            this.settings.Commit();
+            var deviceConfiguration = this.settings.Devices.First();
+
+            deviceConfiguration.EndpointUrl = this.textBoxIPAddress.Text;
+
+            deviceConfiguration.Polling.IsEnabled = true;
+            deviceConfiguration.Polling.Type = (this.radioButtonPollingTypeWDTSync.Checked) ? PollingType.WDTSync : PollingType.FixedInterval;
+            deviceConfiguration.Polling.Interval = this.textBoxPollingInterval.HasText() && MathX.IsInteger(this.textBoxPollingInterval.Text) ? int.Parse(this.textBoxPollingInterval.Text) : default(int?);
+
+            this.settings.Save();
             this.Close();
         }
     }

@@ -8,9 +8,11 @@ using uRADMonitorX.Commons.Networking;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core;
 using uRADMonitorX.Core.Device;
+using uRADMonitorX.Helpers;
 using uRADMonitorX.uRADMonitor.Domain;
 using uRADMonitorX.uRADMonitor.Infrastructure;
 using uRADMonitorX.uRADMonitor.Services;
+using uRADMonitorX.Windows;
 
 namespace uRADMonitorX.GuiTest
 {
@@ -25,37 +27,61 @@ namespace uRADMonitorX.GuiTest
 
         static void InternalMain(string[] args)
         {
-            var settings = new InMemorySettings()
+            if (!EnvironmentUtils.IsUnix())
             {
-                CloseToSystemTray = true,
-                HasPressureSensor = true,
-                TemperatureUnitType = TemperatureUnitType.Celsius,
-                RadiationUnitType = RadiationUnitType.Cpm,
-                PollingType = PollingType.FixedInterval,
-                LastWindowXPos = DefaultSettings.LastWindowXPos,
-                LastWindowYPos = DefaultSettings.LastWindowYPos,
-                PollingInterval = 1,
-                DeviceIPAddress = "127.0.0.1",
-                IsPollingEnabled = true,
-                AreNotificationsEnabled = true,
-                DetectorName = "SBM20",
-                HighTemperatureNotificationValue = 25,
-                TemperatureNotificationUnitType = TemperatureUnitType.Celsius,
-                RadiationNotificationValue = 0,
-                RadiationNotificationUnitType = RadiationUnitType.Cpm
+                if (EnvironmentUtils.IsAtLeastWindows10())
+                {
+                    NativeMethods.SetProcessDpiAwareness(NativeMethods.ProcessDpiAwareness.ProcessSystemDpiAware);
+                }
+                else if (EnvironmentUtils.IsAtLeastWindowsVista())
+                {
+                    NativeMethods.SetProcessDPIAware();
+                }
+            }
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            var settings = new InMemorySettings
+            {
+                IsPollingEnabled = true
             };
+
+            settings.Display.CloseToSystemTray = true;
+            settings.Display.WindowPosition = DefaultSettings.Display.WindowPosition;
+
+            settings.Notifications.IsEnabled = true;
+            settings.Notifications.TemperatureThreshold.HighValue = 25;
+            settings.Notifications.TemperatureThreshold.MeasurementUnit = TemperatureUnitType.Celsius;
+            settings.Notifications.RadiationThreshold.HighValue = 0;
+            settings.Notifications.RadiationThreshold.MeasurementUnit = RadiationUnitType.Cpm;
+
+            settings.Misc.TemperatureUnitType = TemperatureUnitType.Celsius;
+            settings.Misc.PressureUnitType = PressureUnitType.Pa;
+            settings.Misc.RadiationUnitType = RadiationUnitType.Cpm;
+
+            var deviceSettings = new DeviceSettings
+            {
+                EndpointUrl = "127.0.0.1"
+            };
+
+            deviceSettings.Polling.IsEnabled = true;
+            deviceSettings.Polling.Type = PollingType.FixedInterval;
+            deviceSettings.Polling.Interval = 1;
+
+            settings.Devices.Add(deviceSettings);
 
             var readings = new Collection<DeviceReadings>
             {
                 new DeviceReadings() { Radiation = 19, RadiationAverage = 15, Temperature = 26, Pressure = 100040, Voltage = 375, VoltagePercent = 50 },
-                new DeviceReadings() { Radiation = 20, RadiationAverage = 15, Temperature = 25, Pressure = 100000, Voltage = 375, VoltagePercent = 50 },
-                new DeviceReadings() { Radiation = 25, RadiationAverage = 15, Temperature = 24, Pressure = 100020, Voltage = 375, VoltagePercent = 50 },
-                new DeviceReadings() { Radiation = 17, RadiationAverage = 15, Temperature = 25, Pressure = 100025, Voltage = 375, VoltagePercent = 50 },
-                new DeviceReadings() { Radiation = 18, RadiationAverage = 15, Temperature = 26, Pressure = 100030, Voltage = 375, VoltagePercent = 50 },
-                new DeviceReadings() { Radiation = 19, RadiationAverage = 15, Temperature = 25, Pressure = 100040, Voltage = 375, VoltagePercent = 50 }
+                new DeviceReadings() { Radiation = 20, RadiationAverage = 15, Temperature = 25, Pressure = 100000, Voltage = 377, VoltagePercent = 44 },
+                new DeviceReadings() { Radiation = 25, RadiationAverage = 15, Temperature = 24, Pressure = 100020, Voltage = 378, VoltagePercent = 46 },
+                new DeviceReadings() { Radiation = 17, RadiationAverage = 15, Temperature = 25, Pressure = 100025, Voltage = 400, VoltagePercent = 43 },
+                new DeviceReadings() { Radiation = 18, RadiationAverage = 15, Temperature = 26, Pressure = 100030, Voltage = 365, VoltagePercent = 45 },
+                new DeviceReadings() { Radiation = 19, RadiationAverage = 15, Temperature = 25, Pressure = 100040, Voltage = 368, VoltagePercent = 47 }
             };
 
-            var virtualDevice = new VirtualDevice("10000000", RadiationDetector.SBM20, 112, 108, DeviceModelType.A2, settings.DeviceIPAddress, "0.0.0.0", readings)
+            var virtualDevice = new VirtualDevice("10000000", RadiationDetector.SBM20, 112, 108, DeviceModelType.A2, deviceSettings.EndpointUrl, readings)
             {
                 ServerResponseCode = HttpStatus.OK
             };
@@ -64,9 +90,6 @@ namespace uRADMonitorX.GuiTest
 
             var deviceDataReaderFactory = new DeviceDataVirtualReaderFactory(virtualDevice);
             var deviceDataJobFactory = new DeviceDataJobFactory(settings, deviceDataReaderFactory);
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
 
             var logger = new NullLogger();
 
@@ -79,6 +102,9 @@ namespace uRADMonitorX.GuiTest
 
             var formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, deviceServiceFactory, settings, logger);
             formMain.SettingsChangedEventHandler += new SettingsChangedEventHandler(FormMain_SettingsChangedEventHandler);
+
+            // Both uRADMonitor API and GitHub API requires TLS v1.2.
+            ServicePointManagerHelper.SetSecurityProtocolToTls12();
 
             Application.Run(formMain);
         }

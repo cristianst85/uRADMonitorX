@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using uRADMonitorX.Configuration;
 using uRADMonitorX.Core.Jobs;
 using uRADMonitorX.Extensions;
@@ -30,13 +31,15 @@ namespace uRADMonitorX.Core
         {
             IPollingStrategy pollingStrategy;
 
-            if (this.settings.PollingType == PollingType.WDTSync)
+            var pollingSettings = this.settings.Devices.First().Polling;
+
+            if (pollingSettings.Type == PollingType.WDTSync)
             {
                 pollingStrategy = new WDTSyncPollingStrategy(WDTSyncPollingStrategy.DefaultWDTInterval);
             }
             else
             {
-                pollingStrategy = new FixedIntervalPollingStrategy(this.settings.PollingInterval);
+                pollingStrategy = new FixedIntervalPollingStrategy(pollingSettings.Interval.Value);
             }
 
             var deviceDataReader = this.deviceDataReaderFactory.Create();

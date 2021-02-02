@@ -154,10 +154,10 @@ namespace uRADMonitorX
                     settings = JsonSettings.LoadFromFile(settingsFilePath);
 
                     // Fixes an issue with data log directory name on Linux due to trailing slash.
-                    if (settings.DataLogDirectoryPath.IsNotNull() && settings.DataLogDirectoryPath.EndsWith("\\"))
+                    if (settings.Logging.DataLogging.DirectoryPath.IsNotNull() && settings.Logging.DataLogging.DirectoryPath.EndsWith("\\"))
                     {
-                        settings.DataLogDirectoryPath = settings.DataLogDirectoryPath.TrimEnd('\\');
-                        settings.Commit();
+                        settings.Logging.DataLogging.DirectoryPath = settings.Logging.DataLogging.DirectoryPath.TrimEnd('\\');
+                        settings.Save();
                     }
                 }
                 catch (Exception loadSettingsFileException)
@@ -168,8 +168,8 @@ namespace uRADMonitorX
                 }
             }
 
-            var loggerFilePath = GetLoggerPath(settings.LogDirectoryPath, Program.LoggerFileName, false);
-            var dataLoggerFilePath = GetLoggerPath(settings.DataLoggingToSeparateFile ? settings.DataLogDirectoryPath : settings.LogDirectoryPath, Program.DataLoggerFileName, settings.IsLoggingEnabled && settings.IsDataLoggingEnabled && settings.DataLoggingToSeparateFile);
+            var loggerFilePath = GetLoggerPath(settings.Logging.DirectoryPath, Program.LoggerFileName, false);
+            var dataLoggerFilePath = GetLoggerPath(settings.Logging.DataLogging.UseSeparateFile ? settings.Logging.DataLogging.DirectoryPath : settings.Logging.DirectoryPath, Program.DataLoggerFileName, settings.IsPollingEnabled && settings.Logging.DataLogging.IsEnabled && settings.Logging.DataLogging.UseSeparateFile);
 
             LoggerManager.GetInstance().Add(Program.LoggerName,
                                             new ThreadSafeLogger(
@@ -178,7 +178,7 @@ namespace uRADMonitorX
                                                     new DateTimeFormatter()
                                                 )
                                                 {
-                                                    Enabled = settings.IsLoggingEnabled
+                                                    Enabled = settings.Logging.IsEnabled
                                                 }
                                             ));
 
@@ -189,9 +189,9 @@ namespace uRADMonitorX
                                                     new DateTimeFormatter()
                                                 )
                                                 {
-                                                    Enabled = settings.IsLoggingEnabled &&
-                                                    settings.IsDataLoggingEnabled &&
-                                                    settings.DataLoggingToSeparateFile
+                                                    Enabled = settings.Logging.IsEnabled &&
+                                                    settings.Logging.DataLogging.IsEnabled &&
+                                                    settings.Logging.DataLogging.UseSeparateFile
                                                 }
                                             ));
 
@@ -227,14 +227,14 @@ namespace uRADMonitorX
             {
                 ConfigLogger(
                     LoggerManager.GetInstance().GetLogger(Program.LoggerName),
-                    GetLoggerPath(settings.LogDirectoryPath, Program.LoggerFileName, false),
-                    settings.IsLoggingEnabled
+                    GetLoggerPath(settings.Logging.DirectoryPath, Program.LoggerFileName, false),
+                    settings.Logging.IsEnabled
                 );
 
                 ConfigLogger(
                     LoggerManager.GetInstance().GetLogger(Program.DataLoggerName),
-                    GetLoggerPath(settings.DataLoggingToSeparateFile ? settings.DataLogDirectoryPath : settings.LogDirectoryPath, Program.DataLoggerFileName, true),
-                    settings.IsLoggingEnabled && settings.IsDataLoggingEnabled && settings.DataLoggingToSeparateFile
+                    GetLoggerPath(settings.Logging.DataLogging.UseSeparateFile ? settings.Logging.DataLogging.DirectoryPath : settings.Logging.DirectoryPath, Program.DataLoggerFileName, true),
+                    settings.Logging.IsEnabled && settings.Logging.DataLogging.IsEnabled && settings.Logging.DataLogging.UseSeparateFile
                 );
             }
 
@@ -299,7 +299,7 @@ namespace uRADMonitorX
         {
             try
             {
-                if (settings.StartWithWindows)
+                if (settings.General.StartWithWindows)
                 {
                     RegistryUtils.RegisterAtWindowsStartup(Application.ProductName, string.Format("\"{0}\"", new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath));
                 }

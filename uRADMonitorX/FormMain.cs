@@ -67,8 +67,7 @@ namespace uRADMonitorX
             }
         }
 
-        private int MLastWindowXPos { get; set; }
-        private int MLastWindowYPos { get; set; }
+        private Point WindowPosition { get; set; }
 
         private volatile bool allowVisible;
 
@@ -111,9 +110,10 @@ namespace uRADMonitorX
                 }
 
                 // Pre-initialization.
+                var deviceSettings = this.settings.Devices.First();
 
                 // Update controls based on current settings.
-                if (this.settings.DeviceIPAddress.IsNullOrEmpty())
+                if (deviceSettings.EndpointUrl.IsNullOrEmpty())
                 {
                     this.enablePollingToolStripMenuItem.Enabled = false;
                     this.viewDeviceWebpageToolStripMenuItem.Enabled = false;
@@ -121,18 +121,21 @@ namespace uRADMonitorX
                 }
 
                 this.enablePollingToolStripMenuItem.Checked = this.settings.IsPollingEnabled;
-                this.labelPressure.Enabled = this.settings.HasPressureSensor;
-                this.pressureToolStripMenuItem.Enabled = this.settings.HasPressureSensor;
+
+                var deviceCapabilities = deviceSettings.GetDeviceCapabilities();
+
+                this.labelPressure.Enabled = deviceCapabilities.HasFlag(DeviceCapability.Pressure);
+                this.pressureToolStripMenuItem.Enabled = deviceCapabilities.HasFlag(DeviceCapability.Pressure);
 
                 this.StartPosition = FormStartPosition.Manual;
-                this.RestoreWindowPosition(this.settings.LastWindowXPos, this.settings.LastWindowYPos);
+                this.RestoreWindowPosition(this.settings.Display.WindowPosition);
 
-                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] Settings.StartMinimized: {this.settings.StartMinimized.ToString().ToLower()}");
-                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] Settings.ShowInTaskbar: {this.settings.ShowInTaskbar.ToString().ToLower()}");
+                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] Settings.StartMinimized: {this.settings.Display.StartMinimized.ToString().ToLower()}");
+                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] Settings.ShowInTaskbar: {this.settings.Display.ShowInTaskbar.ToString().ToLower()}");
 
-                this.allowVisible = !this.settings.StartMinimized;
+                this.allowVisible = !this.settings.Display.StartMinimized;
 
-                if (this.settings.StartMinimized)
+                if (this.settings.Display.StartMinimized)
                 {
                     this.WindowState = FormWindowState.Minimized;
                     this.ShowInTaskbar = false;
@@ -140,7 +143,7 @@ namespace uRADMonitorX
                 else
                 {
                     this.WindowState = FormWindowState.Normal;
-                    this.ShowInTaskbar = this.settings.ShowInTaskbar;
+                    this.ShowInTaskbar = this.settings.Display.ShowInTaskbar;
                 }
 
                 this.viewDeviceOnlineDataToolStripMenuItem.Enabled = false;
@@ -175,7 +178,7 @@ namespace uRADMonitorX
 
         private void ConfigureCheckForUpdatesJob()
         {
-            if (settings.AutomaticallyCheckForUpdates)
+            if (settings.General.AutomaticallyCheckForUpdates)
             {
                 if (JobManager.GetSchedule("checkForUpdates").IsNull())
                 {
@@ -243,7 +246,7 @@ namespace uRADMonitorX
                     this.deviceDataJob.Dispose();
                 }
 
-                if (this.settings.DeviceIPAddress.IsNotNullOrEmpty())
+                if (this.settings.Devices.First().EndpointUrl.IsNotNullOrEmpty())
                 {
                     deviceDataJob = deviceDataJobFactory.Create();
                     deviceDataJob.DeviceDataJobEventHandler += new DeviceDataJobEventHandler(DeviceDataJob_DeviceDataJobEventHandler);
@@ -255,7 +258,7 @@ namespace uRADMonitorX
 
                         if (!isRestart || this.toolStripStatusLabelDeviceStatus.Text.Equals(Properties.Resources.DeviceIsNotConfigured))
                         {
-                            this.UpdateDeviceStatus(string.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
+                            this.UpdateDeviceStatus(string.Format("Connecting to {0}...", this.settings.Devices.First().EndpointUrl));
                         }
 
                         this.notifyIcon.Icon = Properties.Resources.RadiationIcon;
@@ -387,13 +390,13 @@ namespace uRADMonitorX
 
             try
             {
-                if (this.settings.IsLoggingEnabled && this.settings.IsDataLoggingEnabled)
+                if (this.settings.Logging.IsEnabled && this.settings.Logging.DataLogging.IsEnabled)
                 {
                     if (!this.lastDataReadingTimestamp.HasValue || (this.lastDataReadingTimestamp.HasValue && now.Subtract(this.lastDataReadingTimestamp.Value).TotalSeconds >= 60))
                     {
                         this.lastDataReadingTimestamp = dataReadingsTimeStamp;
 
-                        if (this.settings.DataLoggingToSeparateFile)
+                        if (this.settings.Logging.DataLogging.UseSeparateFile)
                         {
                             LoggerManager.GetInstance().GetLogger(Program.DataLoggerName).Write(JsonConvert.SerializeObject(deviceData));
                         }
@@ -412,7 +415,7 @@ namespace uRADMonitorX
             // Get detector's normalized name for performing conversions.
             var radiationDetectorName = RadiationDetector.Normalize(deviceData.DeviceInformation.Detector);
 
-            if (this.settings.RadiationUnitType == RadiationUnitType.Cpm)
+            if (this.settings.Misc.RadiationUnitType == RadiationUnitType.Cpm)
             {
                 this.viewOnlyTextBoxRadiation.Text = string.Format("{0} cpm", deviceData.Radiation);
                 this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} cpm", deviceData.RadiationAverage) : string.Empty;
@@ -423,12 +426,12 @@ namespace uRADMonitorX
                 {
                     var radiationDetector = RadiationDetector.GetByName(radiationDetectorName);
 
-                    if (this.settings.RadiationUnitType == RadiationUnitType.uSvH)
+                    if (this.settings.Misc.RadiationUnitType == RadiationUnitType.uSvH)
                     {
                         this.viewOnlyTextBoxRadiation.Text = string.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour(deviceData.Radiation, radiationDetector.ConversionFactor), 4));
                         this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour((double)deviceData.RadiationAverage, radiationDetector.ConversionFactor), 4)) : string.Empty;
                     }
-                    else if (this.settings.RadiationUnitType == RadiationUnitType.uRemH)
+                    else if (this.settings.Misc.RadiationUnitType == RadiationUnitType.uRemH)
                     {
                         this.viewOnlyTextBoxRadiation.Text = string.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour(deviceData.Radiation, radiationDetector.ConversionFactor), 2));
                         this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour((double)deviceData.RadiationAverage, radiationDetector.ConversionFactor), 2)) : string.Empty;
@@ -436,8 +439,8 @@ namespace uRADMonitorX
                     else
                     {
                         // If conversion to other radiation unit type is not implemented fall-back silently to cpm.
-                        this.settings.RadiationUnitType = RadiationUnitType.Cpm;
-                        this.settings.Commit();
+                        this.settings.Misc.RadiationUnitType = RadiationUnitType.Cpm;
+                        this.settings.Save();
 
                         this.viewOnlyTextBoxRadiation.Text = string.Format("{0} cpm", deviceData.Radiation);
                         this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} cpm", deviceData.RadiationAverage) : string.Empty;
@@ -446,8 +449,8 @@ namespace uRADMonitorX
                 else
                 {
                     // If detector is not known silently fall-back to cpm.
-                    this.settings.RadiationUnitType = RadiationUnitType.Cpm;
-                    this.settings.Commit();
+                    this.settings.Misc.RadiationUnitType = RadiationUnitType.Cpm;
+                    this.settings.Save();
 
                     this.viewOnlyTextBoxRadiation.Text = string.Format("{0} cpm", deviceData.Radiation);
                     this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} cpm", deviceData.RadiationAverage) : string.Empty;
@@ -456,19 +459,19 @@ namespace uRADMonitorX
 
             this.labelRadiationAverage.Enabled = deviceData.RadiationAverage.HasValue;
 
-            if (this.settings.TemperatureUnitType == TemperatureUnitType.Celsius)
+            if (this.settings.Misc.TemperatureUnitType == TemperatureUnitType.Celsius)
             {
                 this.viewOnlyTextBoxTemperature.Text = string.Format("{0} °C", deviceData.Temperature);
             }
-            else if (this.settings.TemperatureUnitType == TemperatureUnitType.Fahrenheit)
+            else if (this.settings.Misc.TemperatureUnitType == TemperatureUnitType.Fahrenheit)
             {
                 this.viewOnlyTextBoxTemperature.Text = string.Format("{0} °F", Temperature.CelsiusToFahrenheit(deviceData.Temperature));
             }
             else
             {
                 // If conversion to other temperature unit type is not implemented fall-back silently to default (Celsius).
-                this.settings.TemperatureUnitType = TemperatureUnitType.Celsius;
-                this.settings.Commit();
+                this.settings.Misc.TemperatureUnitType = TemperatureUnitType.Celsius;
+                this.settings.Save();
 
                 this.viewOnlyTextBoxTemperature.Text = string.Format("{0} °C", deviceData.Temperature);
             }
@@ -478,27 +481,27 @@ namespace uRADMonitorX
                 this.labelPressure.Enabled = true;
                 this.pressureToolStripMenuItem.Enabled = true;
 
-                if (this.settings.PressureUnitType == PressureUnitType.Pa)
+                if (this.settings.Misc.PressureUnitType == PressureUnitType.Pa)
                 {
                     this.viewOnlyTextBoxPressure.Text = string.Format("{0} Pa", deviceData.Pressure.Value);
                 }
-                else if (this.settings.PressureUnitType == PressureUnitType.hPa)
+                else if (this.settings.Misc.PressureUnitType == PressureUnitType.hPa)
                 {
                     this.viewOnlyTextBoxPressure.Text = string.Format("{0} hPa", Pressure.PascalsToHectoPascals(deviceData.Pressure.Value));
                 }
-                else if (this.settings.PressureUnitType == PressureUnitType.kPa)
+                else if (this.settings.Misc.PressureUnitType == PressureUnitType.kPa)
                 {
                     this.viewOnlyTextBoxPressure.Text = string.Format("{0} kPa", Pressure.PascalsToKiloPascals(deviceData.Pressure.Value));
                 }
-                else if (this.settings.PressureUnitType == PressureUnitType.mbar)
+                else if (this.settings.Misc.PressureUnitType == PressureUnitType.mbar)
                 {
                     this.viewOnlyTextBoxPressure.Text = string.Format("{0} mbar", Pressure.PascalsToMilliBars(deviceData.Pressure.Value));
                 }
                 else
                 {
                     // If conversion to other pressure unit type is not implemented fall-back silently to default (Pascal).
-                    this.settings.PressureUnitType = PressureUnitType.Pa;
-                    this.settings.Commit();
+                    this.settings.Misc.PressureUnitType = PressureUnitType.Pa;
+                    this.settings.Save();
 
                     this.viewOnlyTextBoxPressure.Text = string.Format("{0} Pa", deviceData.Pressure.Value);
                 }
@@ -513,24 +516,27 @@ namespace uRADMonitorX
             // Update settings.
             var commitSettings = false;
 
-            if (this.settings.HasPressureSensor != deviceData.Pressure.HasValue)
+            var deviceSettings = this.settings.Devices.First();
+            var deviceCapabilities = deviceSettings.GetDeviceCapabilities();
+
+            if (deviceCapabilities.HasFlag(DeviceCapability.Pressure) != deviceData.Pressure.HasValue)
             {
-                this.settings.HasPressureSensor = deviceData.Pressure.HasValue;
+                var deviceCapabilitiesRegister = new EnumRegister<DeviceCapability>(deviceSettings.GetDeviceCapabilities());
+                deviceSettings.SetDeviceCapabilities(deviceCapabilitiesRegister.InvertFlag(DeviceCapability.Pressure));
                 commitSettings = true;
             }
 
-            if (!radiationDetectorName.Equals(this.settings.DetectorName))
+            if (!radiationDetectorName.Equals(deviceSettings.GetRadiationDetectorName()))
             {
-                this.settings.DetectorName = radiationDetectorName;
+                deviceSettings.SetRadiationDetectorName(radiationDetectorName);
 
                 // If the detector is known and the radiation notification value was not set then fall-back to default values.
-                if (this.settings.DetectorName.IsNotNull() &&
-                        RadiationDetector.IsKnown(this.settings.DetectorName) &&
-                        this.settings.RadiationNotificationUnitType == RadiationUnitType.Cpm &&
-                        this.settings.RadiationNotificationValue == 0)
+                if (deviceSettings.GetRadiationDetectorName().IsNotNull() &&
+                        RadiationDetector.IsKnown(deviceSettings.GetRadiationDetectorName()) &&
+                        this.settings.Notifications.RadiationThreshold.MeasurementUnit == RadiationUnitType.Cpm &&
+                        this.settings.Notifications.RadiationThreshold.HighValue == 0.0m)
                 {
-                    this.settings.RadiationNotificationValue = DefaultSettings.RadiationNotificationValue;
-                    this.settings.RadiationNotificationUnitType = DefaultSettings.RadiationNotificationUnitType;
+                    this.settings.Notifications.RadiationThreshold = DefaultSettings.Notifications.RadiationThreshold;
                 }
 
                 commitSettings = true;
@@ -538,7 +544,7 @@ namespace uRADMonitorX
 
             if (commitSettings)
             {
-                this.settings.Commit();
+                this.settings.Save();
             }
 
             this.viewOnlyTextBoxVoltage.Text = string.Format("{0} V ({1}%)", deviceData.Voltage, deviceData.VoltagePercent);
@@ -549,7 +555,7 @@ namespace uRADMonitorX
             // Update ToolTip text for notification area icon.
             var notifyIconText = new StringBuilder(string.Format("Radiation: {0}, Average: {1}\nTemperature: {2}", this.viewOnlyTextBoxRadiation.Text, this.viewOnlyTextBoxRadiationAverage.Text, this.viewOnlyTextBoxTemperature.Text));
 
-            if (settings.HasPressureSensor)
+            if (deviceSettings.GetDeviceCapabilities().HasFlag(DeviceCapability.Pressure))
             {
                 notifyIconText.Append(string.Format(", Pressure: {0}", this.viewOnlyTextBoxPressure.Text));
             }
@@ -578,12 +584,12 @@ namespace uRADMonitorX
                 this.notifyIcon.Icon = Properties.Resources.RadiationIcon;
             }
 
-            if (this.settings.AreNotificationsEnabled)
+            if (this.settings.Notifications.IsEnabled)
             {
                 var currentTemperature = deviceData.Temperature;
                 var currentTemperatureUnit = "C";
 
-                if (this.settings.TemperatureNotificationUnitType == TemperatureUnitType.Fahrenheit)
+                if (this.settings.Notifications.TemperatureThreshold.MeasurementUnit == TemperatureUnitType.Fahrenheit)
                 {
                     currentTemperature = Temperature.CelsiusToFahrenheit(deviceData.Temperature);
                     currentTemperatureUnit = "F";
@@ -596,20 +602,20 @@ namespace uRADMonitorX
                 {
                     var radiationDetector = RadiationDetector.GetByName(radiationDetectorName);
 
-                    if (this.settings.RadiationNotificationUnitType == RadiationUnitType.uSvH)
+                    if (this.settings.Notifications.RadiationThreshold.MeasurementUnit == RadiationUnitType.uSvH)
                     {
                         currentRadiation = Radiation.CpmToMicroSvPerHour(currentRadiation, radiationDetector.ConversionFactor);
                     }
-                    else if (this.settings.RadiationNotificationUnitType == RadiationUnitType.uRemH)
+                    else if (this.settings.Notifications.RadiationThreshold.MeasurementUnit == RadiationUnitType.uRemH)
                     {
                         currentRadiation = Radiation.CpmToMicroRemPerHour(currentRadiation, radiationDetector.ConversionFactor);
                     }
 
-                    currentRadiationUnit = EnumHelper.GetEnumDescription(this.settings.RadiationNotificationUnitType);
+                    currentRadiationUnit = EnumHelper.GetEnumDescription(this.settings.Notifications.RadiationThreshold.MeasurementUnit);
                 }
                 else
                 {
-                    if (this.settings.RadiationNotificationUnitType != RadiationUnitType.Cpm)
+                    if (this.settings.Notifications.RadiationThreshold.MeasurementUnit != RadiationUnitType.Cpm)
                     {
                         // Disable radiation notification if radiation value cannot be converted to uSv/h or uRem/h.
                         currentRadiation = 0;
@@ -620,14 +626,14 @@ namespace uRADMonitorX
                 var balloonTitle = string.Empty;
                 var balloonMessage = string.Empty;
 
-                if (currentTemperature >= this.settings.HighTemperatureNotificationValue)
+                if (Convert.ToDecimal(currentTemperature) >= this.settings.Notifications.TemperatureThreshold.HighValue)
                 {
                     balloonTitle = "High Temperature";
                     balloonMessage = string.Format("Temperature: {0} °{1}", currentTemperature, currentTemperatureUnit);
                     showBalloon = true;
                 }
 
-                if (this.settings.RadiationNotificationValue != 0 && currentRadiation >= this.settings.RadiationNotificationValue)
+                if (this.settings.Notifications.RadiationThreshold.HighValue != 0 && Convert.ToDecimal(currentRadiation) >= this.settings.Notifications.RadiationThreshold.HighValue)
                 {
                     if (balloonTitle.Length > 0)
                     {
@@ -670,8 +676,8 @@ namespace uRADMonitorX
             {
                 deviceDataJob.Start();
 
-                this.UpdateDeviceStatus(string.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
-                this.UpdateNotifyIconText(string.Format("Connecting to {0}...", this.settings.DeviceIPAddress));
+                this.UpdateDeviceStatus(string.Format("Connecting to {0}...", this.settings.Devices.First().EndpointUrl));
+                this.UpdateNotifyIconText(string.Format("Connecting to {0}...", this.settings.Devices.First().EndpointUrl));
             }
             else
             {
@@ -688,7 +694,14 @@ namespace uRADMonitorX
             this.enablePollingToolStripMenuItem.Checked = !this.enablePollingToolStripMenuItem.Checked;
             this.settings.IsPollingEnabled = this.enablePollingToolStripMenuItem.Checked;
 
-            this.settings.Commit();
+            var deviceSettings = this.settings.Devices.FirstOrDefault();
+
+            if (deviceSettings.IsNotNull())
+            {
+                deviceSettings.Polling.IsEnabled = this.settings.IsPollingEnabled;
+            }
+
+            this.settings.Save();
 
             this.notifyIcon.Icon = this.settings.IsPollingEnabled ? Properties.Resources.RadiationIcon : Properties.Resources.RadiationDisabled;
         }
@@ -701,7 +714,7 @@ namespace uRADMonitorX
 
                 if (result == DialogResult.OK)
                 {
-                    if (this.settings.DeviceIPAddress.IsNotNullOrEmpty())
+                    if (this.settings.Devices.First().EndpointUrl.IsNotNullOrEmpty())
                     {
                         this.enablePollingToolStripMenuItem.Enabled = true;
                         this.viewDeviceWebpageToolStripMenuItem.Enabled = true;
@@ -751,7 +764,7 @@ namespace uRADMonitorX
                 return;
             }
 
-            if (this.settings.CloseToSystemTray && !this.IsClosing)
+            if (this.settings.Display.CloseToSystemTray && !this.IsClosing)
             {
                 this.MinimizeToTray();
                 this.Hide();
@@ -780,7 +793,7 @@ namespace uRADMonitorX
 
         private void RestoreWindowPosition()
         {
-            if (!IsOnScreen(new Point(MLastWindowXPos, MLastWindowYPos), atLeast: 10))
+            if (!IsOnScreen(WindowPosition, atLeast: 10))
             {
                 var screenWorkingArea = Screen.PrimaryScreen?.WorkingArea;
 
@@ -789,11 +802,11 @@ namespace uRADMonitorX
                     var x = screenWorkingArea.Value.Width - this.Size.Width - 10;
                     var y = screenWorkingArea.Value.Height - this.Size.Height - 10;
 
-                    this.RestoreWindowPosition(x, y);
+                    this.RestoreWindowPosition(WindowPosition);
                 }
             }
 
-            this.RestoreWindowPosition(MLastWindowXPos, MLastWindowYPos);
+            this.RestoreWindowPosition(WindowPosition);
         }
 
         private bool IsOnScreen(Point topLeft, int atLeast = 0)
@@ -801,12 +814,11 @@ namespace uRADMonitorX
             return Screen.AllScreens.Any(s => s.WorkingArea.Contains(new Point(topLeft.X + atLeast, topLeft.Y + atLeast)));
         }
 
-        private void RestoreWindowPosition(int x, int y)
+        private void RestoreWindowPosition(Point windowPosition)
         {
-            this.Top = y;
-            this.Left = x;
-            this.MLastWindowYPos = this.Top;
-            this.MLastWindowXPos = this.Left;
+            this.Top = windowPosition.Y;
+            this.Left = windowPosition.X;
+            this.WindowPosition = new Point(this.Left, this.Top);
         }
 
         private void SaveWindowPosition()
@@ -818,16 +830,14 @@ namespace uRADMonitorX
         {
             if (this.WindowState != FormWindowState.Minimized)
             {
-                this.MLastWindowYPos = this.Top;
-                this.MLastWindowXPos = this.Left;
+                this.WindowPosition = new Point(this.Left, this.Top);
             }
 
             if (commitToSettings)
             {
-                this.settings.LastWindowXPos = MLastWindowXPos;
-                this.settings.LastWindowYPos = MLastWindowYPos;
+                this.settings.Display.WindowPosition = this.WindowPosition;
 
-                this.settings.Commit();
+                this.settings.Save();
             }
         }
 
@@ -835,7 +845,7 @@ namespace uRADMonitorX
         {
             if (this.WindowState == FormWindowState.Minimized)
             {
-                this.ShowInTaskbar = this.settings.ShowInTaskbar;
+                this.ShowInTaskbar = this.settings.Display.ShowInTaskbar;
                 this.Show();
                 this.BringToFront();
                 this.WindowState = FormWindowState.Normal;
@@ -857,7 +867,7 @@ namespace uRADMonitorX
         {
             Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] MinimizeToTray()");
 
-            this.ShowInTaskbar = this.settings.ShowInTaskbar;
+            this.ShowInTaskbar = this.settings.Display.ShowInTaskbar;
             this.WindowState = FormWindowState.Minimized;
             this.Visible = false;
             this.Hide();
@@ -867,7 +877,7 @@ namespace uRADMonitorX
         {
             Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] ToogleWindow()");
 
-            this.ShowInTaskbar = this.settings.ShowInTaskbar;
+            this.ShowInTaskbar = this.settings.Display.ShowInTaskbar;
 
             if (this.WindowState == FormWindowState.Minimized)
             {
@@ -907,12 +917,12 @@ namespace uRADMonitorX
 
         private void ViewDeviceWebpageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(string.Format("http://{0}/", this.settings.DeviceIPAddress));
+            Process.Start(string.Format("http://{0}/", this.settings.Devices.First().EndpointUrl));
         }
 
         private void ViewDeviceWebpageToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            Process.Start(string.Format("http://{0}/", this.settings.DeviceIPAddress));
+            Process.Start(string.Format("http://{0}/", this.settings.Devices.First().EndpointUrl));
         }
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)

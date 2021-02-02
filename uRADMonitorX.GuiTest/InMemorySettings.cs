@@ -4,7 +4,11 @@ namespace uRADMonitorX.GuiTest
 {
     public class InMemorySettings : Settings
     {
-        public override void Commit()
+        public InMemorySettings() : base()
+        {
+        }
+
+        public override void Save()
         {
             ; // Nothing to do here.
         }

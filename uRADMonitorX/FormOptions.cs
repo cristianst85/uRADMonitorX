@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using uRADMonitorX.Commons;
 using uRADMonitorX.Configuration;
@@ -28,12 +29,12 @@ namespace uRADMonitorX
 
             this.settings = settings;
 
-            this.checkBoxStartWithWindows.Checked = settings.StartWithWindows;
+            this.checkBoxStartWithWindows.Checked = this.settings.General.StartWithWindows;
             this.checkBoxStartWithWindows.Enabled = !EnvironmentUtils.IsUnix();
-            this.checkBoxAutomaticallyCheckForUpdates.Checked = settings.AutomaticallyCheckForUpdates;
+            this.checkBoxAutomaticallyCheckForUpdates.Checked = this.settings.General.AutomaticallyCheckForUpdates;
 
-            this.checkBoxLoggingEnable.Checked = settings.IsLoggingEnabled;
-            this.textBoxLogDirectoryPath.Text = settings.LogDirectoryPath;
+            this.checkBoxLoggingEnable.Checked = this.settings.Logging.IsEnabled;
+            this.textBoxLogDirectoryPath.Text = this.settings.Logging.DirectoryPath;
 
             if (this.checkBoxLoggingEnable.Checked && this.textBoxLogDirectoryPath.Text.Length > 0 && Directory.Exists(this.textBoxLogDirectoryPath.Text))
             {
@@ -51,13 +52,13 @@ namespace uRADMonitorX
                 this.pictureBoxLoggingInfo.Image = Properties.Resources.information;
             }
 
-            this.checkBoxDataLoggingEnable.Checked = settings.IsDataLoggingEnabled;
-            this.checkBoxDataLoggingToSeparateFile.Checked = settings.DataLoggingToSeparateFile;
-            this.textBoxDataLogDirectoryPath.Text = settings.DataLogDirectoryPath;
+            this.checkBoxDataLoggingEnable.Checked = this.settings.Logging.DataLogging.IsEnabled;
+            this.checkBoxDataLoggingToSeparateFile.Checked = this.settings.Logging.DataLogging.UseSeparateFile;
+            this.textBoxDataLogDirectoryPath.Text = this.settings.Logging.DataLogging.DirectoryPath;
 
-            this.checkBoxShowInTaskbar.Checked = settings.ShowInTaskbar;
-            this.checkBoxStartMinimized.Checked = settings.StartMinimized;
-            this.checkBoxCloseToSystemTray.Checked = settings.CloseToSystemTray;
+            this.checkBoxShowInTaskbar.Checked = this.settings.Display.ShowInTaskbar;
+            this.checkBoxStartMinimized.Checked = this.settings.Display.StartMinimized;
+            this.checkBoxCloseToSystemTray.Checked = this.settings.Display.CloseToSystemTray;
 
             this.comboBoxTemperatureUnit.Items.Add(TemperatureUnitType.Celsius);
             this.comboBoxTemperatureUnit.Items.Add(TemperatureUnitType.Fahrenheit);
@@ -71,11 +72,11 @@ namespace uRADMonitorX
             this.comboBoxRadiationUnit.Items.Add(EnumHelper.GetEnumDescription(RadiationUnitType.uSvH));
             this.comboBoxRadiationUnit.Items.Add(EnumHelper.GetEnumDescription(RadiationUnitType.uRemH));
 
-            if (settings.TemperatureUnitType == TemperatureUnitType.Celsius)
+            if (this.settings.Misc.TemperatureUnitType == TemperatureUnitType.Celsius)
             {
                 this.comboBoxTemperatureUnit.SelectedIndex = 0;
             }
-            else if (settings.TemperatureUnitType == TemperatureUnitType.Fahrenheit)
+            else if (this.settings.Misc.TemperatureUnitType == TemperatureUnitType.Fahrenheit)
             {
                 this.comboBoxTemperatureUnit.SelectedIndex = 1;
             }
@@ -85,19 +86,19 @@ namespace uRADMonitorX
                 this.comboBoxTemperatureUnit.SelectedIndex = 0;
             }
 
-            if (settings.PressureUnitType == PressureUnitType.Pa)
+            if (this.settings.Misc.PressureUnitType == PressureUnitType.Pa)
             {
                 this.comboBoxPressureUnit.SelectedIndex = 0;
             }
-            else if (settings.PressureUnitType == PressureUnitType.hPa)
+            else if (this.settings.Misc.PressureUnitType == PressureUnitType.hPa)
             {
                 this.comboBoxPressureUnit.SelectedIndex = 1;
             }
-            else if (settings.PressureUnitType == PressureUnitType.kPa)
+            else if (this.settings.Misc.PressureUnitType == PressureUnitType.kPa)
             {
                 this.comboBoxPressureUnit.SelectedIndex = 2;
             }
-            else if (settings.PressureUnitType == PressureUnitType.mbar)
+            else if (this.settings.Misc.PressureUnitType == PressureUnitType.mbar)
             {
                 this.comboBoxPressureUnit.SelectedIndex = 3;
             }
@@ -107,15 +108,15 @@ namespace uRADMonitorX
                 this.comboBoxPressureUnit.SelectedIndex = 0;
             }
 
-            if (settings.RadiationUnitType == RadiationUnitType.Cpm)
+            if (this.settings.Misc.RadiationUnitType == RadiationUnitType.Cpm)
             {
                 this.comboBoxRadiationUnit.SelectedIndex = 0;
             }
-            else if (settings.RadiationUnitType == RadiationUnitType.uSvH)
+            else if (this.settings.Misc.RadiationUnitType == RadiationUnitType.uSvH)
             {
                 this.comboBoxRadiationUnit.SelectedIndex = 1;
             }
-            else if (settings.RadiationUnitType == RadiationUnitType.uRemH)
+            else if (this.settings.Misc.RadiationUnitType == RadiationUnitType.uRemH)
             {
                 this.comboBoxRadiationUnit.SelectedIndex = 2;
             }
@@ -125,8 +126,10 @@ namespace uRADMonitorX
                 this.comboBoxRadiationUnit.SelectedIndex = 0;
             }
 
-            this.comboBoxPressureUnit.Enabled = settings.HasPressureSensor;
-            this.labelPressureUnit.Enabled = settings.HasPressureSensor;
+            var deviceSettings = this.settings.Devices.FirstOrDefault();
+
+            this.comboBoxPressureUnit.Enabled = deviceSettings.IsNotNull() && deviceSettings.GetDeviceCapabilities().HasFlag(DeviceCapability.Pressure);
+            this.labelPressureUnit.Enabled = deviceSettings.IsNotNull() && deviceSettings.GetDeviceCapabilities().HasFlag(DeviceCapability.Pressure);
 
             this.comboBoxTemperatureNotificationUnit.Items.Add(TemperatureUnitType.Celsius);
             this.comboBoxTemperatureNotificationUnit.Items.Add(TemperatureUnitType.Fahrenheit);
@@ -135,15 +138,15 @@ namespace uRADMonitorX
             this.comboBoxRadiationNotificationUnit.Items.Add(EnumHelper.GetEnumDescription(RadiationUnitType.uSvH));
             this.comboBoxRadiationNotificationUnit.Items.Add(EnumHelper.GetEnumDescription(RadiationUnitType.uRemH));
 
-            this.textBoxHighTemperatureNotificationValue.Text = settings.HighTemperatureNotificationValue.ToString();
+            this.textBoxHighTemperatureNotificationValue.Text = this.settings.Notifications.TemperatureThreshold.HighValue.ToString();
 
-            this.checkBoxNotificationsEnable.Checked = settings.AreNotificationsEnabled;
+            this.checkBoxNotificationsEnable.Checked = this.settings.Notifications.IsEnabled;
 
-            if (settings.TemperatureNotificationUnitType == TemperatureUnitType.Celsius)
+            if (this.settings.Notifications.TemperatureThreshold.MeasurementUnit == TemperatureUnitType.Celsius)
             {
                 this.comboBoxTemperatureNotificationUnit.SelectedIndex = 0;
             }
-            else if (settings.TemperatureNotificationUnitType == TemperatureUnitType.Fahrenheit)
+            else if (this.settings.Notifications.TemperatureThreshold.MeasurementUnit == TemperatureUnitType.Fahrenheit)
             {
                 this.comboBoxTemperatureNotificationUnit.SelectedIndex = 1;
             }
@@ -155,18 +158,19 @@ namespace uRADMonitorX
 
             this.temperatureNotificationUnitSelectedIndex = this.comboBoxTemperatureNotificationUnit.SelectedIndex;
 
-            var radiationNotificationUnitType = settings.RadiationNotificationUnitType;
-            var radiationNotificationValue = settings.RadiationNotificationValue;
+            var radiationNotificationUnitType = this.settings.Notifications.RadiationThreshold.MeasurementUnit;
+            var radiationNotificationValue = this.settings.Notifications.RadiationThreshold.HighValue;
+
+            var radiationDetectorName = RadiationDetector.Normalize(deviceSettings.GetRadiationDetectorName());
+            var isKnownRadiationDetector = radiationDetectorName.IsNotNull() && RadiationDetector.IsKnown(radiationDetectorName);
 
             // Override settings if radiation notification unit type is not in counts per minute (cpm) and the detector is unknown.
-            if (radiationNotificationUnitType != RadiationUnitType.Cpm &&
-                    (settings.DetectorName.IsNullOrEmpty() ||
-                    !RadiationDetector.IsKnown(RadiationDetector.Normalize(settings.DetectorName)))
-                )
+            if (radiationNotificationUnitType != RadiationUnitType.Cpm && !isKnownRadiationDetector)
             {
                 radiationNotificationValue = 0;
                 radiationNotificationUnitType = RadiationUnitType.Cpm;
             }
+
             this.textBoxRadiationNotificationValue.Text = radiationNotificationValue.ToString();
 
             if (radiationNotificationUnitType == RadiationUnitType.Cpm)
@@ -328,42 +332,31 @@ namespace uRADMonitorX
 
         private void SaveSettings()
         {
-            this.settings.StartWithWindows = this.checkBoxStartWithWindows.Checked;
-            this.settings.AutomaticallyCheckForUpdates = this.checkBoxAutomaticallyCheckForUpdates.Checked;
+            this.settings.General.StartWithWindows = this.checkBoxStartWithWindows.Checked;
+            this.settings.General.AutomaticallyCheckForUpdates = this.checkBoxAutomaticallyCheckForUpdates.Checked;
 
-            if (this.checkBoxLoggingEnable.Checked)
-            {
-                this.settings.LogDirectoryPath = this.textBoxLogDirectoryPath.Text;
-            }
+            this.settings.Display.ShowInTaskbar = this.checkBoxShowInTaskbar.Checked;
+            this.settings.Display.StartMinimized = this.checkBoxStartMinimized.Checked;
+            this.settings.Display.CloseToSystemTray = this.checkBoxCloseToSystemTray.Checked;
 
-            this.settings.IsLoggingEnabled = this.checkBoxLoggingEnable.Checked;
+            this.settings.Notifications.IsEnabled = this.checkBoxNotificationsEnable.Checked;
+            this.settings.Notifications.TemperatureThreshold.HighValue = this.textBoxHighTemperatureNotificationValue.HasText() && MathX.IsDecimal(this.textBoxHighTemperatureNotificationValue.Text, numberFormatInfo) ? decimal.Parse(this.textBoxHighTemperatureNotificationValue.Text, NumberStyles.AllowDecimalPoint, numberFormatInfo) : default(decimal?);
+            this.settings.Notifications.TemperatureThreshold.MeasurementUnit = (TemperatureUnitType)Enum.Parse(typeof(TemperatureUnitType), this.comboBoxTemperatureNotificationUnit.SelectedItem.ToString(), true);
+            this.settings.Notifications.RadiationThreshold.HighValue = this.textBoxRadiationNotificationValue.HasText() && MathX.IsDecimal(this.textBoxRadiationNotificationValue.Text, numberFormatInfo) ? decimal.Parse(this.textBoxRadiationNotificationValue.Text, NumberStyles.AllowDecimalPoint, numberFormatInfo) : default(decimal?);
+            this.settings.Notifications.RadiationThreshold.MeasurementUnit = EnumHelper.GetEnumByDescription<RadiationUnitType>(this.comboBoxRadiationNotificationUnit.SelectedItem.ToString(), true);
 
-            if (this.checkBoxDataLoggingEnable.Checked)
-            {
-                this.settings.DataLogDirectoryPath = this.textBoxDataLogDirectoryPath.Text;
-            }
+            this.settings.Logging.IsEnabled = this.checkBoxLoggingEnable.Checked;
+            this.settings.Logging.DirectoryPath = this.textBoxLogDirectoryPath.Text;
 
-            this.settings.IsDataLoggingEnabled = this.checkBoxDataLoggingEnable.Checked;
-            this.settings.DataLoggingToSeparateFile = this.checkBoxDataLoggingToSeparateFile.Checked;
+            this.settings.Logging.DataLogging.IsEnabled = this.checkBoxDataLoggingEnable.Checked;
+            this.settings.Logging.DataLogging.UseSeparateFile = this.checkBoxDataLoggingToSeparateFile.Checked;
+            this.settings.Logging.DataLogging.DirectoryPath = this.textBoxDataLogDirectoryPath.Text;
 
-            this.settings.ShowInTaskbar = this.checkBoxShowInTaskbar.Checked;
-            this.settings.StartMinimized = this.checkBoxStartMinimized.Checked;
-            this.settings.CloseToSystemTray = this.checkBoxCloseToSystemTray.Checked;
-            this.settings.TemperatureUnitType = (TemperatureUnitType)Enum.Parse(typeof(TemperatureUnitType), this.comboBoxTemperatureUnit.SelectedItem.ToString(), true);
-            this.settings.PressureUnitType = (PressureUnitType)Enum.Parse(typeof(PressureUnitType), this.comboBoxPressureUnit.SelectedItem.ToString(), true);
-            this.settings.RadiationUnitType = EnumHelper.GetEnumByDescription<RadiationUnitType>(this.comboBoxRadiationUnit.SelectedItem.ToString(), true);
+            this.settings.Misc.TemperatureUnitType = (TemperatureUnitType)Enum.Parse(typeof(TemperatureUnitType), this.comboBoxTemperatureUnit.SelectedItem.ToString(), true);
+            this.settings.Misc.PressureUnitType = (PressureUnitType)Enum.Parse(typeof(PressureUnitType), this.comboBoxPressureUnit.SelectedItem.ToString(), true);
+            this.settings.Misc.RadiationUnitType = EnumHelper.GetEnumByDescription<RadiationUnitType>(this.comboBoxRadiationUnit.SelectedItem.ToString(), true);
 
-            if (this.checkBoxNotificationsEnable.Checked)
-            {
-                this.settings.HighTemperatureNotificationValue = int.Parse(this.textBoxHighTemperatureNotificationValue.Text);
-                this.settings.TemperatureNotificationUnitType = (TemperatureUnitType)Enum.Parse(typeof(TemperatureUnitType), this.comboBoxTemperatureNotificationUnit.SelectedItem.ToString(), true);
-                this.settings.RadiationNotificationValue = double.Parse(this.textBoxRadiationNotificationValue.Text, NumberStyles.AllowDecimalPoint, numberFormatInfo);
-                this.settings.RadiationNotificationUnitType = EnumHelper.GetEnumByDescription<RadiationUnitType>(this.comboBoxRadiationNotificationUnit.SelectedItem.ToString(), true);
-            }
-
-            this.settings.AreNotificationsEnabled = this.checkBoxNotificationsEnable.Checked;
-
-            this.settings.Commit();
+            this.settings.Save();
 
             this.OnSettingsChanged();
         }
@@ -450,7 +443,17 @@ namespace uRADMonitorX
             this.textBoxRadiationNotificationValue.Enabled = this.checkBoxNotificationsEnable.Checked;
             this.comboBoxTemperatureNotificationUnit.Enabled = this.checkBoxNotificationsEnable.Checked;
 
-            if (settings.DetectorName.IsNullOrEmpty() || !RadiationDetector.IsKnown(RadiationDetector.Normalize(settings.DetectorName)))
+            var deviceSettings = this.settings.Devices.First();
+
+            if (deviceSettings.IsNull())
+            {
+                return;
+            }
+
+            var radiationDetectorName = RadiationDetector.Normalize(deviceSettings.GetRadiationDetectorName());
+            var isKnownRadiationDetector = radiationDetectorName.IsNotNull() && RadiationDetector.IsKnown(radiationDetectorName);
+
+            if (!isKnownRadiationDetector)
             {
                 this.comboBoxRadiationNotificationUnit.Enabled = false;
 
@@ -492,10 +495,11 @@ namespace uRADMonitorX
                     ToolTipTitle = "Incorrect value"
                 };
 
-                string message = "Value for Temperature must be a number between ";
-                message += (this.comboBoxTemperatureNotificationUnit.SelectedIndex == 0) ? "0 and 60." : "32 and 140.";
+                var message = new StringBuilder("Value for Temperature must be a number between ");
+                message.Append((this.comboBoxTemperatureNotificationUnit.SelectedIndex == 0) ? "0 and 60." : "32 and 140.");
+                message.AppendFormat("\nDecimal sign ({0}) is allowed.", numberFormatInfo.NumberDecimalSeparator);
 
-                toolTip.Show(message, this.textBoxRadiationNotificationValue, 0, -102, 5000);
+                toolTip.Show(message.ToString(), this.textBoxRadiationNotificationValue, 0, -102, 5000);
             }
 
             this.UpdateApplyButtonState();
@@ -522,20 +526,20 @@ namespace uRADMonitorX
 
         private bool TemperatureNotificationValueIsValid(string temperature, TemperatureUnitType unit)
         {
-            bool isInteger = int.TryParse(temperature, out int value);
+            bool isDecimal = decimal.TryParse(temperature, NumberStyles.AllowDecimalPoint, numberFormatInfo, out decimal value);
 
             // Device working temperature is between -20 °C and +60 °C.
             // For High Temperature notification we allow only the positive part of the interval.
-            return (isInteger &&
-                    ((unit == TemperatureUnitType.Celsius && value >= 0 && value <= 60) ||
-                    (unit == TemperatureUnitType.Fahrenheit && value >= 32 && value <= 140)));
+            return (isDecimal &&
+                    ((unit == TemperatureUnitType.Celsius && value >= 0.0m && value <= 60.0m) ||
+                    (unit == TemperatureUnitType.Fahrenheit && value >= 32.0m && value <= 140.0m)));
         }
 
         private bool RadiationNotificationValueIsValid(string radiation)
         {
-            bool isInteger = double.TryParse(radiation, NumberStyles.AllowDecimalPoint, numberFormatInfo, out double value);
+            bool isDecimal = decimal.TryParse(radiation, NumberStyles.AllowDecimalPoint, numberFormatInfo, out decimal value);
 
-            return (isInteger && (value >= 0 && value <= 999999));
+            return (isDecimal && (value >= 0.0m && value <= 999999.9m));
         }
 
         private void UpdateApplyButtonState()
@@ -577,23 +581,30 @@ namespace uRADMonitorX
 
         private void ComboBoxRadiationNotificationUnit_SelectedIndexChanged(object sender, EventArgs e)
         {
+            var deviceSettings = this.settings.Devices.First();
+
+            if (deviceSettings.IsNull())
+            {
+                return;
+            }
+
             if (MathX.IsDecimal(this.textBoxRadiationNotificationValue.Text, numberFormatInfo))
             {
-                var detector = RadiationDetector.GetByName(settings.DetectorName);
+                var radiationDetector = RadiationDetector.GetByName(deviceSettings.GetRadiationDetectorName());
 
                 if (radiationNotificationUnitSelectedIndex == 0 && this.comboBoxRadiationNotificationUnit.SelectedIndex == 1)
                 {
-                    this.textBoxRadiationNotificationValue.Text = MathX.Truncate(Radiation.CpmToMicroSvPerHour(double.Parse(this.textBoxRadiationNotificationValue.Text), detector.ConversionFactor), 4).ToString();
+                    this.textBoxRadiationNotificationValue.Text = MathX.Truncate(Radiation.CpmToMicroSvPerHour(double.Parse(this.textBoxRadiationNotificationValue.Text), radiationDetector.ConversionFactor), 4).ToString();
                 }
                 else if (radiationNotificationUnitSelectedIndex == 0 && this.comboBoxRadiationNotificationUnit.SelectedIndex == 2)
                 {
-                    this.textBoxRadiationNotificationValue.Text = MathX.Truncate(Radiation.CpmToMicroRemPerHour(double.Parse(this.textBoxRadiationNotificationValue.Text), detector.ConversionFactor), 2).ToString();
+                    this.textBoxRadiationNotificationValue.Text = MathX.Truncate(Radiation.CpmToMicroRemPerHour(double.Parse(this.textBoxRadiationNotificationValue.Text), radiationDetector.ConversionFactor), 2).ToString();
                 }
                 else if (radiationNotificationUnitSelectedIndex == 1 && this.comboBoxRadiationNotificationUnit.SelectedIndex == 0)
                 {
                     // Round to the nearest integer when converting to cpm.
                     // Try to maintain precision when converting back-and-forth to/from the same value.
-                    this.textBoxRadiationNotificationValue.Text = Math.Round(Radiation.MicroSvPerHourToCpm(double.Parse(this.textBoxRadiationNotificationValue.Text), detector.ConversionFactor), 0).ToString();
+                    this.textBoxRadiationNotificationValue.Text = Math.Round(Radiation.MicroSvPerHourToCpm(double.Parse(this.textBoxRadiationNotificationValue.Text), radiationDetector.ConversionFactor), 0).ToString();
                 }
                 else if (radiationNotificationUnitSelectedIndex == 1 && this.comboBoxRadiationNotificationUnit.SelectedIndex == 2)
                 {
@@ -603,7 +614,7 @@ namespace uRADMonitorX
                 {
                     // Round to the nearest integer when converting to cpm. 
                     // Try to maintain precision when converting back-and-forth to/from the same value.
-                    this.textBoxRadiationNotificationValue.Text = Math.Round(Radiation.MicroRemPerHourToCpm(double.Parse(this.textBoxRadiationNotificationValue.Text), detector.ConversionFactor), 0).ToString();
+                    this.textBoxRadiationNotificationValue.Text = Math.Round(Radiation.MicroRemPerHourToCpm(double.Parse(this.textBoxRadiationNotificationValue.Text), radiationDetector.ConversionFactor), 0).ToString();
                 }
                 else if (radiationNotificationUnitSelectedIndex == 2 && this.comboBoxRadiationNotificationUnit.SelectedIndex == 1)
                 {

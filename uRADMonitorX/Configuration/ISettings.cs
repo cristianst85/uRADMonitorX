@@ -1,75 +1,27 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using uRADMonitorX.Core;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace uRADMonitorX.Configuration
 {
     public interface ISettings
     {
-        // General
-        bool StartWithWindows { get; set; }
-
-        bool AutomaticallyCheckForUpdates { get; set; }
-
-        // Display
-        bool StartMinimized { get; set; }
-
-        bool ShowInTaskbar { get; set; }
-
-        bool CloseToSystemTray { get; set; }
-
-        int LastWindowXPos { get; set; }
-
-        int LastWindowYPos { get; set; }
-
-        // Logging
-        bool IsLoggingEnabled { get; set; }
-
-        string LogDirectoryPath { get; set; }
-
-        bool IsDataLoggingEnabled { get; set; }
-
-        bool DataLoggingToSeparateFile { get; set; }
-
-        string DataLogDirectoryPath { get; set; }
-
-        // Device
-        string DetectorName { get; set; }
-
-        bool HasPressureSensor { get; set; }
-
-        string DeviceIPAddress { get; set; }
-
-        TemperatureUnitType TemperatureUnitType { get; set; }
-
-        PressureUnitType PressureUnitType { get; set; }
-
-        RadiationUnitType RadiationUnitType { get; set; }
-
-        PollingType PollingType { get; set; }
-
-        int PollingInterval { get; set; }
-
         bool IsPollingEnabled { get; set; }
 
-        // Notifications
-        bool AreNotificationsEnabled { get; set; }
+        GeneralSettings General { get; }
 
-        int HighTemperatureNotificationValue { get; set; }
+        DisplaySettings Display { get; }
 
-        double RadiationNotificationValue { get; set; }
+        NotificationsSettings Notifications { get; }
 
-        TemperatureUnitType TemperatureNotificationUnitType { get; set; }
+        LoggingSettings Logging { get; }
 
-        RadiationUnitType RadiationNotificationUnitType { get; set; }
+        MiscSettings Misc { get; }
 
-        // uRADMonitor API Authentication
-        [SuppressMessage(category: "Style", checkId: "IDE1006")]
-        string uRADMonitorAPIUserId { get; set; }
+        IList<DeviceSettings> Devices { get; }
 
         [SuppressMessage(category: "Style", checkId: "IDE1006")]
-        string uRADMonitorAPIUserKey { get; set; }
+        uRADMonitorNetworkSettings uRADMonitorNetwork { get; }
 
-        // Commit
-        void Commit();
+        void Save();
     }
 }

@@ -192,7 +192,7 @@
             this.checkBoxAutomaticallyCheckForUpdates.AutoSize = true;
             this.checkBoxAutomaticallyCheckForUpdates.Location = new System.Drawing.Point(19, 42);
             this.checkBoxAutomaticallyCheckForUpdates.Name = "checkBoxAutomaticallyCheckForUpdates";
-            this.checkBoxAutomaticallyCheckForUpdates.Size = new System.Drawing.Size(177, 17);
+            this.checkBoxAutomaticallyCheckForUpdates.Size = new System.Drawing.Size(180, 17);
             this.checkBoxAutomaticallyCheckForUpdates.TabIndex = 1;
             this.checkBoxAutomaticallyCheckForUpdates.Text = "Automatically Check for Updates";
             this.checkBoxAutomaticallyCheckForUpdates.UseVisualStyleBackColor = true;
@@ -267,10 +267,10 @@
             this.labelNotificationsInfo.Location = new System.Drawing.Point(41, 117);
             this.labelNotificationsInfo.Name = "labelNotificationsInfo";
             this.labelNotificationsInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelNotificationsInfo.Size = new System.Drawing.Size(215, 39);
+            this.labelNotificationsInfo.Size = new System.Drawing.Size(200, 39);
             this.labelNotificationsInfo.TabIndex = 7;
-            this.labelNotificationsInfo.Text = "Radiation measure unit selection is disabled \r\nbecause device detector is unknown" +
-    " or is \r\nnot configured.";
+            this.labelNotificationsInfo.Text = "Radiation measurement unit selection is \r\ndisabled because the device detector is" +
+    " \r\nunknown or the device is not configured.";
             // 
             // comboBoxRadiationNotificationUnit
             // 
@@ -311,7 +311,7 @@
             // textBoxHighTemperatureNotificationValue
             // 
             this.textBoxHighTemperatureNotificationValue.Location = new System.Drawing.Point(132, 41);
-            this.textBoxHighTemperatureNotificationValue.MaxLength = 3;
+            this.textBoxHighTemperatureNotificationValue.MaxLength = 4;
             this.textBoxHighTemperatureNotificationValue.Name = "textBoxHighTemperatureNotificationValue";
             this.textBoxHighTemperatureNotificationValue.Size = new System.Drawing.Size(48, 20);
             this.textBoxHighTemperatureNotificationValue.TabIndex = 2;
