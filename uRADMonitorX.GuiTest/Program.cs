@@ -73,12 +73,12 @@ namespace uRADMonitorX.GuiTest
 
             var readings = new Collection<DeviceReadings>
             {
-                new DeviceReadings() { Radiation = 19, RadiationAverage = 15, Temperature = 26, Pressure = 100040, Voltage = 375, VoltagePercent = 50 },
-                new DeviceReadings() { Radiation = 20, RadiationAverage = 15, Temperature = 25, Pressure = 100000, Voltage = 377, VoltagePercent = 44 },
-                new DeviceReadings() { Radiation = 25, RadiationAverage = 15, Temperature = 24, Pressure = 100020, Voltage = 378, VoltagePercent = 46 },
-                new DeviceReadings() { Radiation = 17, RadiationAverage = 15, Temperature = 25, Pressure = 100025, Voltage = 400, VoltagePercent = 43 },
-                new DeviceReadings() { Radiation = 18, RadiationAverage = 15, Temperature = 26, Pressure = 100030, Voltage = 365, VoltagePercent = 45 },
-                new DeviceReadings() { Radiation = 19, RadiationAverage = 15, Temperature = 25, Pressure = 100040, Voltage = 368, VoltagePercent = 47 }
+                new DeviceReadings() { Radiation = 19, RadiationAverage = 15, Temperature = 26, Pressure = 100040, Voltage = 375, VoltagePercentage = 50 },
+                new DeviceReadings() { Radiation = 20, RadiationAverage = 15, Temperature = 25, Pressure = 100000, Voltage = 377, VoltagePercentage = 44 },
+                new DeviceReadings() { Radiation = 25, RadiationAverage = 15, Temperature = 24, Pressure = 100020, Voltage = 378, VoltagePercentage = 46 },
+                new DeviceReadings() { Radiation = 17, RadiationAverage = 15, Temperature = 25, Pressure = 100025, Voltage = 400, VoltagePercentage = 43 },
+                new DeviceReadings() { Radiation = 18, RadiationAverage = 15, Temperature = 26, Pressure = 100030, Voltage = 365, VoltagePercentage = 45 },
+                new DeviceReadings() { Radiation = 19, RadiationAverage = 15, Temperature = 25, Pressure = 100040, Voltage = 368, VoltagePercentage = 47 }
             };
 
             var virtualDevice = new VirtualDevice("10000000", RadiationDetector.SBM20, 112, 108, DeviceModelType.A2, deviceSettings.EndpointUrl, readings)

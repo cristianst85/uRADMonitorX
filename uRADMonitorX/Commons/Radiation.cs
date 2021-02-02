@@ -8,7 +8,7 @@
         /// <param name="cpm"></param>
         /// <param name="conversionFactor"></param>
         /// <returns></returns>
-        public static double CpmToMicroSvPerHour(double cpm, double conversionFactor)
+        public static decimal CpmToMicroSvPerHour(decimal cpm, decimal conversionFactor)
         {
             return cpm * conversionFactor;
         }
@@ -19,27 +19,27 @@
         /// <param name="cpm"></param>
         /// <param name="conversionFactor"></param>
         /// <returns></returns>
-        public static double CpmToMicroRemPerHour(double cpm, double conversionFactor)
+        public static decimal CpmToMicroRemPerHour(decimal cpm, decimal conversionFactor)
         {
             return cpm * conversionFactor * 100;
         }
 
-        public static double MicroSvPerHourToCpm(double uSvH, double conversionFactor)
+        public static decimal MicroSvPerHourToCpm(decimal uSvH, decimal conversionFactor)
         {
             return uSvH / conversionFactor;
         }
 
-        public static double MicroRemPerHourToCpm(double uRemH, double conversionFactor)
+        public static decimal MicroRemPerHourToCpm(decimal uRemH, decimal conversionFactor)
         {
             return uRemH / (conversionFactor * 100);
         }
 
-        public static double MicroRemPerHourToMicroSvPerHour(double uRemH)
+        public static decimal MicroRemPerHourToMicroSvPerHour(decimal uRemH)
         {
             return uRemH / 100;
         }
 
-        public static double MicroSvPerHourToMicroRemPerHour(double uSvH)
+        public static decimal MicroSvPerHourToMicroRemPerHour(decimal uSvH)
         {
             return uSvH * 100;
         }

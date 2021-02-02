@@ -89,7 +89,7 @@ namespace uRADMonitorX.GuiTest
             deviceData.RadiationAverage = deviceReadings.RadiationAverage;
             deviceData.Pressure = deviceReadings.Pressure;
             deviceData.Voltage = deviceReadings.Voltage;
-            deviceData.VoltagePercent = deviceReadings.VoltagePercent;
+            deviceData.VoltagePercentage = deviceReadings.VoltagePercentage;
             deviceData.Uptime = secondsElapsedFromStartTime;
             deviceData.WDT = secondsElapsedFromStartTime % 60;
             deviceData.ServerResponseCode = this.ServerResponseCode.Code.ToString();

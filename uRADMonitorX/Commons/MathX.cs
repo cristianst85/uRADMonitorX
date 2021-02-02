@@ -14,6 +14,11 @@ namespace uRADMonitorX.Commons
             return number / order;
         }
 
+        public static decimal Truncate(decimal number, int decimals)
+        {
+            return Convert.ToDecimal(Truncate(Convert.ToDouble(number), decimals));
+        }
+
         public static bool IsInteger(string number)
         {
             return int.TryParse(number, out int integer);
@@ -28,7 +33,7 @@ namespace uRADMonitorX.Commons
 
         public static bool IsDecimal(string number, NumberFormatInfo numberFormatInfo)
         {
-            return double.TryParse(number, NumberStyles.AllowDecimalPoint, numberFormatInfo, out double value);
+            return decimal.TryParse(number, NumberStyles.AllowDecimalPoint, numberFormatInfo, out decimal value);
         }
     }
 }

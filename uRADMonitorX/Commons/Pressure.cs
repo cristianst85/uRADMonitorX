@@ -2,17 +2,17 @@
 {
     public static class Pressure
     {
-        public static double PascalsToHectoPascals(double pascals)
+        public static decimal PascalsToHectoPascals(decimal pascals)
         {
-            return pascals / 100d;
+            return pascals / 100m;
         }
 
-        public static double PascalsToKiloPascals(double pascals)
+        public static decimal PascalsToKiloPascals(decimal pascals)
         {
-            return pascals / 1000d;
+            return pascals / 1000m;
         }
 
-        public static double PascalsToMilliBars(double pascals)
+        public static decimal PascalsToMilliBars(decimal pascals)
         {
             return PascalsToHectoPascals(pascals);
         }

@@ -28,11 +28,11 @@ namespace uRADMonitorX.Tests.Core.Device
             Assert.AreEqual(deviceModelType, deviceData.DeviceInformation.DeviceModel);
             Assert.AreEqual(detector, deviceData.DeviceInformation.Detector);
             Assert.AreEqual(radiation, deviceData.Radiation);
-            Assert.AreEqual(radiationAverage != null ? double.Parse(radiationAverage) : (double?)null, deviceData.RadiationAverage);
-            Assert.AreEqual(double.Parse(temperature), deviceData.Temperature);
-            Assert.AreEqual(pressure != null ? double.Parse(pressure) : (double?)null, deviceData.Pressure);
+            Assert.AreEqual(radiationAverage != null ? decimal.Parse(radiationAverage) : (decimal?)null, deviceData.RadiationAverage);
+            Assert.AreEqual(decimal.Parse(temperature), deviceData.Temperature);
+            Assert.AreEqual(pressure != null ? decimal.Parse(pressure) : (decimal?)null, deviceData.Pressure);
             Assert.AreEqual(voltage, deviceData.Voltage);
-            Assert.AreEqual(voltagePercent, deviceData.VoltagePercent);
+            Assert.AreEqual(voltagePercent, deviceData.VoltagePercentage);
             Assert.AreEqual(wdt, deviceData.WDT);
             Assert.AreEqual(uptime, deviceData.Uptime);
             Assert.AreEqual(ip, deviceData.IPAddress);

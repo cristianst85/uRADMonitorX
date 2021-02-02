@@ -24,9 +24,9 @@ namespace uRADMonitorX.Core.Device
 
         public string Name { get; private set; }
 
-        public double ConversionFactor { get; private set; }
+        public decimal? ConversionFactor { get; private set; }
 
-        private RadiationDetector(string detectorName, double conversionFactor)
+        private RadiationDetector(string detectorName, decimal? conversionFactor)
         {
             this.Name = detectorName;
             this.ConversionFactor = conversionFactor;
@@ -34,14 +34,14 @@ namespace uRADMonitorX.Core.Device
 
         public static RadiationDetector Unknown(string detectorName)
         {
-            return new RadiationDetector(detectorName, 0.0);
+            return new RadiationDetector(detectorName, null);
         }
 
         public static RadiationDetector SBM19
         {
             get
             {
-                return new RadiationDetector("SBM19", 0.001500);
+                return new RadiationDetector("SBM19", 0.001500m);
             }
         }
 
@@ -49,7 +49,7 @@ namespace uRADMonitorX.Core.Device
         {
             get
             {
-                return new RadiationDetector("SBM20", 0.006315);
+                return new RadiationDetector("SBM20", 0.006315m);
             }
         }
 
@@ -57,7 +57,7 @@ namespace uRADMonitorX.Core.Device
         {
             get
             {
-                return new RadiationDetector("SBM20M", 0.013333);
+                return new RadiationDetector("SBM20M", 0.013333m);
             }
         }
 
@@ -65,7 +65,7 @@ namespace uRADMonitorX.Core.Device
         {
             get
             {
-                return new RadiationDetector("SBM21", 0.048000);
+                return new RadiationDetector("SBM21", 0.048000m);
             }
         }
 
@@ -73,7 +73,7 @@ namespace uRADMonitorX.Core.Device
         {
             get
             {
-                return new RadiationDetector("SI1G", 0.006000);
+                return new RadiationDetector("SI1G", 0.006000m);
             }
         }
 
@@ -81,7 +81,7 @@ namespace uRADMonitorX.Core.Device
         {
             get
             {
-                return new RadiationDetector("SI3BG", 0.631578);
+                return new RadiationDetector("SI3BG", 0.631578m);
             }
         }
 
@@ -89,7 +89,7 @@ namespace uRADMonitorX.Core.Device
         {
             get
             {
-                return new RadiationDetector("SI22G", 0.001714);
+                return new RadiationDetector("SI22G", 0.001714m);
             }
         }
 
@@ -97,7 +97,7 @@ namespace uRADMonitorX.Core.Device
         {
             get
             {
-                return new RadiationDetector("SI29BG", 0.010000);
+                return new RadiationDetector("SI29BG", 0.010000m);
             }
         }
 
@@ -105,7 +105,7 @@ namespace uRADMonitorX.Core.Device
         {
             get
             {
-                return new RadiationDetector("STS5", 0.006666);
+                return new RadiationDetector("STS5", 0.006666m);
             }
         }
 
@@ -113,7 +113,7 @@ namespace uRADMonitorX.Core.Device
         {
             get
             {
-                return new RadiationDetector("LND712", 0.00594);
+                return new RadiationDetector("LND712", 0.00594m);
             }
         }
 
@@ -121,7 +121,7 @@ namespace uRADMonitorX.Core.Device
         {
             get
             {
-                return new RadiationDetector("SI8B", 0.001108);
+                return new RadiationDetector("SI8B", 0.001108m);
             }
         }
 
@@ -129,7 +129,7 @@ namespace uRADMonitorX.Core.Device
         {
             get
             {
-                return new RadiationDetector("SBT10A", 0.001105);
+                return new RadiationDetector("SBT10A", 0.001105m);
             }
         }
 

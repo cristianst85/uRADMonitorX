@@ -51,23 +51,23 @@ namespace uRADMonitorX.Core.Device
                         if (tokens[i + 1].Contains("("))
                         {
                             string radiationAvg = tokens[++i];
-                            deviceData.RadiationAverage = double.Parse(radiationAvg.Substring(1, radiationAvg.IndexOf("CPM", StringComparison.OrdinalIgnoreCase) - 1), NumberStyles.AllowDecimalPoint, numberFormatInfo);
+                            deviceData.RadiationAverage = decimal.Parse(radiationAvg.Substring(1, radiationAvg.IndexOf("CPM", StringComparison.OrdinalIgnoreCase) - 1), NumberStyles.AllowDecimalPoint, numberFormatInfo);
                         }
                     }
                     else if (token.StartsWith("average", StringComparison.OrdinalIgnoreCase))
                     {
                         string radiationAvg = token.Split(':')[1];
-                        deviceData.RadiationAverage = double.Parse(radiationAvg.Substring(0, radiationAvg.IndexOf("CPM", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint, numberFormatInfo);
+                        deviceData.RadiationAverage = decimal.Parse(radiationAvg.Substring(0, radiationAvg.IndexOf("CPM", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint, numberFormatInfo);
                     }
                     else if (token.StartsWith("temp", StringComparison.OrdinalIgnoreCase) || token.StartsWith("t:", StringComparison.OrdinalIgnoreCase))
                     {
                         string temperature = token.Split(':')[1];
-                        deviceData.Temperature = double.Parse(temperature.Substring(0, temperature.IndexOf("C", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, numberFormatInfo);
+                        deviceData.Temperature = decimal.Parse(temperature.Substring(0, temperature.IndexOf("C", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, numberFormatInfo);
                     }
                     else if (token.StartsWith("P", StringComparison.OrdinalIgnoreCase) && token.EndsWith("Pa", StringComparison.OrdinalIgnoreCase))
                     {
                         string pressure = token.Split(':')[1];
-                        deviceData.Pressure = double.Parse(pressure.Substring(0, pressure.IndexOf("Pa", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint, numberFormatInfo);
+                        deviceData.Pressure = decimal.Parse(pressure.Substring(0, pressure.IndexOf("Pa", StringComparison.OrdinalIgnoreCase)), NumberStyles.AllowDecimalPoint, numberFormatInfo);
                     }
                     else if (token.StartsWith("vol", StringComparison.OrdinalIgnoreCase))
                     {
@@ -76,17 +76,17 @@ namespace uRADMonitorX.Core.Device
 
                         if (tokens[i + 1].Contains("/"))
                         {
-                            deviceData.VoltagePercent = int.Parse(tokens[i + 1].TrimStart('(').TrimEnd(')').Split('/')[0].TrimEnd('%'));
+                            deviceData.VoltagePercentage = int.Parse(tokens[i + 1].TrimStart('(').TrimEnd(')').Split('/')[0].TrimEnd('%'));
                         }
                         else
                         {
                             if (tokens[i + 1].StartsWith("duty"))
                             {
-                                deviceData.VoltagePercent = int.Parse(tokens[i + 1].Split(':')[1].TrimEnd('%'));
+                                deviceData.VoltagePercentage = int.Parse(tokens[i + 1].Split(':')[1].TrimEnd('%'));
                             }
                             else
                             {
-                                deviceData.VoltagePercent = int.Parse(tokens[i + 1].TrimStart('(').TrimEnd(')').TrimEnd('%'));
+                                deviceData.VoltagePercentage = int.Parse(tokens[i + 1].TrimStart('(').TrimEnd(')').TrimEnd('%'));
                             }
                         }
 

@@ -4,28 +4,28 @@ namespace uRADMonitorX.Commons
 {
     public static class Temperature
     {
-        public static double CelsiusToFahrenheit(double celsius)
+        public static decimal CelsiusToFahrenheit(decimal celsius)
         {
-            double fahrenheit = (celsius * 9 / 5) + 32;
+            decimal fahrenheit = (celsius * 9m / 5m) + 32;
 
             return fahrenheit;
         }
 
-        public static double FahrenheitToCelsius(double fahrenheit)
+        public static decimal FahrenheitToCelsius(decimal fahrenheit)
         {
-            double celsius = (fahrenheit - 32) * 5 / 9;
+            decimal celsius = (fahrenheit - 32) * 5m / 9m;
 
             return celsius;
         }
 
-        public static double CelsiusToKelvin(double celsius)
+        public static decimal CelsiusToKelvin(decimal celsius)
         {
-            return celsius + double.Parse("273.15", NumberStyles.AllowDecimalPoint, new CultureInfo("en-US").NumberFormat);
+            return celsius + decimal.Parse("273.15", NumberStyles.AllowDecimalPoint, new CultureInfo("en-US").NumberFormat);
         }
 
-        public static double KelvinToCelsius(double kelvin)
+        public static decimal KelvinToCelsius(decimal kelvin)
         {
-            return kelvin - double.Parse("273.15", NumberStyles.AllowDecimalPoint, new CultureInfo("en-US").NumberFormat);
+            return kelvin - decimal.Parse("273.15", NumberStyles.AllowDecimalPoint, new CultureInfo("en-US").NumberFormat);
         }
     }
 }

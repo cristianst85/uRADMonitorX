@@ -562,13 +562,13 @@ namespace uRADMonitorX
                 {
                     // Round to the nearest integer.
                     // Try to maintain precision when converting back-and-forth to/from the same value.
-                    this.textBoxHighTemperatureNotificationValue.Text = Math.Round(Temperature.CelsiusToFahrenheit(double.Parse(this.textBoxHighTemperatureNotificationValue.Text)), 0).ToString();
+                    this.textBoxHighTemperatureNotificationValue.Text = Math.Round(Temperature.CelsiusToFahrenheit(decimal.Parse(this.textBoxHighTemperatureNotificationValue.Text)), 0).ToString();
                 }
                 else if (temperatureNotificationUnitSelectedIndex == 1 && this.comboBoxTemperatureNotificationUnit.SelectedIndex == 0)
                 {
                     // Round to the nearest integer. 
                     // Try to maintain precision when converting back-and-forth to/from the same value.
-                    this.textBoxHighTemperatureNotificationValue.Text = Math.Round(Temperature.FahrenheitToCelsius(double.Parse(this.textBoxHighTemperatureNotificationValue.Text)), 0).ToString();
+                    this.textBoxHighTemperatureNotificationValue.Text = Math.Round(Temperature.FahrenheitToCelsius(decimal.Parse(this.textBoxHighTemperatureNotificationValue.Text)), 0).ToString();
                 }
                 else
                 {
@@ -594,31 +594,31 @@ namespace uRADMonitorX
 
                 if (radiationNotificationUnitSelectedIndex == 0 && this.comboBoxRadiationNotificationUnit.SelectedIndex == 1)
                 {
-                    this.textBoxRadiationNotificationValue.Text = MathX.Truncate(Radiation.CpmToMicroSvPerHour(double.Parse(this.textBoxRadiationNotificationValue.Text), radiationDetector.ConversionFactor), 4).ToString();
+                    this.textBoxRadiationNotificationValue.Text = MathX.Truncate(Radiation.CpmToMicroSvPerHour(decimal.Parse(this.textBoxRadiationNotificationValue.Text), radiationDetector.ConversionFactor.Value), 4).ToString();
                 }
                 else if (radiationNotificationUnitSelectedIndex == 0 && this.comboBoxRadiationNotificationUnit.SelectedIndex == 2)
                 {
-                    this.textBoxRadiationNotificationValue.Text = MathX.Truncate(Radiation.CpmToMicroRemPerHour(double.Parse(this.textBoxRadiationNotificationValue.Text), radiationDetector.ConversionFactor), 2).ToString();
+                    this.textBoxRadiationNotificationValue.Text = MathX.Truncate(Radiation.CpmToMicroRemPerHour(decimal.Parse(this.textBoxRadiationNotificationValue.Text), radiationDetector.ConversionFactor.Value), 2).ToString();
                 }
                 else if (radiationNotificationUnitSelectedIndex == 1 && this.comboBoxRadiationNotificationUnit.SelectedIndex == 0)
                 {
                     // Round to the nearest integer when converting to cpm.
                     // Try to maintain precision when converting back-and-forth to/from the same value.
-                    this.textBoxRadiationNotificationValue.Text = Math.Round(Radiation.MicroSvPerHourToCpm(double.Parse(this.textBoxRadiationNotificationValue.Text), radiationDetector.ConversionFactor), 0).ToString();
+                    this.textBoxRadiationNotificationValue.Text = Math.Round(Radiation.MicroSvPerHourToCpm(decimal.Parse(this.textBoxRadiationNotificationValue.Text), radiationDetector.ConversionFactor.Value), 0).ToString();
                 }
                 else if (radiationNotificationUnitSelectedIndex == 1 && this.comboBoxRadiationNotificationUnit.SelectedIndex == 2)
                 {
-                    this.textBoxRadiationNotificationValue.Text = MathX.Truncate(Radiation.MicroSvPerHourToMicroRemPerHour(double.Parse(this.textBoxRadiationNotificationValue.Text)), 2).ToString();
+                    this.textBoxRadiationNotificationValue.Text = MathX.Truncate(Radiation.MicroSvPerHourToMicroRemPerHour(decimal.Parse(this.textBoxRadiationNotificationValue.Text)), 2).ToString();
                 }
                 else if (radiationNotificationUnitSelectedIndex == 2 && this.comboBoxRadiationNotificationUnit.SelectedIndex == 0)
                 {
                     // Round to the nearest integer when converting to cpm. 
                     // Try to maintain precision when converting back-and-forth to/from the same value.
-                    this.textBoxRadiationNotificationValue.Text = Math.Round(Radiation.MicroRemPerHourToCpm(double.Parse(this.textBoxRadiationNotificationValue.Text), radiationDetector.ConversionFactor), 0).ToString();
+                    this.textBoxRadiationNotificationValue.Text = Math.Round(Radiation.MicroRemPerHourToCpm(decimal.Parse(this.textBoxRadiationNotificationValue.Text), radiationDetector.ConversionFactor.Value), 0).ToString();
                 }
                 else if (radiationNotificationUnitSelectedIndex == 2 && this.comboBoxRadiationNotificationUnit.SelectedIndex == 1)
                 {
-                    this.textBoxRadiationNotificationValue.Text = MathX.Truncate(Radiation.MicroRemPerHourToMicroSvPerHour(double.Parse(this.textBoxRadiationNotificationValue.Text)), 4).ToString();
+                    this.textBoxRadiationNotificationValue.Text = MathX.Truncate(Radiation.MicroRemPerHourToMicroSvPerHour(decimal.Parse(this.textBoxRadiationNotificationValue.Text)), 4).ToString();
                 }
                 else
                 {

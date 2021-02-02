@@ -428,13 +428,13 @@ namespace uRADMonitorX
 
                     if (this.settings.Misc.RadiationUnitType == RadiationUnitType.uSvH)
                     {
-                        this.viewOnlyTextBoxRadiation.Text = string.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour(deviceData.Radiation, radiationDetector.ConversionFactor), 4));
-                        this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour((double)deviceData.RadiationAverage, radiationDetector.ConversionFactor), 4)) : string.Empty;
+                        this.viewOnlyTextBoxRadiation.Text = string.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour(deviceData.Radiation, radiationDetector.ConversionFactor.Value), 4));
+                        this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour((decimal)deviceData.RadiationAverage, radiationDetector.ConversionFactor.Value), 4)) : string.Empty;
                     }
                     else if (this.settings.Misc.RadiationUnitType == RadiationUnitType.uRemH)
                     {
-                        this.viewOnlyTextBoxRadiation.Text = string.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour(deviceData.Radiation, radiationDetector.ConversionFactor), 2));
-                        this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour((double)deviceData.RadiationAverage, radiationDetector.ConversionFactor), 2)) : string.Empty;
+                        this.viewOnlyTextBoxRadiation.Text = string.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour(deviceData.Radiation, radiationDetector.ConversionFactor.Value), 2));
+                        this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour((decimal)deviceData.RadiationAverage, radiationDetector.ConversionFactor.Value), 2)) : string.Empty;
                     }
                     else
                     {
@@ -547,7 +547,7 @@ namespace uRADMonitorX
                 this.settings.Save();
             }
 
-            this.viewOnlyTextBoxVoltage.Text = string.Format("{0} V ({1}%)", deviceData.Voltage, deviceData.VoltagePercent);
+            this.viewOnlyTextBoxVoltage.Text = string.Format("{0} V ({1}%)", deviceData.Voltage, deviceData.VoltagePercentage);
             this.viewOnlyTextBoxWDT.Text = string.Format("{0} s", deviceData.WDT);
 
             this.UpdateDeviceStatus(string.Format("Device received {0} from server.", (HttpStatus.GetReason(int.Parse(deviceData.ServerResponseCode)) != null) ? string.Format("{0} ({1})", deviceData.ServerResponseCode, HttpStatus.GetReason(int.Parse(deviceData.ServerResponseCode))) : deviceData.ServerResponseCode));
@@ -595,7 +595,7 @@ namespace uRADMonitorX
                     currentTemperatureUnit = "F";
                 }
 
-                var currentRadiation = (double)deviceData.Radiation;
+                var currentRadiation = (decimal)deviceData.Radiation;
                 var currentRadiationUnit = EnumHelper.GetEnumDescription(RadiationUnitType.Cpm);
 
                 if (RadiationDetector.IsKnown(radiationDetectorName))
@@ -604,11 +604,11 @@ namespace uRADMonitorX
 
                     if (this.settings.Notifications.RadiationThreshold.MeasurementUnit == RadiationUnitType.uSvH)
                     {
-                        currentRadiation = Radiation.CpmToMicroSvPerHour(currentRadiation, radiationDetector.ConversionFactor);
+                        currentRadiation = Radiation.CpmToMicroSvPerHour(currentRadiation, radiationDetector.ConversionFactor.Value);
                     }
                     else if (this.settings.Notifications.RadiationThreshold.MeasurementUnit == RadiationUnitType.uRemH)
                     {
-                        currentRadiation = Radiation.CpmToMicroRemPerHour(currentRadiation, radiationDetector.ConversionFactor);
+                        currentRadiation = Radiation.CpmToMicroRemPerHour(currentRadiation, radiationDetector.ConversionFactor.Value);
                     }
 
                     currentRadiationUnit = EnumHelper.GetEnumDescription(this.settings.Notifications.RadiationThreshold.MeasurementUnit);
