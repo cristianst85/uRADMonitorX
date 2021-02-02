@@ -191,5 +191,25 @@ namespace uRADMonitorX.Core.Device
 
             throw new Exception(string.Format("Unknown radiation detector '{0}'.", detectorName));
         }
+
+        public static bool TryGetByName(string detectorName, out RadiationDetector radiationDetector)
+        {
+            radiationDetector = null;
+
+            if (detectorName.IsNullOrEmpty())
+            {
+                return false;
+            }
+
+            detectorName = Normalize(detectorName);
+
+            if (IsKnown(detectorName))
+            {
+                radiationDetector = GetByName(detectorName);
+                return true;
+            }
+
+            return false;
+        }
     }
 }
