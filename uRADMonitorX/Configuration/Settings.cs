@@ -1,4 +1,6 @@
-﻿using uRADMonitorX.Core;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using uRADMonitorX.Core;
 
 namespace uRADMonitorX.Configuration
 {
@@ -38,12 +40,16 @@ namespace uRADMonitorX.Configuration
 
         public string DeviceIPAddress { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public TemperatureUnitType TemperatureUnitType { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public PressureUnitType PressureUnitType { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public RadiationUnitType RadiationUnitType { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public PollingType PollingType { get; set; }
 
         public int PollingInterval { get; set; }
@@ -57,13 +63,17 @@ namespace uRADMonitorX.Configuration
 
         public double RadiationNotificationValue { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public TemperatureUnitType TemperatureNotificationUnitType { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public RadiationUnitType RadiationNotificationUnitType { get; set; }
 
         // uRADMonitor API Authentication
+        [JsonConverter(typeof(DataProtectionApiJsonConverter))]
         public string uRADMonitorAPIUserId { get; set; }
 
+        [JsonConverter(typeof(DataProtectionApiJsonConverter))]
         public string uRADMonitorAPIUserKey { get; set; }
 
         // Commit

@@ -78,6 +78,8 @@
     <Compile Include="Commons\IHttpClientFactory.cs" />
     <Compile Include="Configuration\DeviceDataClientConfiguration.cs" />
     <Compile Include="Configuration\HttpClientConfiguration.cs" />
+    <Compile Include="Configuration\JsonSettings.cs" />
+    <Compile Include="Configuration\DataProtectionApiJsonConverter.cs" />
     <Compile Include="Program.Settings.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Helpers\ServicePointManagerHelper.cs" />

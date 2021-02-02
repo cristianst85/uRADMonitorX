@@ -7,34 +7,33 @@ namespace uRADMonitorX.Tests.Configuration
     [TestFixture]
     public class XMLSettingsTests
     {
-        private readonly string outputfilePath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\uRADMonitorX.Tests.Files\configs\Settings.xml"));
+        private readonly string xmlSettingsFilePath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\uRADMonitorX.Tests.Files\configs\Settings.xml"));
 
         [SetUp]
         public void SetUp()
         {
-            Assert.IsFalse(File.Exists(outputfilePath));
+            Assert.IsFalse(File.Exists(xmlSettingsFilePath));
         }
 
         [TearDown]
         public void TearDown()
         {
-            Assert.IsTrue(File.Exists(outputfilePath));
+            File.Delete(xmlSettingsFilePath);
 
-            File.Delete(outputfilePath);
-
-            Assert.IsFalse(File.Exists(outputfilePath));
+            Assert.IsFalse(File.Exists(xmlSettingsFilePath));
         }
 
         [Test]
         public void CreateFileWithDefaults()
         {
-            XMLSettings.CreateFile(outputfilePath);
+            XMLSettings.CreateFile(xmlSettingsFilePath);
 
-            Assert.IsTrue(File.Exists(outputfilePath));
+            Assert.IsTrue(File.Exists(xmlSettingsFilePath));
 
-            XMLSettings settings = XMLSettings.LoadFromFile(outputfilePath);
+            XMLSettings settings = XMLSettings.LoadFromFile(xmlSettingsFilePath);
 
-            Assert.AreEqual(outputfilePath, settings.FilePath);
+            Assert.AreEqual(xmlSettingsFilePath, settings.FilePath);
+
             Assert.AreEqual(DefaultSettings.StartWithWindows, settings.StartWithWindows);
             Assert.AreEqual(DefaultSettings.AutomaticallyCheckForUpdates, settings.AutomaticallyCheckForUpdates);
 
@@ -46,6 +45,9 @@ namespace uRADMonitorX.Tests.Configuration
 
             Assert.AreEqual(DefaultSettings.IsLoggingEnabled, settings.IsLoggingEnabled);
             Assert.AreEqual(DefaultSettings.LogDirectoryPath, settings.LogDirectoryPath);
+            Assert.AreEqual(DefaultSettings.IsDataLoggingEnabled, settings.IsDataLoggingEnabled);
+            Assert.AreEqual(DefaultSettings.DataLoggingToSeparateFile, settings.DataLoggingToSeparateFile);
+            Assert.AreEqual(DefaultSettings.DataLogDirectoryPath, settings.DataLogDirectoryPath);
 
             Assert.AreEqual(DefaultSettings.DetectorName, settings.DetectorName);
             Assert.AreEqual(DefaultSettings.HasPressureSensor, settings.HasPressureSensor);
@@ -64,6 +66,9 @@ namespace uRADMonitorX.Tests.Configuration
             Assert.AreEqual(DefaultSettings.RadiationNotificationValue, settings.RadiationNotificationValue);
             Assert.AreEqual(DefaultSettings.TemperatureNotificationUnitType, settings.TemperatureNotificationUnitType);
             Assert.AreEqual(DefaultSettings.RadiationNotificationUnitType, settings.RadiationNotificationUnitType);
+
+            Assert.IsNull(settings.uRADMonitorAPIUserId);
+            Assert.IsNull(settings.uRADMonitorAPIUserId);
         }
     }
 }

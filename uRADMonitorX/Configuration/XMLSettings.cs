@@ -190,8 +190,8 @@ namespace uRADMonitorX.Configuration
                 WriteFullElement(xmlWriter, "radiation_unit_type", DefaultSettings.RadiationNotificationUnitType.ToString());
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("api_credentials");
-                WriteFullElement(xmlWriter, "user_id", String.Empty);
-                WriteFullElement(xmlWriter, "user_key", String.Empty);
+                WriteFullElement(xmlWriter, "user_id", string.Empty);
+                WriteFullElement(xmlWriter, "user_key", string.Empty);
                 xmlWriter.WriteEndElement();
                 xmlWriter.Flush();
             }
@@ -283,7 +283,7 @@ namespace uRADMonitorX.Configuration
             xmlNode["notifications"].SelectSingleNode("enabled").InnerText = this.AreNotificationsEnabled.ToString().ToLower();
             xmlNode["notifications"].SelectSingleNode("high_temperature_value").InnerText = this.HighTemperatureNotificationValue.ToString();
             xmlNode["notifications"].SelectSingleNode("temperature_unit_type").InnerText = this.TemperatureNotificationUnitType.ToString();
-            xmlNode["notifications"].SelectSingleNode("radiation_value").InnerText = this.RadiationNotificationValue.ToString();
+            xmlNode["notifications"].SelectSingleNode("radiation_value").InnerText = this.RadiationNotificationValue.ToString(numberFormatInfo);
             xmlNode["notifications"].SelectSingleNode("radiation_unit_type").InnerText = this.RadiationNotificationUnitType.ToString();
 
             // uRADMonitor API credentials were introduced with version 1.4.0.

@@ -27,7 +27,6 @@ namespace uRADMonitorX
         internal static readonly string DataLoggerName = "dataLogger";
         internal static readonly string LoggerFileName = "uRADMonitorX.log";
         internal static readonly string DataLoggerFileName = "data.log";
-        internal static readonly string SettingsFileName = "config.xml";
 
         /// <summary>
         /// Specifies the URL application uses to check 
@@ -112,38 +111,61 @@ namespace uRADMonitorX
             }
 
             // Load settings.
-            var settingsFilePath = string.Format("{0}{1}{2}", Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath), Path.DirectorySeparatorChar, Program.SettingsFileName);
+            var settingsFilePath = Path.Combine(AssemblyUtils.GetApplicationDirPath(), Program.Settings.Files.JsonFileName);
 
-            try
+            // Migrate settings from XML to JSON file format.
+            if (!File.Exists(settingsFilePath))
             {
-                if (!File.Exists(settingsFilePath))
-                {
-                    try
-                    {
-                        XMLSettings.CreateFile(settingsFilePath);
-                    }
-                    catch (Exception createSettingsFileException)
-                    {
-                        MessageBox.Show(string.Format("Cannot create settings file {0}.\n\nError details: {1}", settingsFilePath, createSettingsFileException.Message), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var xmlSettingsFilePath = Path.Combine(AssemblyUtils.GetApplicationDirPath(), Program.Settings.Files.XmlFileName);
 
-                        return;
-                    }
+                try
+                {
+                    if (File.Exists(xmlSettingsFilePath))
+                    {
+                        settings = JsonSettings.LoadFromXmlFile(xmlSettingsFilePath).SaveAs(settingsFilePath);
+                    };
                 }
-
-                settings = XMLSettings.LoadFromFile(settingsFilePath);
-
-                // Fixes an issue with data log directory name on Linux due to trailing slash.
-                if (settings.DataLogDirectoryPath.IsNotNull() && settings.DataLogDirectoryPath.EndsWith("\\"))
+                catch (Exception ex)
                 {
-                    settings.DataLogDirectoryPath = settings.DataLogDirectoryPath.TrimEnd('\\');
-                    settings.Commit();
+                    MessageBox.Show(string.Format("Cannot migrate settings to JSON format.\n\nError details: {0}", ex.Message), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    return;
                 }
             }
-            catch (Exception loadSettingsFileException)
-            {
-                MessageBox.Show(string.Format("Cannot load settings from file {0}.\n\nError details: {1}", settingsFilePath, loadSettingsFileException.Message), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                return;
+            if (settings.IsNull())
+            {
+                try
+                {
+                    if (!File.Exists(settingsFilePath))
+                    {
+                        try
+                        {
+                            JsonSettings.CreateFile(settingsFilePath);
+                        }
+                        catch (Exception createSettingsFileException)
+                        {
+                            MessageBox.Show(string.Format("Cannot create settings file {0}.\n\nError details: {1}", settingsFilePath, createSettingsFileException.Message), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                            return;
+                        }
+                    }
+
+                    settings = JsonSettings.LoadFromFile(settingsFilePath);
+
+                    // Fixes an issue with data log directory name on Linux due to trailing slash.
+                    if (settings.DataLogDirectoryPath.IsNotNull() && settings.DataLogDirectoryPath.EndsWith("\\"))
+                    {
+                        settings.DataLogDirectoryPath = settings.DataLogDirectoryPath.TrimEnd('\\');
+                        settings.Commit();
+                    }
+                }
+                catch (Exception loadSettingsFileException)
+                {
+                    MessageBox.Show(string.Format("Cannot load settings from file {0}.\n\nError details: {1}", settingsFilePath, loadSettingsFileException.Message), Program.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    return;
+                }
             }
 
             var loggerFilePath = GetLoggerPath(settings.LogDirectoryPath, Program.LoggerFileName, false);
@@ -192,7 +214,6 @@ namespace uRADMonitorX
 
             var formMain = new FormMain(deviceDataReaderFactory, deviceDataJobFactory, deviceServiceFactory, settings, logger);
             formMain.SettingsChangedEventHandler += new SettingsChangedEventHandler(FormMain_SettingsChangedEventHandler);
-
 
             // Both uRADMonitor API and GitHub API requires TLS v1.2.
             ServicePointManagerHelper.SetSecurityProtocolToTls12();

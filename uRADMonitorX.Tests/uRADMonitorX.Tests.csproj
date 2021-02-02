@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commons\Formatting\TimeSpanFormatterTest.cs" />
+    <Compile Include="Configuration\JsonSettingsTests.cs" />
     <Compile Include="Configuration\XMLSettingsCommitTests.cs" />
     <Compile Include="Core\Device\DeviceDataFileReader.cs" />
     <Compile Include="Core\Device\DeviceDataFileReaderTest.cs" />
