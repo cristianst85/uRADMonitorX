@@ -171,7 +171,7 @@ namespace uRADMonitorX
                 radiationNotificationUnitType = RadiationUnitType.Cpm;
             }
 
-            this.textBoxRadiationNotificationValue.Text = radiationNotificationValue.ToString();
+            this.textBoxRadiationNotificationValue.Text = radiationNotificationUnitType == RadiationUnitType.Cpm && radiationNotificationValue.HasValue ? radiationNotificationValue.Value.ToString("#") : radiationNotificationValue.ToString();
 
             if (radiationNotificationUnitType == RadiationUnitType.Cpm)
             {
@@ -556,19 +556,17 @@ namespace uRADMonitorX
 
         private void ComboBoxTemperatureNotificationUnit_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (MathX.IsInteger(this.textBoxHighTemperatureNotificationValue.Text))
+            if (MathX.IsDecimal(this.textBoxHighTemperatureNotificationValue.Text, numberFormatInfo))
             {
                 if (temperatureNotificationUnitSelectedIndex == 0 && this.comboBoxTemperatureNotificationUnit.SelectedIndex == 1)
                 {
-                    // Round to the nearest integer.
                     // Try to maintain precision when converting back-and-forth to/from the same value.
-                    this.textBoxHighTemperatureNotificationValue.Text = Math.Round(Temperature.CelsiusToFahrenheit(decimal.Parse(this.textBoxHighTemperatureNotificationValue.Text)), 0).ToString();
+                    this.textBoxHighTemperatureNotificationValue.Text = Math.Round(Temperature.CelsiusToFahrenheit(decimal.Parse(this.textBoxHighTemperatureNotificationValue.Text)), 1).ToString();
                 }
                 else if (temperatureNotificationUnitSelectedIndex == 1 && this.comboBoxTemperatureNotificationUnit.SelectedIndex == 0)
                 {
-                    // Round to the nearest integer. 
                     // Try to maintain precision when converting back-and-forth to/from the same value.
-                    this.textBoxHighTemperatureNotificationValue.Text = Math.Round(Temperature.FahrenheitToCelsius(decimal.Parse(this.textBoxHighTemperatureNotificationValue.Text)), 0).ToString();
+                    this.textBoxHighTemperatureNotificationValue.Text = Math.Round(Temperature.FahrenheitToCelsius(decimal.Parse(this.textBoxHighTemperatureNotificationValue.Text)), 1).ToString();
                 }
                 else
                 {

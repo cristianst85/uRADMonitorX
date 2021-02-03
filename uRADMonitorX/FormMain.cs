@@ -412,99 +412,36 @@ namespace uRADMonitorX
                 Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] UpdateDeviceData Error: {loggingException.ToString()}");
             }
 
-            // Get detector's normalized name for performing conversions.
-            var radiationDetectorName = RadiationDetector.Normalize(deviceData.DeviceInformation.Detector);
+            // Try to get the radiation detector to perform the conversion.
+            var radiationDetectorIsKnown = RadiationDetector.TryGetByName(deviceData.DeviceInformation.Detector, out RadiationDetector radiationDetector);
 
-            if (this.settings.Misc.RadiationUnitType == RadiationUnitType.Cpm)
+            if (!radiationDetectorIsKnown || this.settings.Misc.RadiationUnitType == RadiationUnitType.Cpm)
             {
-                this.viewOnlyTextBoxRadiation.Text = string.Format("{0} cpm", deviceData.Radiation);
-                this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} cpm", deviceData.RadiationAverage) : string.Empty;
+                this.viewOnlyTextBoxRadiation.Text = Radiation.FromCpm(deviceData.Radiation).ToString();
+                this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? Radiation.FromCpm(deviceData.RadiationAverage).ToString() : string.Empty;
             }
             else
             {
-                if (RadiationDetector.IsKnown(radiationDetectorName))
-                {
-                    var radiationDetector = RadiationDetector.GetByName(radiationDetectorName);
+                var decimalDigitsNumber = this.settings.Misc.RadiationUnitType == RadiationUnitType.uSvH ? 4 : 2;
 
-                    if (this.settings.Misc.RadiationUnitType == RadiationUnitType.uSvH)
-                    {
-                        this.viewOnlyTextBoxRadiation.Text = string.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour(deviceData.Radiation, radiationDetector.ConversionFactor.Value), 4));
-                        this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} µSv/h", MathX.Truncate(Radiation.CpmToMicroSvPerHour((decimal)deviceData.RadiationAverage, radiationDetector.ConversionFactor.Value), 4)) : string.Empty;
-                    }
-                    else if (this.settings.Misc.RadiationUnitType == RadiationUnitType.uRemH)
-                    {
-                        this.viewOnlyTextBoxRadiation.Text = string.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour(deviceData.Radiation, radiationDetector.ConversionFactor.Value), 2));
-                        this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} µrem/h", MathX.Truncate(Radiation.CpmToMicroRemPerHour((decimal)deviceData.RadiationAverage, radiationDetector.ConversionFactor.Value), 2)) : string.Empty;
-                    }
-                    else
-                    {
-                        // If conversion to other radiation unit type is not implemented fall-back silently to cpm.
-                        this.settings.Misc.RadiationUnitType = RadiationUnitType.Cpm;
-                        this.settings.Save();
-
-                        this.viewOnlyTextBoxRadiation.Text = string.Format("{0} cpm", deviceData.Radiation);
-                        this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} cpm", deviceData.RadiationAverage) : string.Empty;
-                    }
-                }
-                else
-                {
-                    // If detector is not known silently fall-back to cpm.
-                    this.settings.Misc.RadiationUnitType = RadiationUnitType.Cpm;
-                    this.settings.Save();
-
-                    this.viewOnlyTextBoxRadiation.Text = string.Format("{0} cpm", deviceData.Radiation);
-                    this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? string.Format("{0} cpm", deviceData.RadiationAverage) : string.Empty;
-                }
+                this.viewOnlyTextBoxRadiation.Text = Radiation.FromCpm(deviceData.Radiation).ConvertTo(this.settings.Misc.RadiationUnitType, radiationDetector.ConversionFactor.Value).ToString(decimalDigitsNumber);
+                this.viewOnlyTextBoxRadiationAverage.Text = deviceData.RadiationAverage.HasValue ? Radiation.FromCpm(deviceData.RadiationAverage).ConvertTo(this.settings.Misc.RadiationUnitType, radiationDetector.ConversionFactor.Value).ToString(decimalDigitsNumber) : string.Empty;
             }
 
             this.labelRadiationAverage.Enabled = deviceData.RadiationAverage.HasValue;
 
-            if (this.settings.Misc.TemperatureUnitType == TemperatureUnitType.Celsius)
-            {
-                this.viewOnlyTextBoxTemperature.Text = string.Format("{0} °C", deviceData.Temperature);
-            }
-            else if (this.settings.Misc.TemperatureUnitType == TemperatureUnitType.Fahrenheit)
-            {
-                this.viewOnlyTextBoxTemperature.Text = string.Format("{0} °F", Temperature.CelsiusToFahrenheit(deviceData.Temperature));
-            }
-            else
-            {
-                // If conversion to other temperature unit type is not implemented fall-back silently to default (Celsius).
-                this.settings.Misc.TemperatureUnitType = TemperatureUnitType.Celsius;
-                this.settings.Save();
+            // Temperature conversion.
+            this.viewOnlyTextBoxTemperature.Text = Temperature.FromCelsius(deviceData.Temperature).ConvertTo(this.settings.Misc.TemperatureUnitType).ToString();
 
-                this.viewOnlyTextBoxTemperature.Text = string.Format("{0} °C", deviceData.Temperature);
-            }
-
+            // Pressure conversion.
             if (deviceData.Pressure.HasValue)
             {
                 this.labelPressure.Enabled = true;
                 this.pressureToolStripMenuItem.Enabled = true;
 
-                if (this.settings.Misc.PressureUnitType == PressureUnitType.Pa)
-                {
-                    this.viewOnlyTextBoxPressure.Text = string.Format("{0} Pa", deviceData.Pressure.Value);
-                }
-                else if (this.settings.Misc.PressureUnitType == PressureUnitType.hPa)
-                {
-                    this.viewOnlyTextBoxPressure.Text = string.Format("{0} hPa", Pressure.PascalsToHectoPascals(deviceData.Pressure.Value));
-                }
-                else if (this.settings.Misc.PressureUnitType == PressureUnitType.kPa)
-                {
-                    this.viewOnlyTextBoxPressure.Text = string.Format("{0} kPa", Pressure.PascalsToKiloPascals(deviceData.Pressure.Value));
-                }
-                else if (this.settings.Misc.PressureUnitType == PressureUnitType.mbar)
-                {
-                    this.viewOnlyTextBoxPressure.Text = string.Format("{0} mbar", Pressure.PascalsToMilliBars(deviceData.Pressure.Value));
-                }
-                else
-                {
-                    // If conversion to other pressure unit type is not implemented fall-back silently to default (Pascal).
-                    this.settings.Misc.PressureUnitType = PressureUnitType.Pa;
-                    this.settings.Save();
+                var decimalDigitsNumber = this.settings.Misc.PressureUnitType == PressureUnitType.Pa ? 0 : 3;
 
-                    this.viewOnlyTextBoxPressure.Text = string.Format("{0} Pa", deviceData.Pressure.Value);
-                }
+                this.viewOnlyTextBoxPressure.Text = Pressure.FromPascals(deviceData.Pressure.Value).ConvertTo(this.settings.Misc.PressureUnitType).ToString(decimalDigitsNumber);
             }
             else
             {
@@ -514,7 +451,7 @@ namespace uRADMonitorX
             }
 
             // Update settings.
-            var commitSettings = false;
+            var saveSettings = false;
 
             var deviceSettings = this.settings.Devices.First();
             var deviceCapabilities = deviceSettings.GetDeviceCapabilities();
@@ -523,26 +460,18 @@ namespace uRADMonitorX
             {
                 var deviceCapabilitiesRegister = new EnumRegister<DeviceCapability>(deviceSettings.GetDeviceCapabilities());
                 deviceSettings.SetDeviceCapabilities(deviceCapabilitiesRegister.InvertFlag(DeviceCapability.Pressure));
-                commitSettings = true;
+                saveSettings = true;
             }
+
+            var radiationDetectorName = RadiationDetector.Normalize(deviceData.DeviceInformation.Detector);
 
             if (!radiationDetectorName.Equals(deviceSettings.GetRadiationDetectorName()))
             {
                 deviceSettings.SetRadiationDetectorName(radiationDetectorName);
-
-                // If the detector is known and the radiation notification value was not set then fall-back to default values.
-                if (deviceSettings.GetRadiationDetectorName().IsNotNull() &&
-                        RadiationDetector.IsKnown(deviceSettings.GetRadiationDetectorName()) &&
-                        this.settings.Notifications.RadiationThreshold.MeasurementUnit == RadiationUnitType.Cpm &&
-                        this.settings.Notifications.RadiationThreshold.HighValue == 0.0m)
-                {
-                    this.settings.Notifications.RadiationThreshold = DefaultSettings.Notifications.RadiationThreshold;
-                }
-
-                commitSettings = true;
+                saveSettings = true;
             }
 
-            if (commitSettings)
+            if (saveSettings)
             {
                 this.settings.Save();
             }
@@ -586,39 +515,19 @@ namespace uRADMonitorX
 
             if (this.settings.Notifications.IsEnabled)
             {
-                var currentTemperature = deviceData.Temperature;
-                var currentTemperatureUnit = "C";
+                var currentRadiation = Radiation.FromCpm(deviceData.Radiation);
+                var showRadiationNotification = true;
 
-                if (this.settings.Notifications.TemperatureThreshold.MeasurementUnit == TemperatureUnitType.Fahrenheit)
+                if (this.settings.Notifications.RadiationThreshold.MeasurementUnit != RadiationUnitType.Cpm)
                 {
-                    currentTemperature = Temperature.CelsiusToFahrenheit(deviceData.Temperature);
-                    currentTemperatureUnit = "F";
-                }
-
-                var currentRadiation = (decimal)deviceData.Radiation;
-                var currentRadiationUnit = EnumHelper.GetEnumDescription(RadiationUnitType.Cpm);
-
-                if (RadiationDetector.IsKnown(radiationDetectorName))
-                {
-                    var radiationDetector = RadiationDetector.GetByName(radiationDetectorName);
-
-                    if (this.settings.Notifications.RadiationThreshold.MeasurementUnit == RadiationUnitType.uSvH)
+                    if (radiationDetectorIsKnown)
                     {
-                        currentRadiation = Radiation.CpmToMicroSvPerHour(currentRadiation, radiationDetector.ConversionFactor.Value);
+                        currentRadiation = currentRadiation.ConvertTo(this.settings.Notifications.RadiationThreshold.MeasurementUnit, radiationDetector.ConversionFactor.Value);
                     }
-                    else if (this.settings.Notifications.RadiationThreshold.MeasurementUnit == RadiationUnitType.uRemH)
+                    else
                     {
-                        currentRadiation = Radiation.CpmToMicroRemPerHour(currentRadiation, radiationDetector.ConversionFactor.Value);
-                    }
-
-                    currentRadiationUnit = EnumHelper.GetEnumDescription(this.settings.Notifications.RadiationThreshold.MeasurementUnit);
-                }
-                else
-                {
-                    if (this.settings.Notifications.RadiationThreshold.MeasurementUnit != RadiationUnitType.Cpm)
-                    {
-                        // Disable radiation notification if radiation value cannot be converted to uSv/h or uRem/h.
-                        currentRadiation = 0;
+                        // Disable radiation notification if the radiation value cannot be converted from cpm to uSv/h or uRem/h.
+                        showRadiationNotification = false;
                     }
                 }
 
@@ -626,14 +535,19 @@ namespace uRADMonitorX
                 var balloonTitle = string.Empty;
                 var balloonMessage = string.Empty;
 
-                if (Convert.ToDecimal(currentTemperature) >= this.settings.Notifications.TemperatureThreshold.HighValue)
+                var currentTemperature = Temperature.FromCelsius(deviceData.Temperature).ConvertTo(this.settings.Notifications.TemperatureThreshold.MeasurementUnit);
+
+                if (this.settings.Notifications.TemperatureThreshold.HighValue.HasValue && 
+                    currentTemperature.Value >= this.settings.Notifications.TemperatureThreshold.HighValue)
                 {
                     balloonTitle = "High Temperature";
-                    balloonMessage = string.Format("Temperature: {0} °{1}", currentTemperature, currentTemperatureUnit);
+                    balloonMessage = string.Format("Temperature: {0}", currentTemperature.ToString());
                     showBalloon = true;
                 }
 
-                if (this.settings.Notifications.RadiationThreshold.HighValue != 0 && Convert.ToDecimal(currentRadiation) >= this.settings.Notifications.RadiationThreshold.HighValue)
+                if (showRadiationNotification && 
+                    this.settings.Notifications.RadiationThreshold.HighValue.HasValue &&
+                    currentRadiation.Value >= this.settings.Notifications.RadiationThreshold.HighValue)
                 {
                     if (balloonTitle.Length > 0)
                     {
@@ -646,7 +560,7 @@ namespace uRADMonitorX
                     }
 
                     balloonTitle += "Radiation";
-                    balloonMessage += string.Format("Radiation: {0} {1}", currentRadiation, currentRadiationUnit);
+                    balloonMessage += string.Format("Radiation: {0}", currentRadiation.ToString());
 
                     showBalloon = true;
                 }
