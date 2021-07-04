@@ -716,11 +716,13 @@ namespace uRADMonitorX
                     var x = screenWorkingArea.Value.Width - this.Size.Width - 10;
                     var y = screenWorkingArea.Value.Height - this.Size.Height - 10;
 
-                    this.RestoreWindowPosition(WindowPosition);
+                    this.RestoreWindowPosition(new Point(x, y));
                 }
             }
-
-            this.RestoreWindowPosition(WindowPosition);
+            else
+            {
+                this.RestoreWindowPosition(WindowPosition);
+            }
         }
 
         private bool IsOnScreen(Point topLeft, int atLeast = 0)
