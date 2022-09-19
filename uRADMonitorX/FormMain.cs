@@ -668,12 +668,12 @@ namespace uRADMonitorX
         {
             Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] FormMain_Closing()");
 
-            this.SaveWindowPosition();
+            this.UpdateWindowPosition(saveToSettings: false);
 
             if (e.CloseReason != CloseReason.UserClosing)
             {
+                this.UpdateWindowPosition(saveToSettings: true);
                 this.IsClosing = true;
-                this.SaveWindowPosition(true);
 
                 return;
             }
@@ -687,8 +687,8 @@ namespace uRADMonitorX
             }
             else
             {
+                this.UpdateWindowPosition(saveToSettings: true);
                 this.IsClosing = true;
-                this.SaveWindowPosition(true);
             }
         }
 
@@ -737,22 +737,16 @@ namespace uRADMonitorX
             this.WindowPosition = new Point(this.Left, this.Top);
         }
 
-        private void SaveWindowPosition()
-        {
-            this.SaveWindowPosition(false);
-        }
-
-        private void SaveWindowPosition(bool commitToSettings)
+        private void UpdateWindowPosition(bool saveToSettings)
         {
             if (this.WindowState != FormWindowState.Minimized)
             {
                 this.WindowPosition = new Point(this.Left, this.Top);
             }
 
-            if (commitToSettings)
+            if (saveToSettings)
             {
                 this.settings.Display.WindowPosition = this.WindowPosition;
-
                 this.settings.Save();
             }
         }
@@ -807,7 +801,7 @@ namespace uRADMonitorX
             else
             {
                 this.Hide();
-                this.SaveWindowPosition();
+                this.UpdateWindowPosition(saveToSettings: false);
                 this.Visible = false;
                 this.WindowState = FormWindowState.Minimized;
             }
