@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDeviceConfiguration));
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.labelPollingIntervalUnits = new System.Windows.Forms.Label();
             this.textBoxPollingInterval = new System.Windows.Forms.TextBox();
@@ -151,6 +152,7 @@
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.groupBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormDeviceConfiguration";
