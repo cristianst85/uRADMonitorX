@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.ObjectModel;
 using System.Linq;
 using uRADMonitorX.uRADMonitor.API.V1;
 using uRADMonitorX.uRADMonitor.Domain;
@@ -23,12 +22,21 @@ namespace uRADMonitorX.uRADMonitor.Services
         {
             var response = this.deviceDataClient.Get();
 
-            var deviceServiceResponse = ParseResponse(response);
+            var deviceServiceResponse = new DeviceServiceResponse();
 
-            if (deviceServiceResponse.HasData)
+            if (JToken.Parse(response) is JObject jObject)
             {
-                deviceServiceResponse.Devices = new Collection<Device>();
+                var jProperty = jObject.Properties().First();
 
+                if (jProperty.Name.Equals("error"))
+                {
+                    deviceServiceResponse.SetError(jProperty.Value.ToString());
+                    return deviceServiceResponse;
+                }
+            }
+
+            if (!deviceServiceResponse.HasError)
+            {
                 var jArray = JsonConvert.DeserializeObject(response) as JArray;
 
                 foreach (var jToken in jArray)
@@ -39,23 +47,6 @@ namespace uRADMonitorX.uRADMonitor.Services
                     device.RawData = jToken.ToString(Formatting.None);
 
                     deviceServiceResponse.Devices.Add(device);
-                }
-            }
-
-            return deviceServiceResponse;
-        }
-
-        private DeviceServiceResponse ParseResponse(string response)
-        {
-            var deviceServiceResponse = new DeviceServiceResponse();
-
-            var jToken = JToken.Parse(response);
-
-            if (jToken is JObject jObject)
-            {
-                if (jObject.Properties().First().Name.Equals("error"))
-                {
-                    deviceServiceResponse.Error = jObject.Properties().First().Value.ToString();
                 }
             }
 

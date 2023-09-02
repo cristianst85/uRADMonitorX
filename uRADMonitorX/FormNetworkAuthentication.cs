@@ -58,21 +58,21 @@ namespace uRADMonitorX
         {
             try
             {
-                DeviceServiceResponse result = null;
+                DeviceServiceResponse response = null;
 
                 await Task.Run(() =>
                 {
                     var deviceService = deviceServiceFactory.Create(textBoxUserId.Text, textBoxUserKey.Text);
-                    result = deviceService.GetAll();
+                    response = deviceService.GetAll();
                 });
 
-                if (result.HasData)
+                if (response.HasError)
                 {
-                    ShowMessageBox("A successful connection was made to the data.uradmonitor.com server.", MessageBoxIcon.Information);
+                    ShowMessageBox($"Error: {response.Error}.", MessageBoxIcon.Error);
                 }
                 else
                 {
-                    ShowMessageBox($"Error: {result.Error}.", MessageBoxIcon.Error);
+                    ShowMessageBox("A successful connection was made to the data.uradmonitor.com server.", MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
