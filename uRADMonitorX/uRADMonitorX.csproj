@@ -85,6 +85,7 @@
     <Compile Include="Configuration\DataProtectionApiJsonConverter.cs" />
     <Compile Include="Configuration\NotificationThreshold.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Program.Settings.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Helpers\ServicePointManagerHelper.cs" />
