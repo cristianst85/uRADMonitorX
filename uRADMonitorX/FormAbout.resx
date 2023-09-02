@@ -118,11 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="richTextBoxCopyright.Text" xml:space="preserve">
-    <value>Application/system tray icons from Free Time Icons/Free Application Icons sets
+    <value>Application and system tray icons are from Free Time Icons/Free Application Icons sets.
 Copyright (c) 2009 Aha-Soft. All rights reserved.
 http://www.aha-soft.com
 
-Menu icons from Silk icon set v1.3
+Menu icons are from Silk icon set v1.3.
 Copyright (c) Mark James
 http://www.famfamfam.com/lab/icons/silk/
 
