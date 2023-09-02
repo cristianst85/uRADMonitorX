@@ -1,21 +1,25 @@
 ﻿using System.Collections.Generic;
-using uRADMonitorX.Extensions;
 using uRADMonitorX.uRADMonitor.Domain;
 
 namespace uRADMonitorX.uRADMonitor.Services
 {
     public class DeviceServiceResponse
     {
-        public ICollection<Device> Devices { get; set; }
+        public ICollection<Device> Devices { get; }
 
-        public string Error { get; set; }
-
-        public bool HasData
+        public DeviceServiceResponse()
         {
-            get
-            {
-                return this.Error.IsNullOrEmpty();
-            }
+            this.Devices = new List<Device>();
         }
+
+        public void SetError(string error)
+        {
+            this.HasError = true;
+            this.Error = error;
+        }
+
+        public string Error { get; private set; }
+
+        public bool HasError { get; private set; }
     }
 }

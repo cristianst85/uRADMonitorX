@@ -31,7 +31,7 @@ namespace uRADMonitorX.Tests.uRADMonitor.Services
                 response = deviceService.GetAll();
             });
 
-            Assert.That(response.HasData);
+            Assert.IsFalse(response.HasError);
             Assert.That(response.Devices.Count, Is.EqualTo(expectedDevicesCount));
         }
 
@@ -50,7 +50,7 @@ namespace uRADMonitorX.Tests.uRADMonitor.Services
                 response = deviceService.GetAll();
             });
 
-            Assert.IsFalse(response.HasData);
+            Assert.IsTrue(response.HasError);
             Assert.That(response.Error, Is.EqualTo("Authentication failed"));
         }
     }

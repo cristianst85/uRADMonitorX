@@ -15,6 +15,8 @@ namespace uRADMonitorX
 {
     public partial class FormNetwork : Form
     {
+        private volatile bool IsClosing;
+
         private readonly ISettings settings;
         private readonly IDeviceServiceFactory deviceServiceFactory;
 
@@ -44,6 +46,8 @@ namespace uRADMonitorX
             this.checkBoxShowOnlineDevicesOnly.CheckedChanged += CheckBoxShowOnlineDevicesOnly_CheckedChanged;
 
             ToggleControls(state: ControlState.Enabled);
+
+            this.FormClosing += new FormClosingEventHandler(this.FormNetwork_Closing);
         }
 
         private void CheckBoxShowOnlineDevicesOnly_CheckedChanged(object sender, EventArgs e)
@@ -185,11 +189,26 @@ namespace uRADMonitorX
         {
             return Task.Run(() =>
             {
-                devices.Clear();
+                try
+                {
+                    devices.Clear();
 
-                var deviceService = deviceServiceFactory.Create(settings.uRADMonitorNetwork.UserId, settings.uRADMonitorNetwork.UserKey);
+                    var deviceService = deviceServiceFactory.Create(settings.uRADMonitorNetwork.UserId, settings.uRADMonitorNetwork.UserKey);
+                    var response = deviceService.GetAll();
 
-                devices.AddRange(deviceService.GetAll().Devices.OrderBy(x => x.Id));
+                    if (response.HasError)
+                    {
+                        ShowMessageBox($"Error: {response.Error}.", MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        devices.AddRange(deviceService.GetAll().Devices.OrderBy(x => x.Id));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ShowMessageBox($"Error: {ex.Message}.", MessageBoxIcon.Error);
+                }
             });
         }
 
@@ -203,6 +222,19 @@ namespace uRADMonitorX
             };
 
             return this.devices;
+        }
+
+        private void ShowMessageBox(string message, MessageBoxIcon messageBoxIcon)
+        {
+            if (!IsClosing)
+            {
+                MessageBox.Show(this, message, Program.ApplicationName, MessageBoxButtons.OK, messageBoxIcon);
+            }
+        }
+
+        private void FormNetwork_Closing(object sender, FormClosingEventArgs e)
+        {
+            this.IsClosing = true;
         }
     }
 }
