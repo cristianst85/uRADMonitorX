@@ -8,6 +8,7 @@ namespace uRADMonitorX.Tests.Configuration
     [TestFixture]
     public class JsonSettingsTests
     {
+        private readonly string directoryPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\uRADMonitorX.Tests.Files\configs\"));
         private readonly string xmlSettingsFilePath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\uRADMonitorX.Tests.Files\configs\Settings.xml"));
         private readonly string jsonSettingsFilePath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\uRADMonitorX.Tests.Files\configs\Settings.json"));
         private readonly string jsonSettingsNewFilePath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\uRADMonitorX.Tests.Files\configs\Settings1.json"));
@@ -15,6 +16,9 @@ namespace uRADMonitorX.Tests.Configuration
         [SetUp]
         public void SetUp()
         {
+            Directory.CreateDirectory(directoryPath);
+            Assert.IsTrue(Directory.Exists(directoryPath));
+
             Assert.IsFalse(File.Exists(xmlSettingsFilePath));
             Assert.IsFalse(File.Exists(jsonSettingsFilePath));
             Assert.IsFalse(File.Exists(jsonSettingsNewFilePath));
