@@ -24,7 +24,7 @@ You can download compiled binaries from [here](https://github.com/cristianst85/u
 ## Development
 
 * Any edition of [Visual Studio 2017](https://visualstudio.microsoft.com/vs/older-downloads/), C# 7.0 language features.
-* [Vitevic Assembly Embedder](https://marketplace.visualstudio.com/items?itemName=Vitevic.VitevicAssemblyEmbedder) v1.0.3.
+* [Vitevic Assembly Embedder](https://marketplace.visualstudio.com/items?itemName=Vitevic.VitevicAssemblyEmbedder) v1.0.4 (needs to be built from [source](https://github.com/cristianst85/AssemblyEmbedder/tree/dev)).
 
 ## License
 
