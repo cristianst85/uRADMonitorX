@@ -157,7 +157,7 @@ namespace uRADMonitorX {
             this.toolStripMenuItem5,
             this.optionsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // enablePollingToolStripMenuItem
@@ -196,19 +196,19 @@ namespace uRADMonitorX {
             // dashboardToolStripMenuItem
             // 
             this.dashboardToolStripMenuItem.Name = "dashboardToolStripMenuItem";
-            this.dashboardToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.dashboardToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.dashboardToolStripMenuItem.Text = "Dashboard";
             this.dashboardToolStripMenuItem.Click += new System.EventHandler(this.ViewDeviceDashboardToolStripMenuItem_Click);
             // 
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(139, 6);
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(137, 6);
             // 
             // temperatureToolStripMenuItem
             // 
             this.temperatureToolStripMenuItem.Name = "temperatureToolStripMenuItem";
-            this.temperatureToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.temperatureToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.temperatureToolStripMenuItem.Tag = "temperature";
             this.temperatureToolStripMenuItem.Text = "Temperature";
             this.temperatureToolStripMenuItem.Click += new System.EventHandler(this.ViewDeviceGraphDataToolStripMenuItem_Click);
@@ -216,7 +216,7 @@ namespace uRADMonitorX {
             // pressureToolStripMenuItem
             // 
             this.pressureToolStripMenuItem.Name = "pressureToolStripMenuItem";
-            this.pressureToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.pressureToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.pressureToolStripMenuItem.Tag = "pressure";
             this.pressureToolStripMenuItem.Text = "Pressure";
             this.pressureToolStripMenuItem.Click += new System.EventHandler(this.ViewDeviceGraphDataToolStripMenuItem_Click);
@@ -224,7 +224,7 @@ namespace uRADMonitorX {
             // cpmToolStripMenuItem
             // 
             this.cpmToolStripMenuItem.Name = "cpmToolStripMenuItem";
-            this.cpmToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.cpmToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.cpmToolStripMenuItem.Tag = "cpm";
             this.cpmToolStripMenuItem.Text = "Radiation";
             this.cpmToolStripMenuItem.Click += new System.EventHandler(this.ViewDeviceGraphDataToolStripMenuItem_Click);
