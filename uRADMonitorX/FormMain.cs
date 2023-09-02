@@ -128,10 +128,11 @@ namespace uRADMonitorX
                 this.pressureToolStripMenuItem.Enabled = deviceCapabilities.HasFlag(DeviceCapability.Pressure);
 
                 this.StartPosition = FormStartPosition.Manual;
-                this.RestoreWindowPosition(this.settings.Display.WindowPosition);
+                this.WindowPosition = this.settings.Display.WindowPosition;
+                RestoreWindowOnScreen();
 
-                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] Settings.StartMinimized: {this.settings.Display.StartMinimized.ToString().ToLower()}");
-                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] Settings.ShowInTaskbar: {this.settings.Display.ShowInTaskbar.ToString().ToLower()}");
+                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] Settings.StartMinimized: {this.settings.Display.StartMinimized.ToString().ToLowerInvariant()}");
+                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] Settings.ShowInTaskbar: {this.settings.Display.ShowInTaskbar.ToString().ToLowerInvariant()}");
 
                 this.allowVisible = !this.settings.Display.StartMinimized;
 
@@ -211,22 +212,21 @@ namespace uRADMonitorX
 
         protected override void SetVisibleCore(bool value)
         {
-            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] SetVisibleCore to {value.ToString().ToLower()}");
-            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] AllowVisible is {this.allowVisible.ToString().ToLower()}");
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] SetVisibleCore to {value.ToString().ToLowerInvariant()}");
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] AllowVisible is {allowVisible.ToString().ToLowerInvariant()}");
 
             if (value && !this.IsHandleCreated)
             {
                 CreateHandle();
             }
 
-            if (!this.allowVisible)
+            if (!allowVisible)
             {
                 value = false;
             }
 
             base.SetVisibleCore(value);
-
-            this.allowVisible = true;
+            allowVisible = true;
         }
 
         private void InitDevice(bool isRestart)
@@ -537,7 +537,7 @@ namespace uRADMonitorX
 
                 var currentTemperature = Temperature.FromCelsius(deviceData.Temperature).ConvertTo(this.settings.Notifications.TemperatureThreshold.MeasurementUnit);
 
-                if (this.settings.Notifications.TemperatureThreshold.HighValue.HasValue && 
+                if (this.settings.Notifications.TemperatureThreshold.HighValue.HasValue &&
                     currentTemperature.Value >= this.settings.Notifications.TemperatureThreshold.HighValue)
                 {
                     balloonTitle = "High Temperature";
@@ -545,7 +545,7 @@ namespace uRADMonitorX
                     showBalloon = true;
                 }
 
-                if (showRadiationNotification && 
+                if (showRadiationNotification &&
                     this.settings.Notifications.RadiationThreshold.HighValue.HasValue &&
                     currentRadiation.Value >= this.settings.Notifications.RadiationThreshold.HighValue)
                 {
@@ -658,38 +658,137 @@ namespace uRADMonitorX
 
         private void CloseApplication(object sender, EventArgs e)
         {
-            this.IsClosing = true;
-            this.contextMenuStrip.Dispose();
-
-            this.Close();
+            IsClosing = true;
+            Close();
         }
 
         private void FormMain_Closing(object sender, FormClosingEventArgs e)
         {
-            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] FormMain_Closing()");
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] FormMain_Closing() CloseReason: {e.CloseReason}");
 
-            this.UpdateWindowPosition(saveToSettings: false);
-
-            if (e.CloseReason != CloseReason.UserClosing)
+            if (WindowState != FormWindowState.Minimized)
             {
-                this.UpdateWindowPosition(saveToSettings: true);
-                this.IsClosing = true;
+                UpdateWindowPositionAndSaveToSettings();
+            }
 
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                if (IsClosing)
+                {
+                    return;
+                }
+
+                if (settings.Display.CloseToSystemTray)
+                {
+                    MinimizeToTray();
+                    Hide();
+
+                    e.Cancel = true;
+                    return;
+                }
+            }
+
+            IsClosing = true;
+        }
+
+        private void RestoreWindowOnScreen()
+        {
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] RestoreWindowOnScreen()");
+
+            if (WindowPosition.IsOnScreenWorkingArea(atLeast: 10))
+            {
+                Top = WindowPosition.Y;
+                Left = WindowPosition.X;
                 return;
             }
 
-            if (this.settings.Display.CloseToSystemTray && !this.IsClosing)
-            {
-                this.MinimizeToTray();
-                this.Hide();
+            var screenWorkingArea = Screen.PrimaryScreen?.WorkingArea;
 
-                e.Cancel = true;
+            if (screenWorkingArea.HasValue)
+            {
+                var x = screenWorkingArea.Value.Width - Size.Width - 10;
+                var y = screenWorkingArea.Value.Height - Size.Height - 10;
+
+                Top = y;
+                Left = x;
+
+                if (WindowState != FormWindowState.Minimized)
+                {
+                    UpdateWindowPositionAndSaveToSettings();
+                }
+            }
+        }
+
+        private void UpdateWindowPositionAndSaveToSettings()
+        {
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] UpdateWindowPositionAndSaveToSettings()");
+
+            var currentWindowPosition = new Point(Left, Top);
+
+            if (WindowPosition != currentWindowPosition)
+            {
+                WindowPosition = currentWindowPosition;
+                settings.Display.WindowPosition = WindowPosition;
+                settings.Save();
+            }
+        }
+
+        private void ShowWindow()
+        {
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] ShowWindow()");
+
+            if (WindowState == FormWindowState.Minimized)
+            {
+                ShowInTaskbar = settings.Display.ShowInTaskbar;
+                Show();
+                BringToFront();
+                WindowState = FormWindowState.Normal;
+                Visible = true;
+
+                RestoreWindowOnScreen();
             }
             else
             {
-                this.UpdateWindowPosition(saveToSettings: true);
-                this.IsClosing = true;
+                TopMost = true; // Force to come on top.
+                Show();
+                BringToFront();
             }
+
+            // Don't stay on top forever. Allow it to go in background.
+            TopMost = false;
+        }
+
+        private void MinimizeToTray()
+        {
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] MinimizeToTray()");
+
+            ShowInTaskbar = settings.Display.ShowInTaskbar;
+            WindowState = FormWindowState.Minimized;
+            Visible = false;
+            Hide();
+        }
+
+        private void ToggleWindow()
+        {
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] ToggleWindow()");
+
+            ShowInTaskbar = settings.Display.ShowInTaskbar;
+
+            if (WindowState == FormWindowState.Minimized)
+            {
+                Show();
+                BringToFront();
+                WindowState = FormWindowState.Normal;
+                Visible = true;
+
+                RestoreWindowOnScreen();
+                return;
+            }
+
+            Hide();
+            UpdateWindowPositionAndSaveToSettings();
+            Visible = false;
+            WindowState = FormWindowState.Minimized;
         }
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
@@ -697,114 +796,11 @@ namespace uRADMonitorX
         {
             if (m.Msg == (int)NativeMethods.WM.SYSCOMMAND && m.WParam.ToInt32() == (int)NativeMethods.SC.MINIMIZE)
             {
-                this.ToggleWindow();
-            }
-            else
-            {
-                base.WndProc(ref m);
-            }
-        }
-
-        private void RestoreWindowPosition()
-        {
-            if (!IsOnScreen(WindowPosition, atLeast: 10))
-            {
-                var screenWorkingArea = Screen.PrimaryScreen?.WorkingArea;
-
-                if (screenWorkingArea.HasValue)
-                {
-                    var x = screenWorkingArea.Value.Width - this.Size.Width - 10;
-                    var y = screenWorkingArea.Value.Height - this.Size.Height - 10;
-
-                    this.RestoreWindowPosition(new Point(x, y));
-                }
-            }
-            else
-            {
-                this.RestoreWindowPosition(WindowPosition);
-            }
-        }
-
-        private bool IsOnScreen(Point topLeft, int atLeast = 0)
-        {
-            return Screen.AllScreens.Any(s => s.WorkingArea.Contains(new Point(topLeft.X + atLeast, topLeft.Y + atLeast)));
-        }
-
-        private void RestoreWindowPosition(Point windowPosition)
-        {
-            this.Top = windowPosition.Y;
-            this.Left = windowPosition.X;
-            this.WindowPosition = new Point(this.Left, this.Top);
-        }
-
-        private void UpdateWindowPosition(bool saveToSettings)
-        {
-            if (this.WindowState != FormWindowState.Minimized)
-            {
-                this.WindowPosition = new Point(this.Left, this.Top);
+                ToggleWindow();
+                return;
             }
 
-            if (saveToSettings)
-            {
-                this.settings.Display.WindowPosition = this.WindowPosition;
-                this.settings.Save();
-            }
-        }
-
-        private void ShowWindow()
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.ShowInTaskbar = this.settings.Display.ShowInTaskbar;
-                this.Show();
-                this.BringToFront();
-                this.WindowState = FormWindowState.Normal;
-                this.Visible = true;
-
-                this.RestoreWindowPosition();
-            }
-            else
-            {
-                this.TopMost = true; // Force to come on top.
-                this.Show();
-                this.BringToFront();
-            }
-
-            this.TopMost = false; // Don't stay on top forever. Allow it to go in background.
-        }
-
-        private void MinimizeToTray()
-        {
-            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] MinimizeToTray()");
-
-            this.ShowInTaskbar = this.settings.Display.ShowInTaskbar;
-            this.WindowState = FormWindowState.Minimized;
-            this.Visible = false;
-            this.Hide();
-        }
-
-        private void ToggleWindow()
-        {
-            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] ToggleWindow()");
-
-            this.ShowInTaskbar = this.settings.Display.ShowInTaskbar;
-
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.Show();
-                this.BringToFront();
-                this.WindowState = FormWindowState.Normal;
-                this.Visible = true;
-
-                this.RestoreWindowPosition();
-            }
-            else
-            {
-                this.Hide();
-                this.UpdateWindowPosition(saveToSettings: false);
-                this.Visible = false;
-                this.WindowState = FormWindowState.Minimized;
-            }
+            base.WndProc(ref m);
         }
 
         private void ShowHideContextMenuToolStripMenuItem_Click(object sender, EventArgs e)
@@ -821,7 +817,7 @@ namespace uRADMonitorX
         {
             if (e.Button == MouseButtons.Left)
             {
-                this.ShowWindow();
+                ShowWindow();
             }
         }
 

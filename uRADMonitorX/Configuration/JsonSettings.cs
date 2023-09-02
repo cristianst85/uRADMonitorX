@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using uRADMonitorX.Extensions;
@@ -84,6 +85,8 @@ namespace uRADMonitorX.Configuration
 
         public override void Save()
         {
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(JsonSettings)}] Save()");
+
             var json = JsonConvert.SerializeObject(this, Formatting.Indented);
 
             File.WriteAllText(this.FilePath, json);
