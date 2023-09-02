@@ -7,9 +7,6 @@
 - Fixed an issue that was causing the application to be restored outside the visible area of the screen.
 - Fixed an issue that was causing the taskbar application icon to be blurred.
 - Measurements retrieved from uRADMonitor devices are using internally the `decimal` type representation instead of `double`.
-- Removed Git branch name from the assembly info / About dialog.
-- All dialogs display an icon.
-- Build is now deterministic.
 - Code refactoring and optimization.
 - Other minor improvements.
 
