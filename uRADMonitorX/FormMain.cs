@@ -697,7 +697,7 @@ namespace uRADMonitorX
         {
             if (m.Msg == (int)NativeMethods.WM.SYSCOMMAND && m.WParam.ToInt32() == (int)NativeMethods.SC.MINIMIZE)
             {
-                this.ToogleWindow();
+                this.ToggleWindow();
             }
             else
             {
@@ -783,9 +783,9 @@ namespace uRADMonitorX
             this.Hide();
         }
 
-        private void ToogleWindow()
+        private void ToggleWindow()
         {
-            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] ToogleWindow()");
+            Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] ToggleWindow()");
 
             this.ShowInTaskbar = this.settings.Display.ShowInTaskbar;
 
@@ -809,12 +809,12 @@ namespace uRADMonitorX
 
         private void ShowHideContextMenuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToogleWindow();
+            ToggleWindow();
         }
 
         private void ShowHideToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToogleWindow();
+            ToggleWindow();
         }
 
         private void NotifyIcon_MouseClick(object sender, MouseEventArgs e)

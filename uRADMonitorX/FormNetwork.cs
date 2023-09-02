@@ -43,7 +43,7 @@ namespace uRADMonitorX
             this.listViewDevices.MouseDoubleClick += ListViewDevices_MouseDoubleClick;
             this.checkBoxShowOnlineDevicesOnly.CheckedChanged += CheckBoxShowOnlineDevicesOnly_CheckedChanged;
 
-            ToogleControls(state: ControlState.Enabled);
+            ToggleControls(state: ControlState.Enabled);
         }
 
         private void CheckBoxShowOnlineDevicesOnly_CheckedChanged(object sender, EventArgs e)
@@ -57,7 +57,7 @@ namespace uRADMonitorX
             {
                 this.InvokeIfRequired(() =>
                 {
-                    ToogleControls(state: ControlState.Disabled);
+                    ToggleControls(state: ControlState.Disabled);
 
                     Text = string.Format("{0}", Title);
 
@@ -81,7 +81,7 @@ namespace uRADMonitorX
             }
             finally
             {
-                ToogleControls(state: ControlState.Enabled);
+                ToggleControls(state: ControlState.Enabled);
             }
         }
 
@@ -106,11 +106,11 @@ namespace uRADMonitorX
             using (var form = new FormNetworkAuthentication(settings, deviceServiceFactory))
             {
                 var result = form.ShowDialog(this);
-                ToogleControls(state: ControlState.Enabled);
+                ToggleControls(state: ControlState.Enabled);
             }
         }
 
-        private void ToogleControls(ControlState state)
+        private void ToggleControls(ControlState state)
         {
             buttonRefresh.Enabled = state.ToBoolean() && settings.uRADMonitorNetwork.UserId.IsNotNullOrEmpty();
             checkBoxShowOnlineDevicesOnly.Enabled = state.ToBoolean();
@@ -151,7 +151,7 @@ namespace uRADMonitorX
             {
                 this.InvokeIfRequired(() =>
                 {
-                    ToogleControls(state: ControlState.Disabled);
+                    ToggleControls(state: ControlState.Disabled);
 
                     Text = string.Format("{0}", Title);
 
@@ -177,7 +177,7 @@ namespace uRADMonitorX
             }
             finally
             {
-                ToogleControls(state: ControlState.Enabled);
+                ToggleControls(state: ControlState.Enabled);
             }
         }
 

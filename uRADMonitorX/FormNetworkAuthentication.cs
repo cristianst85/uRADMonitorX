@@ -23,19 +23,19 @@ namespace uRADMonitorX
             this.textBoxUserId.Text = settings.uRADMonitorNetwork.UserId;
             this.textBoxUserKey.Text = settings.uRADMonitorNetwork.UserKey;
 
-            this.textBoxUserId.TextChanged += ToogleButtons;
-            this.textBoxUserKey.TextChanged += ToogleButtons;
+            this.textBoxUserId.TextChanged += ToggleButtons;
+            this.textBoxUserKey.TextChanged += ToggleButtons;
 
             this.buttonOK.Click += ButtonOK_Click;
             this.buttonTest.Click += ButtonTest_Click;
 
-            ToogleButtons(null, null);
+            ToggleButtons(null, null);
 
             // Handlers.
             this.FormClosing += new FormClosingEventHandler(this.FormNetworkAuthentication_Closing);
         }
 
-        private void ToogleButtons(object sender, EventArgs e)
+        private void ToggleButtons(object sender, EventArgs e)
         {
             var enable = !(string.IsNullOrEmpty(textBoxUserId.Text) && string.IsNullOrEmpty(textBoxUserKey.Text));
 
