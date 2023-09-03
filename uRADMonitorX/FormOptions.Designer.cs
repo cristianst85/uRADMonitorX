@@ -141,9 +141,9 @@
             this.checkBoxShowInTaskbar.AutoSize = true;
             this.checkBoxShowInTaskbar.Location = new System.Drawing.Point(19, 19);
             this.checkBoxShowInTaskbar.Name = "checkBoxShowInTaskbar";
-            this.checkBoxShowInTaskbar.Size = new System.Drawing.Size(102, 17);
+            this.checkBoxShowInTaskbar.Size = new System.Drawing.Size(176, 17);
             this.checkBoxShowInTaskbar.TabIndex = 1;
-            this.checkBoxShowInTaskbar.Text = "Show in taskbar";
+            this.checkBoxShowInTaskbar.Text = "Show uRADMonitorX in taskbar";
             this.checkBoxShowInTaskbar.UseVisualStyleBackColor = true;
             // 
             // checkBoxCloseToSystemTray
@@ -161,9 +161,9 @@
             this.checkBoxStartMinimized.AutoSize = true;
             this.checkBoxStartMinimized.Location = new System.Drawing.Point(19, 42);
             this.checkBoxStartMinimized.Name = "checkBoxStartMinimized";
-            this.checkBoxStartMinimized.Size = new System.Drawing.Size(170, 17);
+            this.checkBoxStartMinimized.Size = new System.Drawing.Size(237, 17);
             this.checkBoxStartMinimized.TabIndex = 2;
-            this.checkBoxStartMinimized.Text = "Start uRADMonitorX minimized";
+            this.checkBoxStartMinimized.Text = "Start uRADMonitorX minimized to system tray";
             this.checkBoxStartMinimized.UseVisualStyleBackColor = true;
             // 
             // tabPageGeneral
