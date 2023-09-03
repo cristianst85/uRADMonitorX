@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading;
@@ -684,11 +685,18 @@ namespace uRADMonitorX
                     Hide();
 
                     e.Cancel = true;
+                    ResetCloseReasonToNone();
                     return;
                 }
             }
 
             IsClosing = true;
+        }
+
+        private void ResetCloseReasonToNone()
+        {
+            var fieldInfo = typeof(Form).GetField("closeReason", BindingFlags.Instance | BindingFlags.NonPublic);
+            fieldInfo.SetValue(this, CloseReason.None);
         }
 
         private void RestoreWindowOnScreen()
