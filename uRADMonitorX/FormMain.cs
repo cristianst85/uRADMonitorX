@@ -138,19 +138,10 @@ namespace uRADMonitorX
 
                 Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] Settings.StartMinimized: {this.settings.Display.StartMinimized.ToString().ToLowerInvariant()}");
                 Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] Settings.ShowInTaskbar: {this.settings.Display.ShowInTaskbar.ToString().ToLowerInvariant()}");
+                Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] Settings.CloseToSystemTray: {this.settings.Display.CloseToSystemTray.ToString().ToLowerInvariant()}");
 
                 this.allowVisible = !this.settings.Display.StartMinimized;
-
-                if (this.settings.Display.StartMinimized)
-                {
-                    this.WindowState = FormWindowState.Minimized;
-                    this.ShowInTaskbar = false;
-                }
-                else
-                {
-                    this.WindowState = FormWindowState.Normal;
-                    this.ShowInTaskbar = this.settings.Display.ShowInTaskbar;
-                }
+                this.ShowInTaskbar = this.settings.Display.ShowInTaskbar;
 
                 this.viewDeviceOnlineDataToolStripMenuItem.Enabled = false;
 

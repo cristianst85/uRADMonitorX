@@ -54,6 +54,9 @@ namespace uRADMonitorX.Configuration
     {
         public bool ShowInTaskbar { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the application is started minimized to System Tray.
+        /// </summary>
         public bool StartMinimized { get; set; }
 
         public bool CloseToSystemTray { get; set; }
