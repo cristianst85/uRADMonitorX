@@ -689,7 +689,6 @@ namespace uRADMonitorX
                 if (settings.Display.CloseToSystemTray)
                 {
                     MinimizeToTray();
-                    Hide();
 
                     e.Cancel = true;
                     ResetCloseReasonToNone();
@@ -778,10 +777,11 @@ namespace uRADMonitorX
         {
             Debug.WriteLine($"[{Program.ApplicationName}] [{nameof(FormMain)}] MinimizeToTray()");
 
+            allowVisible = false;
             ShowInTaskbar = settings.Display.ShowInTaskbar;
-            WindowState = FormWindowState.Minimized;
-            Visible = false;
             Hide();
+            Visible = false;
+            WindowState = FormWindowState.Minimized;
         }
 
         private void ToggleWindow()
