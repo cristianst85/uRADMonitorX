@@ -91,6 +91,8 @@ namespace uRADMonitorX
                 this.settings = settings;
                 this.logger = logger;
 
+                logger.Write($"Application is starting...");
+
                 this.notifyIcon.Icon = Properties.Resources.RadiationDisabled;
 
                 // Fix status strip right padding.
@@ -101,6 +103,8 @@ namespace uRADMonitorX
 
                 var version = AssemblyUtils.GetVersion();
                 this.Text = this.Text.Replace("{version}", version.ToString(3));
+
+                logger.Write($"Application version is {AssemblyUtils.GetProductVersion()}");
 
                 bool isDebug = false;
                 Debug.Assert(isDebug = true);
@@ -165,6 +169,8 @@ namespace uRADMonitorX
                 JobManager.Initialize(new Registry());
 
                 ConfigureCheckForUpdatesJob();
+
+                logger.Write($"Application was started successfully");
             }
             catch (Exception ex)
             {
@@ -676,6 +682,7 @@ namespace uRADMonitorX
             {
                 if (IsClosing)
                 {
+                    this.logger.Write($"Application was closed. Reason: {e.CloseReason}.");
                     return;
                 }
 
@@ -690,6 +697,7 @@ namespace uRADMonitorX
                 }
             }
 
+            logger.Write($"Application was closed. Reason: {e.CloseReason}.");
             IsClosing = true;
         }
 
