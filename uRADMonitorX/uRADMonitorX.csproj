@@ -39,8 +39,8 @@
   <ItemGroup>
     <Reference Include="FluentScheduler, Version=5.3.0.0, Culture=neutral, PublicKeyToken=b76503528a14ebd1, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentScheduler.5.3.0\lib\net40\FluentScheduler.dll</HintPath>
-      <EmbedAssembly>true</EmbedAssembly>
       <Private>False</Private>
+      <EmbedAssembly>true</EmbedAssembly>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -49,7 +49,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.5.2.3\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.5.3.2\lib\net45\NLog.dll</HintPath>
       <EmbedAssembly>true</EmbedAssembly>
       <Private>False</Private>
     </Reference>
