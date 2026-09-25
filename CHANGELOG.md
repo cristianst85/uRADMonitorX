@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1 (2026-09-26)
+
+ - Various fixes.
+
 ## 1.4.0 (2023-09-02)
 
 - Added a new dialog 'uRADMonitor Network' that can be used to list all devices from the uRADMonitor network.
